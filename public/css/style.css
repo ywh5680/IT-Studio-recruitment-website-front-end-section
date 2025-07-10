@@ -21,7 +21,7 @@ a {
     top: 0;
     left: 0;
     z-index: 1000;
-    height: 44px;
+    height: 80px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -47,7 +47,7 @@ a {
 }
 
 .nav-item {
-    font-size: 12px;
+    font-size: 18px;
 }
 
 .nav-item a {
