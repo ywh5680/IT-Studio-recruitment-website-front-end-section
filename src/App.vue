@@ -17,7 +17,7 @@
       <h1>爱特工作室</h1>
       <h2>IT-Studio</h2>
       <div class="actions">
-        <a href="#" class="button button-more">进一步了解</a>
+        <a href="#" class="button button-more">进入报名处</a>
         <a href="#" class="button button-join">加入招新群</a>
       </div>
     </section>
