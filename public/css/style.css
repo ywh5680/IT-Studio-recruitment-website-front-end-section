@@ -1,7 +1,21 @@
+html {
+    scroll-behavior: smooth;
+}
+
+.scroll {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 1s ease-out, transform 1s ease-out;
+}
+
+.scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 body {
     margin: 0;
     font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", "PingFang SC", "Microsoft YaHei", sans-serif;
-    background-color: #ffffff;
     color: #1d1d1f;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -69,7 +83,7 @@ a {
 
 /* Main Content Placeholder */
 main {
-    padding-top: 150px;
+    /* padding-top: 150px; */ /* This was causing the gap, we remove it */
     text-align: center;
 }
 
@@ -134,7 +148,6 @@ h2{
 .department-introduction {
   padding: 60px 20px;
   text-align: center;
-  background-color: #f7f8fa;
 }
 
 .department-introduction h3 {
@@ -162,21 +175,29 @@ h2{
 
 .department-item {
   position: relative;
-  background: #f7f8fa;
   border-radius: 20px;
   box-shadow: 8px 8px 16px #d1d9e6, -8px -8px 16px #ffffff;
   padding: 2rem;
-  width: 400px;
-  height: 130px;
+  width: 450px;
+  height: 200px;
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
   transition: all 0.3s ease-in-out;
   cursor: pointer;
-  color: #333;
   overflow: hidden;
+  color: #fff; /* Default text color for gradient backgrounds */
 }
+
+/* Gradient Backgrounds */
+.department-item:nth-child(1) { background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+.department-item:nth-child(2) { background-image: linear-gradient(135deg, #2af598 0%, #009efd 100%); }
+.department-item:nth-child(3) { background-image: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%); }
+.department-item:nth-child(4) { background-image: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); }
+.department-item:nth-child(5) { background-image: linear-gradient(135deg, #ffdde1 0%, #ee9ca7 100%); }
+.department-item:nth-child(6) { background-image: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%); }
+
 
 .department-item h4 {
   font-size: 1.5rem;
@@ -191,7 +212,7 @@ h2{
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.9); /* A bit more opaque for better readability */
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
   color: #1d1d1f;
@@ -223,4 +244,318 @@ h2{
 .department-item:hover p {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* ProjectAchievements styles */
+.project-achievements {
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.project-achievements h3 {
+  font-size: 2.5rem;
+  color: #333;
+  margin-bottom: 40px;
+  font-weight: 600;
+}
+
+.year-filter {
+  margin-bottom: 40px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.project-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
+}
+
+.project-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.project-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+}
+
+.project-card h4 {
+  font-size: 1.2rem;
+  margin: 15px 0 10px;
+  color: #333;
+}
+
+.project-card p {
+  font-size: 1rem;
+  color: #666;
+}
+
+/* TeamMembers styles */
+.team-members {
+  padding: 60px 0;
+}
+
+.team-members h3 {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 40px;
+}
+
+.department-panel {
+  display: flex;
+  justify-content: center;
+}
+
+.member-card {
+  text-align: center;
+  transition: transform 0.3s;
+}
+
+.member-card:hover {
+  transform: scale(1.05);
+}
+
+.member-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin: 0 auto 10px;
+  transition: transform 0.3s;
+}
+
+.member-card:hover .member-avatar {
+  transform: scale(1.1);
+}
+.member-quote {
+  font-style: italic;
+  color: #666;
+  margin: 10px 0;
+  padding: 0 20px;
+  max-width: 250px;
+}
+
+/* AboutUs styles */
+.about-us {
+  padding: 60px 20px;
+}
+
+.about-container {
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto;
+  align-items: center;
+  gap: 50px;
+}
+
+.about-text {
+  flex: 1;
+  text-align: left;
+}
+
+.about-text h3 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  font-weight: 600;
+  color: #1d1d1f;
+}
+
+.about-text p {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #6e6e73;
+  margin-bottom: 20px;
+}
+
+.carousel-container {
+  flex: 1;
+  max-width: 600px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.carousel-image {
+  width: 100%;
+  height: 420px;
+  object-fit: cover;
+}
+
+/* MessageBoard Styles */
+.message-board {
+  padding: 60px 20px;
+}
+
+.message-board h3 {
+  text-align: center;
+  font-size: 2.5rem;
+  color: #333;
+  margin-bottom: 40px;
+  font-weight: 600;
+}
+
+.message-container {
+  max-width: 800px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+
+.message-list {
+  max-height: 500px;
+  overflow-y: auto;
+  padding-right: 20px;
+}
+
+.message-item {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  margin-bottom: 20px;
+}
+
+.message-content {
+  font-size: 1.1rem;
+  color: #333;
+  margin: 0 0 10px;
+}
+
+.message-meta {
+  text-align: right;
+  font-size: 0.9rem;
+  color: #888;
+}
+
+.author {
+  margin-right: 15px;
+}
+
+.message-form {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.message-form h4 {
+  text-align: center;
+  font-size: 1.5rem;
+  color: #333;
+  margin: 0 0 10px;
+}
+
+.message-form input,
+.message-form textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.message-form textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.message-form button {
+  padding: 12px;
+  background-color: #0071e3;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.message-form button:hover {
+  background-color: #005bb5;
+}
+
+.message-form button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+/* ApplicationStatus Styles */
+.application-status {
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.application-status h3 {
+  font-size: 2.5rem;
+  color: #333;
+  margin-bottom: 40px;
+  font-weight: 600;
+}
+
+.status-checker {
+  max-width: 500px;
+  margin: 0 auto;
+  display: flex;
+}
+
+.status-checker input {
+  flex-grow: 1;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.status-checker button {
+  padding: 15px 30px;
+  background-color: #0071e3;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.status-checker button:hover {
+  background-color: #005bb5;
+}
+
+.status-checker button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.status-result {
+  margin-top: 30px;
+  padding: 20px;
+  border-radius: 8px;
+  display: inline-block;
+  min-width: 250px;
+}
+
+.hint {
+    color: #999;
+    margin-top: 30px;
+    font-size: 0.9rem;
 }
