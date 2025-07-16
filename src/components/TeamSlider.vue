@@ -211,7 +211,12 @@ ul li {
   display: flex;
   justify-content: center;
   margin-bottom: 20px;
-  color:#fff;
+  color: #fff;
+}
+
+.light-theme .year-selector,
+.light-theme .department-selector {
+  color: #1d1d1f;
 }
 
 /* Department Selector */
@@ -219,7 +224,11 @@ ul li {
     display: flex;
     justify-content: center;
     margin-bottom: 40px;
-    color:#fff ;
+    color: #fff;
+}
+
+.light-theme .department-selector {
+    color: #1d1d1f;
 }
 
 /* No Members Message */
@@ -230,6 +239,9 @@ ul li {
     margin-top: 50px;
 }
 
+.light-theme .no-members-message {
+    color: #1d1d1f;
+}
 
 .year-selector button {
   background: none;
@@ -343,6 +355,21 @@ ul li {
   transform: scale(1) translateZ(0px) !important;
 }
 
+figcaption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 20px;
+  background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
+  color: #fff;
+}
+
+.light-theme figcaption {
+  color: #1d1d1f;
+  background: linear-gradient(to top, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 100%);
+}
+
 .cf:before,
 .cf:after {
   content: " ";
@@ -351,5 +378,22 @@ ul li {
 
 .cf:after {
   clear: both;
+}
+
+figcaption p {
+  color: #f0f0f0;
+  font-style: italic;
+  margin-top: 5px;
+}
+
+.light-theme figcaption h2,
+.light-theme figcaption p {
+  color: #1d1d1f;
+  text-shadow: none;
+}
+
+/* Effects */
+figure.active {
+  transform: scale(1.1) translateZ(0px) !important;
 }
 </style> 

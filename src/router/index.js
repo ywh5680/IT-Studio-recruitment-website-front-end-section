@@ -6,6 +6,7 @@ import ProjectsView from '../views/Projects.vue';
 import TeamView from '../views/Team.vue';
 import MessageBoardView from '../views/MessageBoard.vue';
 import StatusView from '../views/Status.vue';
+import RegistrationView from '../views/Registration.vue';
 
 const routes = [
   {
@@ -42,6 +43,11 @@ const routes = [
     path: '/application-status',
     name: 'ApplicationStatus',
     component: StatusView,
+  },
+  {
+    path: '/registration',
+    name: 'Registration',
+    component: RegistrationView,
   },
   // We will add more routes here for each section
 ];

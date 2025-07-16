@@ -1,6 +1,6 @@
 <template>
   <div>
-    <StarfieldBackground />
+    <StarfieldBackground :is-dark="theme.isDark" />
     <section id="team-members" class="team-members">
       <TeamSlider />
     </section>
@@ -10,6 +10,7 @@
 <script>
 import TeamSlider from '../components/TeamSlider.vue';
 import StarfieldBackground from '@/components/StarfieldBackground.vue';
+import { theme } from '@/theme.js';
 
 export default {
   name: 'TeamView',
@@ -17,6 +18,11 @@ export default {
     TeamSlider,
     StarfieldBackground,
   },
+  setup() {
+    return {
+      theme
+    };
+  }
 }
 </script>
 

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <StarfieldBackground />
+    <StarfieldBackground :is-dark="theme.isDark" />
     <section id="application-status" class="application-status scroll">
       <h3>查询报名进度</h3>
       <div class="status-checker">
@@ -13,11 +13,17 @@
 <!--我还是没写具体功能的js-->
 <script>
 import StarfieldBackground from '@/components/StarfieldBackground.vue';
+import { theme } from '@/theme.js';
 
 export default {
   name: 'StatusView',
   components: {
     StarfieldBackground,
+  },
+  setup() {
+    return {
+      theme
+    };
   },
   mounted() {
     const observer = new IntersectionObserver((entries) => {
@@ -56,6 +62,10 @@ export default {
   color: #f5f5f7;
 }
 
+.light-theme .application-status h3 {
+  color: #1d1d1f;
+}
+
 .status-checker {
   max-width: 500px;
   margin: 0 auto;
@@ -75,8 +85,18 @@ export default {
   border-color: rgba(156, 217, 249, 0.3);
 }
 
+.light-theme .status-checker input {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.1);
+  color: #1d1d1f;
+}
+
 .status-checker input::placeholder {
   color: #a1a1a6;
+}
+
+.light-theme .status-checker input::placeholder {
+  color: #6e6e73;
 }
 
 .status-checker button {

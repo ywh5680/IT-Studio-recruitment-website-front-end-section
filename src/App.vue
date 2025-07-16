@@ -1,5 +1,6 @@
 <template>
-  <v-app dark style="background-color: transparent;">
+  <v-app :dark="theme.isDark" style="background-color: transparent;">
+    <StarfieldBackground />
     <header class="main-header">
       <nav class="main-nav">
         <ul class="nav-list">
@@ -11,6 +12,10 @@
           <li class="nav-item"><router-link to="/message-board">留言板</router-link></li>
           <li class="nav-item"><router-link to="/application-status">查询报名进度</router-link></li>
         </ul>
+        <button @click="toggleTheme" class="theme-toggle-button">
+          <span v-if="theme.isDark">☀️</span>
+          <span v-else>🌙</span>
+        </button>
       </nav>
     </header>
 
@@ -21,8 +26,24 @@
 </template>
 
 <script>
+import StarfieldBackground from './components/StarfieldBackground.vue';
+import { theme } from './theme.js';
+
 export default {
   name: 'App',
+  components: {
+    StarfieldBackground
+  },
+  setup() {
+    const toggleTheme = () => {
+      theme.toggleTheme();
+    };
+
+    return {
+      theme,
+      toggleTheme
+    };
+  }
 }
 </script>
 

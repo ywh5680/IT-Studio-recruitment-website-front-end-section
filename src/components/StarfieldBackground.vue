@@ -17,13 +17,19 @@ function Circle(pos, rad, color, ctx) {
     if (!this.active) return;
     this.ctx.beginPath();
     this.ctx.arc(this.pos.x, this.pos.y, this.radius, 0, 2 * Math.PI, false);
-    this.ctx.fillStyle = `rgba(156,217,249,${this.active})`;
+    this.ctx.fillStyle = this.color;
     this.ctx.fill();
   };
 }
 
 export default {
   name: 'StarfieldBackground',
+  props: {
+    isDark: {
+      type: Boolean,
+      default: true
+    }
+  },
   data() {
     return {
       width: 0,
@@ -89,7 +95,8 @@ export default {
       }
 
       for (const i in this.points) {
-        const c = new Circle(this.points[i], 2 + Math.random() * 2, 'rgba(255,255,255,0.3)', this.ctx);
+        const color = this.isDark ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.3)';
+        const c = new Circle(this.points[i], 2 + Math.random() * 2, color, this.ctx);
         this.points[i].circle = c;
       }
     },
@@ -172,7 +179,8 @@ export default {
         this.ctx.beginPath();
         this.ctx.moveTo(p.x, p.y);
         this.ctx.lineTo(p.closest[i].x, p.closest[i].y);
-        this.ctx.strokeStyle = `rgba(156,217,249,${p.active})`;
+        const color = this.isDark ? `rgba(156,217,249,${p.active})` : `rgba(0,0,0,${p.active})`;
+        this.ctx.strokeStyle = color;
         this.ctx.stroke();
       }
     },
@@ -208,6 +216,10 @@ export default {
   height: 100%;
   z-index: -1;
   background-color: #1d1d1f;
+}
+
+.light-theme .starfield-container {
+  background-color: #f5f5f7;
 }
 
 .starfield-canvas {

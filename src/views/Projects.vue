@@ -1,6 +1,6 @@
 <template>
   <div class="project-view-container">
-    <StarfieldBackground />
+    <StarfieldBackground :is-dark="theme.isDark" />
     <div class="main-content">
       <div class="year-filter">
         <button
@@ -60,11 +60,17 @@
 <script>
 import { projectsData } from '../data.js';
 import StarfieldBackground from '@/components/StarfieldBackground.vue';
+import { theme } from '@/theme.js';
 
 export default {
   name: 'ProjectsView',
   components: {
     StarfieldBackground,
+  },
+  setup() {
+    return {
+      theme
+    };
   },
   data() {
     return {
@@ -196,7 +202,7 @@ export default {
 	align-items: center;
 	overflow: hidden;
 	position: relative;
-  padding-top: 60px;
+  padding-top: 80px;
 }
 
 .main-content {
@@ -204,7 +210,7 @@ export default {
   flex-direction: column;
   align-items: center;
   width: 100%;
-  z-index: 10;
+  z-index: 1;
 }
 
 .year-filter {
@@ -216,39 +222,47 @@ export default {
 
 .year-button {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  padding: 0.5rem 1.5rem;
-  border: 1px solid rgba(156, 217, 249, 0.4);
-  background-color: transparent;
-  color: #a1a1a6;
-  border-radius: 20px;
+  padding: 0.5rem 1rem;
+  border: 1px solid transparent;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #f5f5f7;
+  border-radius: 999px;
   cursor: pointer;
   transition: all 0.3s ease;
   font-weight: 500;
 }
 
-.year-button:hover {
-  background-color: rgba(156, 217, 249, 0.1);
-  color: #f5f5f7;
+.light-theme .year-button {
+  color: #1d1d1f;
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
-.year-button.active {
-  background-color: rgba(156, 217, 249, 0.3);
-  color: #f5f5f7;
-  border-color: rgba(156, 217, 249, 0.7);
+.year-button.active,
+.year-button:hover {
+  background-color: #007aff;
+  color: #fff;
+  border-color: #007aff;
+}
+
+.light-theme .year-button.active,
+.light-theme .year-button:hover {
+  background-color: #007aff;
+  color: #fff;
 }
 
 
 .carousel-container {
-	width: 90%;
-	max-width: 1100px;
+	width: 100%;
+	max-width: 1200px;
 	position: relative;
 	perspective: 1500px; /* Reduced perspective for a subtler effect */
 	padding: 1rem 0;
+	margin: 0 auto;
 }
 
 .carousel-track {
 	display: flex;
-	transition: transform 0.75s cubic-bezier(0.21, 0.61, 0.35, 1);
+	transition: transform 0.5s ease-in-out;
 	transform-style: preserve-3d;
 }
 
@@ -257,16 +271,23 @@ export default {
 	max-width: 320px;
 	margin: 0 25px;
   /* Simplified background and border */
-	background: rgba(30, 41, 59, 0.6);
-	border-radius: 16px;
+	background: rgba(255, 255, 255, 0.05);
+	border-radius: 12px;
 	overflow: hidden;
-	backdrop-filter: blur(8px);
+	backdrop-filter: blur(10px);
   /* Simplified shadow */
-	box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-	transition: all 0.6s cubic-bezier(0.21, 0.61, 0.35, 1);
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+	transition: all 0.3s ease;
 	transform-origin: center center;
 	position: relative;
-	border: 1px solid rgba(94, 234, 212, 0.15);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.light-theme .carousel-card {
+  background: rgba(255, 255, 255, 0.8);
+  color: #1d1d1f;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .carousel-card:not(.is-active) {
@@ -311,8 +332,12 @@ export default {
 }
 
 .card-content {
-	padding: 1.5rem;
+	padding: 1rem;
 	color: #f1f5f9;
+}
+
+.light-theme .card-content {
+  color: #1d1d1f;
 }
 
 .card-title {
@@ -327,6 +352,10 @@ export default {
   color: #f5f5f7 !important;
 }
 
+.light-theme .card-title {
+  color: #1d1d1f;
+}
+
 .card-description {
 	font-size: 0.9rem;
 	line-height: 1.6;
@@ -334,13 +363,17 @@ export default {
 	font-weight: 400;
 }
 
+.light-theme .card-description {
+  opacity: 0.8;
+}
+
 .carousel-button {
 	position: absolute;
 	top: 50%;
 	transform: translateY(-50%);
-	background: rgba(30, 41, 59, 0.5);
-	color: #e0f2fe;
-	border: 1px solid rgba(156, 217, 249, 0.3);
+	background-color: rgba(255, 255, 255, 0.1);
+	color: #fff;
+	border: 1px solid rgba(255, 255, 255, 0.2);
 	border-radius: 50%;
 	width: 44px;
 	height: 44px;
@@ -353,18 +386,33 @@ export default {
 	backdrop-filter: blur(5px);
 }
 
+.light-theme .carousel-button {
+  background-color: rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: #1d1d1f;
+}
+
 .carousel-button:hover {
-	background-color: rgba(156, 217, 249, 0.2);
+	background-color: rgba(255, 255, 255, 0.2);
 	border-color: rgba(156, 217, 249, 0.5);
 	transform: translateY(-50%) scale(1.05);
 }
 
+.light-theme .carousel-button:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
 .carousel-button.prev {
-	left: 0px; /* Adjusted position */
+	left: -22px;
 }
 
 .carousel-button.next {
-	right: 0px; /* Adjusted position */
+	right: -22px;
+}
+
+.light-theme .card-title,
+.light-theme .card-description {
+  color: #1d1d1f;
 }
 
 .carousel-indicators {

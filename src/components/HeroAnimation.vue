@@ -4,7 +4,7 @@
     <div id="coverBlack"></div>
     <div class="hero-content">
       <div class="actions">
-        <a href="#" class="button button-more">进入报名处</a>
+        <router-link to="/registration" class="button button-more">进入报名处</router-link>
         <a href="#" class="button button-join">加入招新群</a>
       </div>
     </div>
