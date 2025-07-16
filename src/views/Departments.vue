@@ -1,6 +1,6 @@
 <template>
   <div class="departments-view">
-    <StarfieldBackground />
+    <StarfieldBackground :is-dark="theme.isDark" />
     <div class="departments-container">
       <header class="departments-header">
         <h1 class="title">部门介绍</h1>
@@ -51,18 +51,24 @@
 <script>
 import { departmentsData } from '../data.js';
 import StarfieldBackground from '@/components/StarfieldBackground.vue';
+import { theme } from '@/theme.js';
 
 export default {
   name: 'DepartmentsView',
   components: {
-    StarfieldBackground,
+    StarfieldBackground
+  },
+  setup() {
+    return {
+      theme
+    };
   },
   data() {
     return {
       departments: departmentsData,
       currentIndex: 0,
       theta: 0,
-      radius: 350,
+      radius: 450,
       totalCards: departmentsData.length,
       isDragging: false,
       startX: 0,
@@ -84,7 +90,7 @@ export default {
   methods: {
     init() {
       this.$nextTick(() => {
-        this.radius = window.innerWidth <= 768 ? 280 : 350;
+        this.radius = window.innerWidth <= 768 ? 280 : 450;
         this.arrangeCards();
         this.addEventListeners();
       });
@@ -190,7 +196,7 @@ export default {
       }
     },
     handleResize() {
-      this.radius = window.innerWidth <= 768 ? 280 : 350;
+      this.radius = window.innerWidth <= 768 ? 280 : 450;
       this.arrangeCards();
       this.rotateCarousel();
     },
@@ -258,14 +264,14 @@ export default {
   align-items: center;
   justify-content: center;
   position: relative;
-  min-height: 500px;
+  min-height: 700px;
 }
 
 .carousel-container {
   position: relative;
   width: 100%;
-  height: 500px;
-  perspective: 1000px;
+  height: 700px;
+  perspective: 1500px;
   transform-style: preserve-3d;
   display: flex;
   justify-content: center;
@@ -275,8 +281,8 @@ export default {
 
 .carousel {
   position: relative;
-  width: 400px;
-  height: 400px;
+  width: 600px;
+  height: 600px;
   transform-style: preserve-3d;
   transition: transform 0.5s ease;
 }
@@ -293,6 +299,20 @@ export default {
   transform-style: preserve-3d;
   transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   cursor: pointer;
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.light-theme .department-card .card-inner {
+  background-color: #fff;
+  border: 1px solid #1d1d1f;
+  backdrop-filter: none;
+}
+
+.light-theme .department-card {
+  background-color: transparent;
+  border: none;
 }
 
 .card-inner {
@@ -329,6 +349,14 @@ export default {
   -webkit-backdrop-filter: blur(12px);
 }
 
+.light-theme .card-front,
+.light-theme .card-back {
+  background: #ffffff;
+  border: 1px solid #1d1d1f;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
 .card-back {
   background: rgba(40, 40, 60, 0.8);
   backdrop-filter: blur(12px);
@@ -354,13 +382,28 @@ export default {
   text-align: left;
 }
 
+.title, .subtitle, .instructions {
+  color: #f5f5f7;
+}
+
+.light-theme .title,
+.light-theme .subtitle,
+.light-theme .instructions {
+  color: #1d1d1f;
+}
 
 .department-card h3 {
   font-size: 2rem;
   margin-top: 20px;
-  color: #f5f5f7;
+  color: #fff;
   font-weight: 600;
   text-shadow: 0 0 15px rgba(156, 217, 249, 0.6);
+}
+
+.light-theme .card-front h3,
+.light-theme .card-back h3,
+.light-theme .card-back p {
+  color: #1d1d1f;
 }
 
 .card-back h3 {
@@ -370,6 +413,16 @@ export default {
   color: #9cd9f9;
 }
 
+.card-back p {
+  font-size: 0.95rem;
+  color: #a1a1a6;
+  line-height: 1.7;
+  flex-grow: 1;
+}
+
+.light-theme .card-back p {
+  color: #1d1d1f;
+}
 
 .department-icon {
   width: 100%;
@@ -378,6 +431,11 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  color: #fff;
+}
+
+.light-theme .department-icon {
+  color: #1d1d1f;
 }
 
 .department-icon i {
@@ -388,13 +446,6 @@ export default {
 
 .department-card:hover .department-icon i {
   transform: scale(1.1);
-}
-
-.card-back p {
-  font-size: 0.95rem;
-  color: #a1a1a6;
-  line-height: 1.7;
-  flex-grow: 1;
 }
 
 

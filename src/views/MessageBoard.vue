@@ -1,6 +1,6 @@
 <template>
   <div>
-    <StarfieldBackground />
+    <StarfieldBackground :is-dark="theme.isDark" />
     <section id="message-board" class="message-board scroll">
       <h3>留言板</h3>
       <div class="message-container">
@@ -33,11 +33,17 @@
 <!--我没写具体功能的js-->
 <script>
 import StarfieldBackground from '@/components/StarfieldBackground.vue';
+import { theme } from '@/theme.js';
 
 export default {
   name: 'MessageBoardView',
   components: {
     StarfieldBackground,
+  },
+  setup() {
+    return {
+      theme
+    };
   },
   mounted() {
     const observer = new IntersectionObserver((entries) => {
@@ -71,6 +77,10 @@ export default {
   color: #f5f5f7;
 }
 
+.light-theme .message-board h3 {
+  color: #1d1d1f;
+}
+
 .message-container {
   max-width: 800px;
   margin: 0 auto;
@@ -95,6 +105,12 @@ export default {
   transition: all 0.3s ease;
 }
 
+.light-theme .message-item {
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: #1d1d1f;
+}
+
 .message-item:hover {
   transform: translateY(-2px);
   box-shadow: 0 10px 25px rgba(156, 217, 249, 0.2);
@@ -107,10 +123,18 @@ export default {
   color: #f5f5f7;
 }
 
+.light-theme .message-content {
+  color: #1d1d1f;
+}
+
 .message-meta {
   text-align: right;
   font-size: 0.9rem;
-  color: #999;
+  color: #a1a1a6;
+}
+
+.light-theme .message-meta {
+  color: #6e6e73;
 }
 
 .message-meta .author {
@@ -118,8 +142,16 @@ export default {
   color: #9cd9f9;
 }
 
+.light-theme .message-meta .author {
+  color: #007aff;
+}
+
 .message-meta .timestamp {
   color: #a1a1a6;
+}
+
+.light-theme .message-meta .timestamp {
+  color: #6e6e73;
 }
 
 .message-form {
@@ -134,11 +166,20 @@ export default {
   gap: 15px;
 }
 
+.light-theme .message-form {
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
 .message-form h4 {
   margin-bottom: 20px;
   font-size: 1.5rem;
   color: #f5f5f7;
   font-weight: 600;
+}
+
+.light-theme .message-form h4 {
+  color: #1d1d1f;
 }
 
 .message-form input,
@@ -154,15 +195,32 @@ export default {
   transition: border-color 0.3s ease;
 }
 
+.light-theme .message-form input,
+.light-theme .message-form textarea {
+  border: 1px solid #ddd;
+  background: rgba(255, 255, 255, 0.8);
+  color: #1d1d1f;
+}
+
 .message-form input::placeholder,
 .message-form textarea::placeholder {
   color: #a1a1a6;
+}
+
+.light-theme .message-form input::placeholder,
+.light-theme .message-form textarea::placeholder {
+  color: #6e6e73;
 }
 
 .message-form input:focus,
 .message-form textarea:focus {
   outline: none;
   border-color: #9cd9f9;
+}
+
+.light-theme .message-form input:focus,
+.light-theme .message-form textarea:focus {
+  border-color: #007aff;
 }
 
 .message-form textarea {
@@ -182,9 +240,17 @@ export default {
   transition: all 0.3s ease;
 }
 
+.light-theme .message-form button {
+  background-color: #007aff;
+}
+
 .message-form button:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+}
+
+.light-theme .message-form button:hover:not(:disabled) {
+  background-color: #0056b3;
 }
 
 .message-form button:disabled {

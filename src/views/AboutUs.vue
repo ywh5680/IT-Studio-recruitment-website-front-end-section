@@ -1,6 +1,6 @@
 <template>
   <div>
-    <StarfieldBackground />
+    <StarfieldBackground :is-dark="theme.isDark"/>
     <section id="about-us" class="about-us scroll">
       <div class="about-container">
         <div class="about-text">
@@ -33,11 +33,17 @@
 
 <script>
 import StarfieldBackground from '@/components/StarfieldBackground.vue';
+import { theme } from '@/theme.js';
 
 export default {
   name: 'AboutUsView',
   components: {
     StarfieldBackground,
+  },
+  setup() {
+    return {
+      theme
+    };
   },
   data() {
     return {
@@ -99,11 +105,19 @@ export default {
   color: #f5f5f7;
 }
 
+.light-theme .about-text h3 {
+  color: #1d1d1f;
+}
+
 .about-text p {
   font-size: 1.1rem;
   line-height: 1.8;
   color: #a1a1a6;
   margin-bottom: 20px;
+}
+
+.light-theme .about-text p {
+  color: #6e6e73;
 }
 
 .carousel-container {
