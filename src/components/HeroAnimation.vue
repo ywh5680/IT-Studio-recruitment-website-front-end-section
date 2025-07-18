@@ -3,6 +3,9 @@
     <div id="container" ref="container"></div>
     <div id="coverBlack"></div>
     <div class="hero-content">
+      <!-- 只保留动画和其他内容 -->
+    </div>
+    <div class="actions-fixed">
       <div class="actions">
         <router-link to="/registration" class="button button-more">进入报名处</router-link>
         <a href="#" class="button button-join">加入招新群</a>
@@ -40,6 +43,20 @@ export default {
   methods: {
     initAnimation() {
       const containerElement = this.$refs.container;
+
+      // 动态适配canvas尺寸和字体
+      let CANVAS_W = 200;
+      let CANVAS_H = 50;
+      let FONT_SIZE = 30;
+      if (window.innerWidth <= 480) {
+        CANVAS_W = 120;
+        CANVAS_H = 30;
+        FONT_SIZE = 18;
+      } else if (window.innerWidth <= 768) {
+        CANVAS_W = 150;
+        CANVAS_H = 40;
+        FONT_SIZE = 22;
+      }
 
       class BasicView {
         constructor() {
@@ -91,8 +108,9 @@ export default {
       class ParticleTextWorld extends BasicView {
         constructor() {
           super();
-          this.CANVAS_W = 200;
-          this.CANVAS_H = 50;
+          this.CANVAS_W = CANVAS_W;
+          this.CANVAS_H = CANVAS_H;
+          this.FONT_SIZE = FONT_SIZE;
           this.WORD_LIST = ["IT-Studio"];
           this.matrixLength = 4;
           this.particleList = [];
@@ -221,7 +239,7 @@ export default {
           canvas.height = this.CANVAS_H;
           const ctx = canvas.getContext("2d");
           ctx.fillStyle = "#FFFFFF";
-          ctx.font = `30px ${FONT_NAME}`;
+          ctx.font = `${this.FONT_SIZE}px ${FONT_NAME}`;
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
           ctx.fillText(this.WORD_LIST[0], this.CANVAS_W / 2, this.CANVAS_H / 2);
@@ -389,11 +407,24 @@ export default {
   text-align: center;
 }
 
+.actions-fixed {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100vw;
+  z-index: 102;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  padding-bottom: env(safe-area-inset-bottom, 16px);
+  background: linear-gradient(to top, rgba(20,20,30,0.85) 60%, rgba(20,20,30,0));
+}
 .actions {
   display: flex;
   justify-content: center;
   gap: 20px;
-  margin-top: 20px;
+  margin: 0 auto 20px auto;
+  pointer-events: auto;
 }
 
 .button {
@@ -429,5 +460,59 @@ export default {
     background-color: #fff;
     color: #000;
     box-shadow: 0 0 25px #fff;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .hero-container {
+    height: 80vh;
+    min-height: 500px;
+  }
+  #container {
+    height: 60vh;
+    min-height: 320px;
+  }
+  .hero-content {
+    bottom: 6%;
+    width: 100vw;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0 10px;
+  }
+  .actions {
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+    margin: 0 auto 12px auto;
+  }
+  .actions-fixed {
+    width: 100vw;
+    left: 0;
+    bottom: 0;
+  }
+  .button {
+    width: 100%;
+    max-width: 320px;
+    font-size: 15px;
+    padding: 10px 0;
+    border-radius: 30px;
+    letter-spacing: 0.5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-container {
+    height: 70vh;
+    min-height: 350px;
+  }
+  #container {
+    height: 45vh;
+    min-height: 180px;
+  }
+  .button {
+    font-size: 14px;
+    max-width: 95vw;
+    padding: 9px 0;
+  }
 }
 </style> 

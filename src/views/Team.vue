@@ -28,8 +28,14 @@ export default {
 
 <style scoped>
 .team-members {
-  padding: 80px 0;
+  padding: 40px 0;
   position: relative;
   z-index: 1;
+}
+
+@media (max-width: 768px) {
+  .team-members {
+    padding: 20px 0;
+  }
 }
 </style> 

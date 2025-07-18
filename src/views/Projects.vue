@@ -232,22 +232,11 @@ export default {
   font-weight: 500;
 }
 
-.light-theme .year-button {
-  color: #1d1d1f;
-  background-color: rgba(0, 0, 0, 0.05);
-}
-
 .year-button.active,
 .year-button:hover {
   background-color: #007aff;
   color: #fff;
   border-color: #007aff;
-}
-
-.light-theme .year-button.active,
-.light-theme .year-button:hover {
-  background-color: #007aff;
-  color: #fff;
 }
 
 
@@ -281,13 +270,6 @@ export default {
 	transform-origin: center center;
 	position: relative;
 	border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.light-theme .carousel-card {
-  background: rgba(255, 255, 255, 0.8);
-  color: #1d1d1f;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .carousel-card:not(.is-active) {
@@ -336,10 +318,6 @@ export default {
 	color: #f1f5f9;
 }
 
-.light-theme .card-content {
-  color: #1d1d1f;
-}
-
 .card-title {
   /* Apple system font stack */
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -352,19 +330,11 @@ export default {
   color: #f5f5f7 !important;
 }
 
-.light-theme .card-title {
-  color: #1d1d1f;
-}
-
 .card-description {
 	font-size: 0.9rem;
 	line-height: 1.6;
 	color: rgba(241, 245, 249, 0.7);
 	font-weight: 400;
-}
-
-.light-theme .card-description {
-  opacity: 0.8;
 }
 
 .carousel-button {
@@ -386,20 +356,10 @@ export default {
 	backdrop-filter: blur(5px);
 }
 
-.light-theme .carousel-button {
-  background-color: rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  color: #1d1d1f;
-}
-
 .carousel-button:hover {
 	background-color: rgba(255, 255, 255, 0.2);
 	border-color: rgba(156, 217, 249, 0.5);
 	transform: translateY(-50%) scale(1.05);
-}
-
-.light-theme .carousel-button:hover {
-  background-color: rgba(0, 0, 0, 0.2);
 }
 
 .carousel-button.prev {
@@ -408,11 +368,6 @@ export default {
 
 .carousel-button.next {
 	right: -22px;
-}
-
-.light-theme .card-title,
-.light-theme .card-description {
-  color: #1d1d1f;
 }
 
 .carousel-indicators {

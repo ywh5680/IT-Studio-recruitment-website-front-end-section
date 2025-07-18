@@ -1,92 +1,197 @@
 <template>
-  <div>
+  <div class="message-board-container">
     <StarfieldBackground :is-dark="theme.isDark" />
-    <section id="message-board" class="message-board scroll">
-      <h3>留言板</h3>
-      <div class="message-container">
-        <div class="message-list">
-          <div class="message-item">
-            <p class="message-content">Ciallo</p>
-            <div class="message-meta">
-              <span class="author">- 啊</span>
-              <span class="timestamp">2023-10-27 10:00</span>
+    <v-container class="message-board-content">
+      <h3 class="text-h3 text-center font-weight-bold mb-8">留言板</h3>
+      
+      <v-row justify="center">
+        <v-col cols="12" md="8">
+          <!-- 留言列表 -->
+          <div class="message-list mb-10">
+            <div v-if="commentsLoading" class="text-center">
+              <v-progress-circular indeterminate color="primary"></v-progress-circular>
             </div>
+            <template v-else-if="comments.length > 0">
+              <CommentItem
+                v-for="comment in comments"
+                :key="comment.id"
+                :comment="comment"
+                @reply="setReply"
+              />
+            </template>
+            <v-card v-else class="no-comments-card" flat>
+              <v-card-text class="text-center text-grey">
+                <span v-if="commentsError">{{ commentsError }}</span>
+                <span v-else>还没有人留言，快来抢占第一个沙发吧！</span>
+              </v-card-text>
+            </v-card>
           </div>
-          <div class="message-item">
-            <p class="message-content">CialloCiallo</p>
-            <div class="message-meta">
-              <span class="author">- 柚子厨</span>
-              <span class="timestamp">2023-10-27 11:30</span>
-            </div>
-          </div>
-        </div>
-        <form class="message-form">
-          <h4>留下你的足迹</h4>
-          <input type="text" placeholder="你的昵称" disabled>
-          <textarea placeholder="说点什么吧..." disabled></textarea>
-          <button type="submit" disabled>发布留言</button>
-        </form>
-      </div>
-    </section>
+
+          <!-- 留言表单 -->
+          <v-card class="message-form-card" elevation="12">
+            <v-card-title class="text-h5">
+              {{ formTitle }}
+            </v-card-title>
+            <v-card-text>
+              <v-form @submit.prevent="handleSubmit">
+                <v-textarea
+                  v-model="newComment.content"
+                  label="说点什么吧..."
+                  variant="outlined"
+                  rows="4"
+                  counter
+                  maxlength="500"
+                  class="mb-3"
+                  autofocus
+                ></v-textarea>
+                <v-row>
+                  <v-col cols="12" sm="6">
+                    <v-text-field
+                      v-model="newComment.email"
+                      label="邮箱"
+                      variant="outlined"
+                      prepend-inner-icon="mdi-email"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6">
+                    <v-text-field
+                      v-model="newComment.qq"
+                      label="QQ (可选)"
+                      variant="outlined"
+                      type="number"
+                      prepend-inner-icon="mdi-qqchat"
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+                
+                <v-alert v-if="replyingTo" type="info" variant="tonal" class="mb-4" dense>
+                  正在回复评论 #{{ replyingTo }}
+                  <v-btn size="x-small" icon="mdi-close" variant="text" @click="cancelReply"></v-btn>
+                </v-alert>
+
+                <v-alert v-if="error" type="error" variant="tonal" class="mb-4" dense>
+                  {{ error }}
+                </v-alert>
+                
+                <v-btn
+                  :disabled="isSubmitDisabled"
+                  :loading="loading"
+                  type="submit"
+                  block
+                  color="primary"
+                  size="large"
+                >
+                  发布
+                </v-btn>
+              </v-form>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
-<!--我没写具体功能的js-->
-<script>
+
+<script setup>
+import { ref, computed, onMounted } from 'vue';
 import StarfieldBackground from '@/components/StarfieldBackground.vue';
+import CommentItem from '@/components/CommentItem.vue';
 import { theme } from '@/theme.js';
 
-export default {
-  name: 'MessageBoardView',
-  components: {
-    StarfieldBackground,
-  },
-  setup() {
-    return {
-      theme
-    };
-  },
-  mounted() {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.1 });
+const comments = ref([]);
+const commentsLoading = ref(true);
+const commentsError = ref(null);
 
-    document.querySelectorAll('.scroll').forEach(section => {
-      observer.observe(section);
-    });
+const newComment = ref({
+  content: '',
+  email: '',
+  qq: ''
+});
+
+const loading = ref(false);
+const error = ref(null);
+const replyingTo = ref(null);
+
+const formTitle = computed(() => {
+  return replyingTo.value ? `回复评论 #${replyingTo.value}` : '留下你的足迹';
+});
+
+const isSubmitDisabled = computed(() => {
+  return !newComment.value.content.trim() || (!newComment.value.email && !newComment.value.qq);
+});
+
+const fetchComments = async () => {
+  commentsLoading.value = true;
+  commentsError.value = null;
+  try {
+    const response = await fetch('/api/comments/'); 
+    if (!response.ok) throw new Error('无法加载评论，请稍后刷新重试');
+    comments.value = await response.json();
+  } catch (e) {
+    commentsError.value = e.message;
+  } finally {
+    commentsLoading.value = false;
   }
-}
+};
+
+const handleSubmit = async () => {
+  if (isSubmitDisabled.value) return;
+
+  loading.value = true;
+  error.value = null;
+  
+  try {
+    const body = {
+      content: newComment.value.content,
+    };
+    if (newComment.value.email) body.email = newComment.value.email;
+    if (newComment.value.qq) body.qq = newComment.value.qq;
+    if (replyingTo.value) body.parent = replyingTo.value;
+
+    const response = await fetch('/api/comment/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+
+    if (response.status === 400) throw new Error('缺少必要参数');
+    if (response.status === 404) throw new Error('回复的评论不存在');
+    if (response.status === 422) throw new Error('数据不合法，请检查邮箱或QQ号');
+    if (!response.ok) throw new Error('发布失败，请稍后重试');
+    
+    // 成功后清空表单并刷新列表
+    newComment.value = { content: '', email: '', qq: '' };
+    replyingTo.value = null;
+    await fetchComments(); // 刷新评论列表
+  } catch (e) {
+    error.value = e.message;
+  } finally {
+    loading.value = false;
+  }
+};
+
+const setReply = (parentId) => {
+  replyingTo.value = parentId;
+  document.querySelector('.message-form-card').scrollIntoView({ behavior: 'smooth' });
+};
+
+const cancelReply = () => {
+  replyingTo.value = null;
+};
+
+onMounted(() => {
+  fetchComments();
+});
 </script>
 
 <style scoped>
-.message-board {
-  padding: 150px 20px 80px;
+.message-board-container {
+  min-height: 100vh;
+}
+.message-board-content {
+  padding: 120px 20px 80px;
   position: relative;
   z-index: 1;
-}
-
-.message-board h3 {
-  text-align: center;
-  font-size: 2.5rem;
-  margin-bottom: 40px;
-  font-weight: 600;
-  color: #f5f5f7;
-}
-
-.light-theme .message-board h3 {
-  color: #1d1d1f;
-}
-
-.message-container {
-  max-width: 800px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
 }
 
 .message-list {
@@ -97,44 +202,31 @@ export default {
 
 .message-item {
   padding: 20px;
-  margin-bottom: 20px;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(156, 217, 249, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   transition: all 0.3s ease;
-}
-
-.light-theme .message-item {
-  background: rgba(0, 0, 0, 0.05);
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  color: #1d1d1f;
 }
 
 .message-item:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(156, 217, 249, 0.2);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
 }
 
 .message-content {
   font-size: 1.1rem;
   line-height: 1.6;
-  margin-bottom: 10px;
   color: #f5f5f7;
-}
-
-.light-theme .message-content {
-  color: #1d1d1f;
+  margin-bottom: 12px;
 }
 
 .message-meta {
-  text-align: right;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
   font-size: 0.9rem;
   color: #a1a1a6;
-}
-
-.light-theme .message-meta {
-  color: #6e6e73;
 }
 
 .message-meta .author {
@@ -142,119 +234,16 @@ export default {
   color: #9cd9f9;
 }
 
-.light-theme .message-meta .author {
-  color: #007aff;
-}
-
-.message-meta .timestamp {
-  color: #a1a1a6;
-}
-
-.light-theme .message-meta .timestamp {
-  color: #6e6e73;
-}
-
-.message-form {
-  background: rgba(255, 255, 255, 0.1);
+.message-form-card {
+  background-color: rgba(30, 30, 30, 0.7) !important;
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(156, 217, 249, 0.2);
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px !important;
+  color: #fff;
 }
 
-.light-theme .message-form {
-  background: rgba(0, 0, 0, 0.05);
-  border: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.message-form h4 {
-  margin-bottom: 20px;
-  font-size: 1.5rem;
-  color: #f5f5f7;
-  font-weight: 600;
-}
-
-.light-theme .message-form h4 {
-  color: #1d1d1f;
-}
-
-.message-form input,
-.message-form textarea {
-  width: 100%;
-  padding: 15px;
-  margin-bottom: 15px;
-  border: 2px solid rgba(156, 217, 249, 0.3);
-  border-radius: 8px;
-  font-size: 1rem;
-  background: rgba(255, 255, 255, 0.1);
-  color: #f5f5f7;
-  transition: border-color 0.3s ease;
-}
-
-.light-theme .message-form input,
-.light-theme .message-form textarea {
-  border: 1px solid #ddd;
-  background: rgba(255, 255, 255, 0.8);
-  color: #1d1d1f;
-}
-
-.message-form input::placeholder,
-.message-form textarea::placeholder {
-  color: #a1a1a6;
-}
-
-.light-theme .message-form input::placeholder,
-.light-theme .message-form textarea::placeholder {
-  color: #6e6e73;
-}
-
-.message-form input:focus,
-.message-form textarea:focus {
-  outline: none;
-  border-color: #9cd9f9;
-}
-
-.light-theme .message-form input:focus,
-.light-theme .message-form textarea:focus {
-  border-color: #007aff;
-}
-
-.message-form textarea {
-  height: 120px;
-  resize: vertical;
-}
-
-.message-form button {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border: none;
-  padding: 15px 30px;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.light-theme .message-form button {
-  background-color: #007aff;
-}
-
-.message-form button:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
-}
-
-.light-theme .message-form button:hover:not(:disabled) {
-  background-color: #0056b3;
-}
-
-.message-form button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+.no-comments-card {
+  background-color: transparent !important;
+  padding: 40px 0;
 }
 </style> 
