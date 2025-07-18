@@ -1,17 +1,112 @@
 <template>
-  <div>
+  <div class="status-view-container">
     <StarfieldBackground :is-dark="theme.isDark" />
-    <section id="application-status" class="application-status scroll">
-      <h3>查询报名进度</h3>
-      <div class="status-checker">
-        <input type="text" placeholder="请输入你的信息进行查询" disabled>
-        <button disabled>查询</button>
-      </div>
-    </section>
+    <v-container class="fill-height content-container" fluid>
+      <v-row align="center" justify="center">
+        <v-col cols="12" md="8" lg="6">
+          <v-card 
+            class="status-card" 
+            elevation="12" 
+            :loading="loading"
+          >
+            <v-card-title class="text-center text-h4 font-weight-bold pa-5">
+              报名状态查询
+            </v-card-title>
+            
+            <v-card-text v-if="!result">
+              <v-form @submit.prevent="handleQuery">
+                <v-text-field
+                  v-model="queryInput"
+                  label="输入姓名/邮箱/QQ/学号/手机号查询"
+                  prepend-inner-icon="mdi-magnify"
+                  variant="outlined"
+                  class="mb-3"
+                  autofocus
+                ></v-text-field>
+
+                <v-alert
+                  v-if="error"
+                  type="error"
+                  variant="tonal"
+                  class="mb-4"
+                  dense
+                >
+                  {{ error }}
+                </v-alert>
+
+                <v-btn
+                  :disabled="isQueryDisabled"
+                  :loading="loading"
+                  type="submit"
+                  block
+                  color="primary"
+                  size="large"
+                >
+                  查询
+                </v-btn>
+              </v-form>
+            </v-card-text>
+
+            <v-card-text v-else class="text-center">
+              <v-list class="result-list" bg-color="transparent">
+                <v-list-item>
+                  <v-list-item-title class="text-h6">
+                    {{ result.progress }}
+                  </v-list-item-title>
+                  <v-list-item-subtitle>
+                    当前状态
+                  </v-list-item-subtitle>
+                </v-list-item>
+              </v-list>
+              
+              <v-divider class="my-4"></v-divider>
+
+              <v-stepper alt-labels>
+                <v-stepper-item
+                  title="提交申请"
+                  icon="mdi-file-document-edit"
+                  :complete="step1State.complete"
+                >
+                </v-stepper-item>
+
+                <v-divider></v-divider>
+
+                <v-stepper-item
+                  title="审核/面试"
+                  icon="mdi-account-group"
+                  :complete="step2State.complete"
+                >
+                </v-stepper-item>
+
+                <v-divider></v-divider>
+
+                <v-stepper-item
+                  title="结果反馈"
+                  :icon="step3State.icon"
+                  :complete="step3State.complete"
+                  :error="step3State.error"
+                >
+                </v-stepper-item>
+              </v-stepper>
+              
+              <v-btn
+                @click="reset"
+                class="mt-8"
+                color="secondary"
+                variant="outlined"
+              >
+                返回
+              </v-btn>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
-<!--我还是没写具体功能的js-->
+
 <script>
+import { ref, computed } from 'vue';
 import StarfieldBackground from '@/components/StarfieldBackground.vue';
 import { theme } from '@/theme.js';
 
@@ -21,103 +116,197 @@ export default {
     StarfieldBackground,
   },
   setup() {
+    const queryInput = ref('');
+    
+    const loading = ref(false);
+    const error = ref(null);
+    const result = ref(null);
+
+    const isQueryDisabled = computed(() => {
+      return !queryInput.value.trim();
+    });
+
+    const step1State = computed(() => {
+      if (!result.value) return {};
+      return { complete: result.value.idx >= 0 };
+    });
+
+    const step2State = computed(() => {
+      if (!result.value) return {};
+      // 任何面试/审核相关的状态都意味着第二步正在进行或已完成
+      return { complete: result.value.idx >= 1 };
+    });
+
+    const step3State = computed(() => {
+      if (!result.value) return {};
+      const isSuccess = result.value.idx === 4;
+      const isFailure = result.value.idx < 0;
+      return {
+        complete: isSuccess,
+        error: isFailure,
+        icon: isSuccess
+          ? 'mdi-check-decagram'
+          : isFailure
+          ? 'mdi-close-octagon'
+          : 'mdi-comment-question-outline',
+      };
+    });
+    
+    const handleQuery = async () => {
+      if (isQueryDisabled.value) return;
+      
+      loading.value = true;
+      error.value = null;
+      result.value = null;
+
+      try {
+        const input = queryInput.value.trim();
+        const body = {};
+
+        if (input.includes('@')) {
+          body.email = input;
+        } else if (/^\d+$/.test(input)) {
+          body.phone = input;
+          body.qq = input;
+          body.uid = input;
+        } else {
+          body.name = input;
+        }
+        
+        const response = await fetch('/api/get_status/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(body)
+        });
+
+        if (response.status === 400) throw new Error('缺少查询参数或参数格式不正确');
+        if (response.status === 404) throw new Error('未找到您的报名记录');
+        if (response.status === 406) throw new Error('找到多条记录，请提供更精确的信息');
+        if (!response.ok) throw new Error('查询失败，请稍后再试');
+
+        result.value = await response.json();
+        
+      } catch (e) {
+        error.value = e.message;
+      } finally {
+        loading.value = false;
+      }
+    };
+
+    const reset = () => {
+      queryInput.value = '';
+      result.value = null;
+      error.value = null;
+    };
+
     return {
-      theme
+      theme,
+      queryInput,
+      loading,
+      error,
+      result,
+      isQueryDisabled,
+      step1State,
+      step2State,
+      step3State,
+      handleQuery,
+      reset
     };
   },
-  mounted() {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.1 });
-
-    document.querySelectorAll('.scroll').forEach(section => {
-      observer.observe(section);
-    });
-  }
-}
+};
 </script>
 
 <style scoped>
-.application-status {
-  padding: 150px 20px 80px;
-  text-align: center;
+.status-view-container {
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+  overflow: hidden;
+}
+
+.content-container {
   position: relative;
   z-index: 1;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
 }
 
-.application-status h3 {
-  font-size: 2.5rem;
-  margin-bottom: 40px;
+.status-card {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px !important;
+  color: #fff;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.v-card-title {
+  color: #f5f5f7;
+}
+
+.v-text-field :deep(label),
+.v-text-field :deep(.v-input__icon .v-icon) {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.v-text-field :deep(input) {
+  color: #fff !important;
+}
+
+.v-text-field :deep(.v-field) {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.v-btn {
   font-weight: 600;
-  color: #f5f5f7;
+  letter-spacing: 0.5px;
 }
 
-.light-theme .application-status h3 {
-  color: #1d1d1f;
+.result-list {
+  color: #fff;
 }
 
-.status-checker {
-  max-width: 500px;
-  margin: 0 auto;
-  display: flex;
-  gap: 10px;
+.result-list :deep(.v-list-item-title) {
+  font-size: 1.5rem !important;
+  font-weight: 600;
+  color: #fff !important;
+  text-align: center;
+  margin-bottom: 8px;
 }
 
-.status-checker input {
-  padding: 15px 20px;
-  border: 2px solid #333;
-  border-radius: 8px;
-  margin-right: 15px;
-  font-size: 1rem;
-  width: 300px;
-  background: rgba(255, 255, 255, 0.1);
-  color: #f5f5f7;
-  border-color: rgba(156, 217, 249, 0.3);
+.result-list :deep(.v-list-item-subtitle) {
+  font-size: 0.9rem !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+  text-align: center;
 }
 
-.light-theme .status-checker input {
-  background: rgba(0, 0, 0, 0.05);
-  border-color: rgba(0, 0, 0, 0.1);
-  color: #1d1d1f;
+.result-list :deep(.v-list-item__prepend .v-icon) {
+  color: rgba(255, 255, 255, 0.8) !important;
 }
 
-.status-checker input::placeholder {
-  color: #a1a1a6;
+.v-stepper {
+  background-color: transparent !important;
+  color: #fff;
 }
 
-.light-theme .status-checker input::placeholder {
-  color: #6e6e73;
+.v-stepper :deep(.v-stepper-item__title) {
+  color: #fff;
 }
 
-.status-checker button {
-  padding: 15px 30px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 1rem;
-  font-weight: 500;
-  transition: all 0.3s ease;
+.v-stepper :deep(.v-stepper-item--complete .v-stepper-item__title) {
+  color: #4caf50; /* Vuetify success color */
 }
 
-.status-checker button:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+.v-stepper :deep(.v-stepper-item--error .v-stepper-item__title) {
+  color: #f44336; /* Vuetify error color */
 }
 
-.status-checker button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+@media (max-width: 600px) {
+  .v-card-title {
+    font-size: 1.8rem !important;
+  }
 }
 </style> 

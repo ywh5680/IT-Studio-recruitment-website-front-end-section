@@ -251,30 +251,9 @@ export default {
 }
 
 
-:global(body.light-theme) .registration-form-wrapper {
-  background-color: rgba(240, 240, 240, 0.9);
-  color: #333;
-  border-color: rgba(0, 0, 0, 0.1);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), 0 4px 16px rgba(0, 0, 0, 0.08); /* 按道理这里应该有阴影，但是没有，不知道为什么 */
-}
-
-
-
-:global(body.light-theme) .form-group input[type="text"],
-:global(body.light-theme) .custom-select {
-    background-color: #fff;
-    color: #333;
-    border: 1px solid #ddd;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-:global(body.light-theme) .custom-options {
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); 
-}
-
 :global(body.dark-theme) .registration-form-wrapper {
-    background-color: rgba(30, 30, 30, 0.7);
-    color: #eee;
+  background-color: rgba(30, 30, 30, 0.7);
+  color: #eee;
 }
 
 :global(body.dark-theme) .form-group input[type="text"],
@@ -305,7 +284,7 @@ export default {
     background-color: #333;
     color: #eee;
 }
-
+/* 纵使我这样写，但是还是无法改变颜色，奇怪，感觉可以考虑移除相关模式，有点麻烦 */
 :global(body.light-theme) .registration-form-wrapper .form-title {
   color: #333 !important;
 }

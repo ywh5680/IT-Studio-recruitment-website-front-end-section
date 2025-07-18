@@ -304,13 +304,13 @@ export default {
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.light-theme .department-card .card-inner {
+.department-card .card-inner {
   background-color: #fff;
   border: 1px solid #1d1d1f;
   backdrop-filter: none;
 }
 
-.light-theme .department-card {
+.department-card {
   background-color: transparent;
   border: none;
 }
@@ -349,8 +349,8 @@ export default {
   -webkit-backdrop-filter: blur(12px);
 }
 
-.light-theme .card-front,
-.light-theme .card-back {
+.card-front,
+.card-back {
   background: #ffffff;
   border: 1px solid #1d1d1f;
   backdrop-filter: none;
@@ -386,12 +386,6 @@ export default {
   color: #f5f5f7;
 }
 
-.light-theme .title,
-.light-theme .subtitle,
-.light-theme .instructions {
-  color: #1d1d1f;
-}
-
 .department-card h3 {
   font-size: 2rem;
   margin-top: 20px;
@@ -400,9 +394,9 @@ export default {
   text-shadow: 0 0 15px rgba(156, 217, 249, 0.6);
 }
 
-.light-theme .card-front h3,
-.light-theme .card-back h3,
-.light-theme .card-back p {
+.card-front h3,
+.card-back h3,
+.card-back p {
   color: #1d1d1f;
 }
 
@@ -420,7 +414,7 @@ export default {
   flex-grow: 1;
 }
 
-.light-theme .card-back p {
+.card-back p {
   color: #1d1d1f;
 }
 
@@ -432,10 +426,6 @@ export default {
   justify-content: center;
   align-items: center;
   color: #fff;
-}
-
-.light-theme .department-icon {
-  color: #1d1d1f;
 }
 
 .department-icon i {
