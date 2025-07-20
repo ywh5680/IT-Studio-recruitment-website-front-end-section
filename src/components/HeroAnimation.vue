@@ -419,6 +419,7 @@ export default {
   padding-bottom: env(safe-area-inset-bottom, 16px);
   background: linear-gradient(to top, rgba(20,20,30,0.85) 60%, rgba(20,20,30,0));
 }
+
 .actions {
   display: flex;
   justify-content: center;
@@ -494,7 +495,7 @@ export default {
     width: 100%;
     max-width: 320px;
     font-size: 15px;
-    padding: 10px 0;
+    padding: 10px 10px;
     border-radius: 30px;
     letter-spacing: 0.5px;
   }
