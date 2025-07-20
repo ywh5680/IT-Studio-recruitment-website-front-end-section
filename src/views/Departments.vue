@@ -11,7 +11,7 @@
         <div class="carousel-container">
           <div class="carousel" ref="carousel">
             <!-- Department Cards -->
-            <div 
+            <div
               v-for="(dept, index) in departments" 
               :key="dept.name"
               class="department-card" 
@@ -42,7 +42,8 @@
       </main>
 
       <footer class="departments-footer">
-        <p class="instructions">点击卡片查看详细介绍</p>
+        <p class="instructions">点击卡片查看详细介绍<br>
+          左右滑动查看其他部门</p>
       </footer>
     </div>
   </div>
@@ -317,6 +318,7 @@ export default {
 
 .card-inner {
   position: relative;
+  border-radius: 15px;
   width: 100%;
   height: 100%;
   transform-style: preserve-3d;
@@ -362,7 +364,7 @@ export default {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   transform: rotateY(180deg);
-  padding: 25px;
+  padding: 20px;
 }
 
 .card-content {
@@ -467,9 +469,22 @@ export default {
 
 /* Responsive Adjustments */
 @media (max-width: 768px) {
+  .departments-header {
+  text-align: center;
+  padding-top: 30px;
+  padding-bottom: 20px;
+  position: relative;
+  z-index: 10;
+  }
+
   .carousel {
     width: 320px;
     height: 320px;
+  }
+
+  .carousel-main {
+  min-height: 100px;
+  padding: 0px;
   }
   
   .department-card {
@@ -487,8 +502,28 @@ export default {
     height: 400px;
   }
 
+  .card-back {
+    padding: 5px;
+  }
+
+  .card-content {
+    padding: 20px;
+  }
+
+  .card-back h3 {
+  margin-bottom: 10px;
+  font-size: 1.5rem;
+  }
+
+  .card-back p {
+  font-size: 0.87rem;
+  color: #a1a1a6;
+  line-height: 1.5;
+  flex-grow: 1;
+  }
+
   .department-card h3 {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
   }
 
   .department-icon {
@@ -522,7 +557,7 @@ export default {
   }
 
   .card-content {
-    padding: 20px;
+    padding: 10px 15px;
   }
 }
 </style> 
