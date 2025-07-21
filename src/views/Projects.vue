@@ -1,56 +1,18 @@
 <template>
   <div class="project-view-container">
     <StarfieldBackground :is-dark="theme.isDark" />
+    <div class="head">项目成果</div>
     <div class="main-content">
-      <div class="year-filter">
-        <button
-          v-for="year in projectYears"
-          :key="year"
-          class="year-button"
-          :class="{ active: year === currentProjectYear }"
-          @click="jumpToYear(year)"
-        >
-          {{ year }}
-        </button>
-      </div>
-
-      <div class="carousel-container" ref="container">
-        <div class="carousel-track" ref="track">
-          <div
-            v-for="(project, index) in allProjects"
-            :key="project.uniqueId"
-            class="carousel-card"
-            :ref="el => { if (el) cards[index] = el }"
-          >
-            <div class="card-image-container">
-              <img :src="project.image" :alt="project.name" class="card-image">
-            </div>
-            <div class="card-content">
-              <h3 class="card-title">{{ project.name }}</h3>
-              <p class="card-description">{{ project.description }}</p>
+      <div class="container" v-for="year in projectYears" :key="year">
+        <div class="year">{{ year }}</div>
+        <div class="pro-container">
+          <div v-for="(item, index) in projects[year]" :key="index" class="projects">
+            <img v-if="item.image" :src="item.image" :alt="item.name" class="project-image" />
+            <div class="text-content">
+              <div class="title">{{ item.name }}</div>
+              <div class="description">{{ item.description }}</div>
             </div>
           </div>
-        </div>
-
-        <button class="carousel-button prev" @click="prevSlide">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
-          </svg>
-        </button>
-        <button class="carousel-button next" @click="nextSlide">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-            <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-          </svg>
-        </button>
-
-        <div class="carousel-indicators">
-          <div
-            v-for="(project, index) in allProjects"
-            :key="project.uniqueId"
-            class="indicator"
-            :class="{ active: index === currentIndex }"
-            @click="moveToSlide(index)"
-          ></div>
         </div>
       </div>
     </div>
@@ -83,7 +45,10 @@ export default {
   },
   computed: {
     projectYears() {
-      return Object.keys(this.projects).sort((a, b) => b - a);
+      return Object.keys(this.projects)
+        .map(Number)
+        .sort((a, b) => b - a)
+        .map(String);
     },
     allProjects() {
       // Flatten projects and add year + unique ID
@@ -111,6 +76,8 @@ export default {
     }
   },
   mounted() {
+    console.log('原始数据:', this.projects);
+    console.log('排序后年份:', this.projectYears);
     this.$nextTick(() => {
         this.initializeCarousel();
         window.addEventListener('resize', this.handleResize);
@@ -197,222 +164,177 @@ export default {
 <style scoped>
 .project-view-container {
   min-height: 100vh;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	overflow: hidden;
-	position: relative;
-  padding-top: 80px;
+  display: flex;
+  flex-direction: column; 
+  align-items: center;
+  padding: 100px 20px 20px;
 }
 
 .main-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 1fr; 
+  justify-items: center; 
   width: 100%;
+  z-index: 1;
+  gap: 2rem; 
+  max-width: 1000px;
+}
+
+.head {
+  font-size: 2.5rem;
+  font-weight: 600;
+  text-align: center;
+  width: 100%;
+  margin-bottom: 1rem;
+  background: linear-gradient(45deg, #a78bfa, #22d3ee);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  z-index: 2;
+}
+
+.container {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  width: 80%; 
+  padding: 50px 0;
+  max-width: 1000px;
+}
+
+.year {
+  font-size: 3rem;
+  font-weight: 600;
+  background: linear-gradient(45deg, #6547ea 0%, #155ceb 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 1rem;
+  position: relative;
+  padding-left: 1rem;
+  width: 100%; 
+  text-align: left; 
+  align-self: start; 
+}
+
+.year::before{
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 1.5rem;
+  background: linear-gradient(to bottom, #22d3ee, #818cf8); 
+  border-radius: 2px;
+}
+
+.pro-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+  gap: 1.5rem; 
+  width: 100%; 
+}
+
+.projects {
+  position: relative;
+  background: rgba(17, 24, 39, 0.7);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  height: 200px; /* 固定高度 */
+  overflow: hidden; /* 隐藏超出部分 */
+  transition: all 0.3s ease;
+}
+
+.projects::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(124, 58, 237, 0.1));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+
+.projects:hover {
+  border-color: rgba(99, 102, 241, 0.4);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.projects:hover::before {
+  opacity: 1;
+}
+
+.project-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
   z-index: 1;
 }
 
-.year-filter {
+.text-content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
   display: flex;
-  justify-content: center;
-  gap: 1rem;
-  margin-bottom: 2rem;
+  flex-direction: column;
+  justify-content: flex-end; 
+  transition: transform 0.3s ease;
 }
 
-.year-button {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  padding: 0.5rem 1rem;
-  border: 1px solid transparent;
-  background-color: rgba(255, 255, 255, 0.1);
-  color: #f5f5f7;
-  border-radius: 999px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-weight: 500;
-}
-
-.year-button.active,
-.year-button:hover {
-  background-color: #007aff;
-  color: #fff;
-  border-color: #007aff;
-}
-
-
-.carousel-container {
-	width: 100%;
-	max-width: 1200px;
-	position: relative;
-	perspective: 1500px; /* Reduced perspective for a subtler effect */
-	padding: 1rem 0;
-	margin: 0 auto;
-}
-
-.carousel-track {
-	display: flex;
-	transition: transform 0.5s ease-in-out;
-	transform-style: preserve-3d;
-}
-
-.carousel-card {
-	min-width: 320px;
-	max-width: 320px;
-	margin: 0 25px;
-  /* Simplified background and border */
-	background: rgba(255, 255, 255, 0.05);
-	border-radius: 12px;
-	overflow: hidden;
-	backdrop-filter: blur(10px);
-  /* Simplified shadow */
-	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-	transition: all 0.3s ease;
-	transform-origin: center center;
-	position: relative;
-	border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.carousel-card:not(.is-active) {
-	transform: scale(0.8) rotateY(35deg) translateZ(-100px);
-	opacity: 0.45;
-}
-
-.carousel-card.is-prev {
-	transform-origin: right center;
-	transform: scale(0.75) rotateY(45deg) translateX(-80px) translateZ(-150px);
-}
-
-.carousel-card.is-next {
-	transform-origin: left center;
-	transform: scale(0.75) rotateY(-45deg) translateX(80px) translateZ(-150px);
-}
-
-.carousel-card.is-active {
-	transform: scale(1) rotateY(0) translateZ(0);
-	opacity: 1;
-	z-index: 20;
-  /* Simplified active shadow */
-	box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 15px rgba(56, 189, 248, 0.2);
-}
-
-.card-image-container {
-	position: relative;
-	height: 200px;
-	overflow: hidden;
-	border-bottom: 1px solid rgba(94, 234, 212, 0.2);
-}
-
-.card-image {
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
-	transition: transform 0.8s ease;
-}
-
-.carousel-card.is-active .card-image {
-	transform: scale(1.05);
-}
-
-.card-content {
-	padding: 1rem;
-	color: #f1f5f9;
-}
-
-.card-title {
-  /* Apple system font stack */
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-	margin-bottom: 0.75rem;
-  font-weight: 600;
+.title {
   font-size: 1.25rem;
-	letter-spacing: 0.5px;
-	position: relative;
-	display: inline-block;
-  color: #f5f5f7 !important;
+  font-weight: 500;
+  color: #e5e7eb;
+  margin-bottom: 0.75rem;
+  background: linear-gradient(to right, #a78bfa, #22d3ee);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: none !important; 
+  -webkit-text-fill-color: transparent; 
 }
 
-.card-description {
-	font-size: 0.9rem;
-	line-height: 1.6;
-	color: rgba(241, 245, 249, 0.7);
-	font-weight: 400;
+.description {
+  max-height: 0;
+  opacity: 0;
+  color: rgb(224, 224, 224);
+  overflow: hidden;
+  transition: all 0.3s ease;
 }
 
-.carousel-button {
-	position: absolute;
-	top: 50%;
-	transform: translateY(-50%);
-	background-color: rgba(255, 255, 255, 0.1);
-	color: #fff;
-	border: 1px solid rgba(255, 255, 255, 0.2);
-	border-radius: 50%;
-	width: 44px;
-	height: 44px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	cursor: pointer;
-	z-index: 20;
-	transition: all 0.3s ease;
-	backdrop-filter: blur(5px);
+.projects:hover .project-image {
+  opacity: 0.3; 
 }
 
-.carousel-button:hover {
-	background-color: rgba(255, 255, 255, 0.2);
-	border-color: rgba(156, 217, 249, 0.5);
-	transform: translateY(-50%) scale(1.05);
+.projects:hover .text-content {
+  transform: translateY(-20%); 
 }
 
-.carousel-button.prev {
-	left: -22px;
+.projects:hover .description {
+  max-height: 100px; 
+  opacity: 1;
+  margin-top: 0.5rem;
 }
 
-.carousel-button.next {
-	right: -22px;
-}
+@media (max-width: 767px) {
+  .main-content,
+  .container {
+    width: 87%; 
+  }
+  
+  .pro-container {
+    grid-template-columns: 1fr; /* 单列布局 */
+  }
 
-.carousel-indicators {
-	display: flex;
-	justify-content: center;
-	gap: 10px;
-	margin-top: 2rem;
-}
-
-.indicator {
-	width: 20px;
-	height: 3px;
-	background: rgba(156, 217, 249, 0.2);
-	border-radius: 2px;
-	cursor: pointer;
-	transition: all 0.3s ease;
-}
-
-.indicator.active {
-	background: #9cd9f9;
-	box-shadow: 0 0 8px rgba(156, 217, 249, 0.5);
-}
-
-@media (max-width: 768px) {
-	.carousel-button {
-		width: 38px;
-		height: 38px;
-	}
-
-	.carousel-button.prev {
-		left: 5px;
-	}
-
-	.carousel-button.next {
-		right: 5px;
-	}
-
-	.carousel-card {
-		min-width: 260px;
-		max-width: 260px;
-		margin: 0 15px;
-	}
-
-	.card-image-container {
-		height: 160px;
-	}
+  .project-view-container {
+    padding-top: 0;
+  }
 }
 </style> 
