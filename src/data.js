@@ -9,17 +9,21 @@ export const departmentsData = [
 
 export const projectsData = {
   '2024': [
-    { name: '1', description: '3111', image: 'https://via.placeholder.com/300x200/FFC0CB/000000?text=AI+Project' },
+    { name: '1', description: '3111', image: '/images/2023project.webp' },
     { name: '21111', description: '41111', image: 'https://via.placeholder.com/300x200/ADD8E6/000000?text=Cross-Platform' }
   ],
   '2023': [
-    { name: '小程序开发', description: '中国海洋大学信息科学与工程学部百年校庆小程序', image: 'https://via.placeholder.com/300x200' },
+    { name: '小程序开发', description: '中国海洋大学信息科学与工程学部百年校庆小程序', image: '/images/2023project.webp' },
     { name: '11', description: '111111', image: 'https://via.placeholder.com/300x200' }
   ],
   '2022': [
     { name: '1', description: '111', image: 'https://via.placeholder.com/300x200' },
     { name: '111', description: '1111', image: 'https://via.placeholder.com/300x200' }
-  ]
+  ],
+  '2025': [
+    { name: '1', description: '3111', image: '/images/2023project.webp' },
+    { name: '21111', description: '41111', image: 'https://via.placeholder.com/300x200/ADD8E6/000000?text=Cross-Platform' }
+  ],
 };
 
 export const teamStructureData = [
