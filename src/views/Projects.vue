@@ -6,7 +6,12 @@
       <div class="container" v-for="year in projectYears" :key="year">
         <div class="year">{{ year }}</div>
         <div class="pro-container">
-          <div v-for="(item, index) in projects[year]" :key="index" class="projects">
+          <div 
+            v-for="(item, index) in projects[year]" 
+            :key="index" 
+            class="projects"
+            @click="openModal(item)"
+          >
             <img v-if="item.image" :src="item.image" :alt="item.name" class="project-image" />
             <div class="text-content">
               <div class="title">{{ item.name }}</div>
@@ -16,6 +21,37 @@
         </div>
       </div>
     </div>
+
+    <!-- 项目详情模态框 -->
+    <transition name="modal">
+    <div 
+      v-if="selectedProject" 
+      class="project-modal" 
+      @click.self="closeModal"
+    >
+      <div class="modal-content">
+        <button class="close-btn" @click="closeModal">&times;</button>
+        <div class="modal-body">
+          <div class="modal-image-container">
+            <img 
+              :src="selectedProject.image" 
+              :alt="selectedProject.name" 
+              class="modal-image" 
+              @error="handleImageError"
+            />
+          </div>
+          <div class="modal-text">
+            <h2>{{ selectedProject.name }}</h2>
+            <div class="modal-description">{{ selectedProject.description }}</div>
+            <div v-if="selectedProject.details" class="modal-details">
+              <h3>项目详情</h3>
+              <p>{{ selectedProject.details }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </transition>
   </div>
 </template>
 
@@ -37,6 +73,7 @@ export default {
   data() {
     return {
       projects: projectsData,
+      selectedProject: null,
       currentIndex: 0,
       cardWidth: 0,
       cardMargin: 0,
@@ -51,7 +88,6 @@ export default {
         .map(String);
     },
     allProjects() {
-      // Flatten projects and add year + unique ID
       return this.projectYears.flatMap(year => 
         this.projects[year].map((p, index) => ({
           ...p,
@@ -67,28 +103,15 @@ export default {
       return null;
     }
   },
-  watch: {
-    allProjects() {
-      this.cards = [];
-      this.$nextTick(() => {
-        this.initializeCarousel();
-      });
-    }
-  },
-  mounted() {
-    console.log('原始数据:', this.projects);
-    console.log('排序后年份:', this.projectYears);
-    this.$nextTick(() => {
-        this.initializeCarousel();
-        window.addEventListener('resize', this.handleResize);
-        document.addEventListener('keydown', this.handleKeydown);
-    });
-  },
-  beforeUnmount() {
-    window.removeEventListener('resize', this.handleResize);
-    document.removeEventListener('keydown', this.handleKeydown);
-  },
   methods: {
+    openModal(project) {
+      this.selectedProject = project;
+      document.body.style.overflow = 'hidden'; // 防止背景滚动
+    },
+    closeModal() {
+      this.selectedProject = null;
+      document.body.style.overflow = ''; // 恢复背景滚动
+    },
     initializeCarousel() {
       const cards = this.cards;
       if (!cards || cards.length === 0) return;
@@ -155,8 +178,28 @@ export default {
             this.nextSlide();
         } else if (e.key === 'ArrowLeft') {
             this.prevSlide();
+        } else if (e.key === 'Escape' && this.selectedProject) {
+          this.closeModal();
         }
-    }
+    },
+    handleImageError(e) {
+    e.target.style.opacity = '0.3';
+    e.target.src = ''; // 移除错误的src
+  },
+  },
+  mounted() {
+    console.log('原始数据:', this.projects);
+    console.log('排序后年份:', this.projectYears);
+    this.$nextTick(() => {
+        this.initializeCarousel();
+        window.addEventListener('resize', this.handleResize);
+        document.addEventListener('keydown', this.handleKeydown);
+    });
+  },
+  beforeUnmount() {
+    window.removeEventListener('resize', this.handleResize);
+    document.removeEventListener('keydown', this.handleKeydown);
+    document.body.style.overflow = ''; // 确保组件卸载时恢复滚动
   }
 }
 </script>
@@ -168,6 +211,7 @@ export default {
   flex-direction: column; 
   align-items: center;
   padding: 100px 20px 20px;
+  position: relative;
 }
 
 .main-content {
@@ -241,10 +285,19 @@ export default {
   border: 1px solid rgba(99, 102, 241, 0.2);
   border-radius: 0.75rem;
   padding: 1.5rem;
-  height: 200px; /* 固定高度 */
-  overflow: hidden; /* 隐藏超出部分 */
+  height: 200px;
+  overflow: hidden;
   transition: all 0.3s ease;
+  cursor: pointer;
+  animation: fadeInUp 0.5s ease forwards;
+  opacity: 0;
 }
+
+.projects:nth-child(1) { animation-delay: 0.1s; }
+.projects:nth-child(2) { animation-delay: 0.2s; }
+.projects:nth-child(3) { animation-delay: 0.3s; }
+.projects:nth-child(4) { animation-delay: 0.4s; }
+.projects:nth-child(5) { animation-delay: 0.5s; }
 
 .projects::before {
   content: '';
@@ -258,8 +311,8 @@ export default {
 
 .projects:hover {
   border-color: rgba(99, 102, 241, 0.4);
-  transform: translateY(-4px);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 15px 20px -5px rgba(0, 0, 0, 0.2);
 }
 
 .projects:hover::before {
@@ -274,7 +327,7 @@ export default {
   height: 100%;
   object-fit: cover;
   opacity: 0.8;
-  transition: opacity 0.3s ease;
+  transition: all 0.5s ease;
   z-index: 1;
 }
 
@@ -285,7 +338,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: flex-end; 
-  transition: transform 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .title {
@@ -306,11 +359,12 @@ export default {
   opacity: 0;
   color: rgb(224, 224, 224);
   overflow: hidden;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .projects:hover .project-image {
-  opacity: 0.3; 
+  transform: scale(1.05);
+  transition: all 0.5s cubic-bezier(0.25, 0.45, 0.45, 0.95);
 }
 
 .projects:hover .text-content {
@@ -323,6 +377,184 @@ export default {
   margin-top: 0.5rem;
 }
 
+.project-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  overflow-y: auto;
+  backdrop-filter: blur(5px);
+}
+
+.modal-content {
+  overflow: hidden;
+  background: rgba(17, 24, 39, 0.95);
+  border-radius: 0.75rem;
+  max-width: 900px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.close-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  color: #a78bfa;
+  font-size: 2rem;
+  cursor: pointer;
+  z-index: 10;
+  transition: transform 0.2s ease;
+  width: 40px; /* 固定宽度 */
+  height: 40px; /* 固定高度 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(17, 24, 39, 0.7); /* 添加背景避免透明 */
+}
+
+.close-btn:hover {
+  transform: rotate(90deg) scale(1.2);
+  color: #22d3ee;
+  background: rgba(99, 102, 241, 0.2); /* 悬停背景色 */
+}
+
+.modal-body {
+  display: flex;
+  flex-direction: row;
+  padding: 2rem;
+}
+
+.modal-image-container {
+  flex: 1;
+  min-width: 300px;
+  padding-right: 2rem;
+}
+
+.modal-image {
+  width: 100%;
+  height: auto;
+  max-height: 60vh;
+  object-fit: contain;
+  border-radius: 0.5rem;
+}
+
+.modal-text {
+  flex: 1;
+  color: #e5e7eb;
+  overflow-y: auto;
+}
+
+.modal-text h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  background: linear-gradient(to right, #a78bfa, #22d3ee);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.modal-description {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.modal-details {
+  margin-top: 2rem;
+}
+
+.modal-details h3 {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  color: #a78bfa;
+}
+
+.modal-details p {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* 动画 */
+.modal-enter-active {
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-leave-active {
+  animation: fadeIn 0.3s ease reverse;
+}
+
+.modal-enter-active .modal-content {
+  animation: zoomIn 0.3s ease;
+}
+
+.modal-leave-active .modal-content {
+  animation: zoomOut 0.3s ease;
+}
+
+/* 动画关键帧 */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes zoomOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+/* 响应式设计 */
+@media (min-width: 768px) {
+  .project-view-container {
+    min-height: calc(100vh - 100px); 
+  }
+  
+  .main-content {
+    min-height: 600px; 
+  }
+}
+
 @media (max-width: 767px) {
   .main-content,
   .container {
@@ -330,11 +562,51 @@ export default {
   }
   
   .pro-container {
-    grid-template-columns: 1fr; /* 单列布局 */
+    grid-template-columns: 1fr;
   }
 
   .project-view-container {
     padding-top: 0;
   }
+
+  /* 移动端模态框样式 */
+  .modal-body {
+    flex-direction: column;
+    padding: 1.5rem;
+  }
+
+  .modal-image-container {
+    padding-right: 0;
+    padding-bottom: 1.5rem;
+    min-width: auto;
+  }
+
+  .modal-text h2 {
+    font-size: 1.5rem;
+  }
+
+  .modal-description {
+    font-size: 1rem;
+  }
+
+  .close-btn {
+    top: 10px;
+    right: 10px;
+    font-size: 1.5rem;
+  }
 }
-</style> 
+
+@media (max-width: 480px) {
+  .modal-content {
+    max-height: 95vh;
+  }
+
+  .modal-body {
+    padding: 1rem;
+  }
+
+  .modal-text h2 {
+    font-size: 1.3rem;
+  }
+}
+</style>
