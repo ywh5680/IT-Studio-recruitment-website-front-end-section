@@ -94,6 +94,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
+import axios from 'axios';
 import StarfieldBackground from '@/components/StarfieldBackground.vue';
 import CommentItem from '@/components/CommentItem.vue';
 import { theme } from '@/theme.js';
@@ -124,11 +125,10 @@ const fetchComments = async () => {
   commentsLoading.value = true;
   commentsError.value = null;
   try {
-    const response = await fetch('/api/comments/'); 
-    if (!response.ok) throw new Error('无法加载评论，请稍后刷新重试');
-    comments.value = await response.json();
+    const response = await axios.get('/api/comments/');
+    comments.value = response.data;
   } catch (e) {
-    commentsError.value = e.message;
+    commentsError.value = e.response?.data?.message || '无法加载评论，请稍后刷新重试';
   } finally {
     commentsLoading.value = false;
   }
@@ -148,23 +148,18 @@ const handleSubmit = async () => {
     if (newComment.value.qq) body.qq = newComment.value.qq;
     if (replyingTo.value) body.parent = replyingTo.value;
 
-    const response = await fetch('/api/comment/', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-    });
-
-    if (response.status === 400) throw new Error('缺少必要参数');
-    if (response.status === 404) throw new Error('回复的评论不存在');
-    if (response.status === 422) throw new Error('数据不合法，请检查邮箱或QQ号');
-    if (!response.ok) throw new Error('发布失败，请稍后重试');
+    await axios.post('/api/comment/', body);
     
     // 成功后清空表单并刷新列表
     newComment.value = { content: '', email: '', qq: '' };
     replyingTo.value = null;
     await fetchComments(); // 刷新评论列表
   } catch (e) {
-    error.value = e.message;
+    const status = e.response?.status;
+    if (status === 400) error.value = '缺少必要参数';
+    else if (status === 404) error.value = '回复的评论不存在';
+    else if (status === 422) error.value = '数据不合法，请检查邮箱或QQ号';
+    else error.value = e.response?.data?.message || '发布失败，请稍后重试';
   } finally {
     loading.value = false;
   }
