@@ -107,6 +107,7 @@
 
 <script>
 import { ref, computed } from 'vue';
+import axios from 'axios';
 import StarfieldBackground from '@/components/StarfieldBackground.vue';
 import { theme } from '@/theme.js';
 
@@ -173,23 +174,15 @@ export default {
           body.name = input;
         }
         
-        const response = await fetch('/api/get_status/', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(body)
-        });
-
-        if (response.status === 400) throw new Error('缺少查询参数或参数格式不正确');
-        if (response.status === 404) throw new Error('未找到您的报名记录');
-        if (response.status === 406) throw new Error('找到多条记录，请提供更精确的信息');
-        if (!response.ok) throw new Error('查询失败，请稍后再试');
-
-        result.value = await response.json();
+        const response = await axios.post('/api/get_status/', body);
+        result.value = response.data;
         
       } catch (e) {
-        error.value = e.message;
+        const status = e.response?.status;
+        if (status === 400) error.value = '缺少查询参数或参数格式不正确';
+        else if (status === 404) error.value = '未找到您的报名记录';
+        else if (status === 406) error.value = '找到多条记录，请提供更精确的信息';
+        else error.value = e.response?.data?.message || '查询失败，请稍后再试';
       } finally {
         loading.value = false;
       }
