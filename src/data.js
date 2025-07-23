@@ -9,28 +9,32 @@ export const departmentsData = [
 
 export const projectsData = {
   '2024': [
-    { name: '1', description: '3111', image: 'https://via.placeholder.com/300x200/FFC0CB/000000?text=AI+Project' },
+    { name: '1', description: '3111', image: '/images/2023project.webp' },
     { name: '21111', description: '41111', image: 'https://via.placeholder.com/300x200/ADD8E6/000000?text=Cross-Platform' }
   ],
   '2023': [
-    { name: '1', description: '1111', image: 'https://via.placeholder.com/300x200' },
+    { name: '小程序开发', description: '中国海洋大学信息科学与工程学部百年校庆小程序', image: '/images/2023project.webp' },
     { name: '11', description: '111111', image: 'https://via.placeholder.com/300x200' }
   ],
   '2022': [
-     { name: '1', description: '111', image: 'https://via.placeholder.com/300x200' },
-     { name: '111', description: '1111', image: 'https://via.placeholder.com/300x200' }
-  ]
+    { name: '1', description: '111', image: 'https://via.placeholder.com/300x200' },
+    { name: '111', description: '1111', image: 'https://via.placeholder.com/300x200' }
+  ],
+  '2025': [
+    { name: '1', description: '3111', image: '/images/2023project.webp' },
+    { name: '21111', description: '41111', image: 'https://via.placeholder.com/300x200/ADD8E6/000000?text=Cross-Platform' }
+  ],
 };
 
 export const teamStructureData = [
   {
     year: '2023',
     departments: [
-      { name: 'APP部', members: [ { name: '1', quote: '1', avatar: 'https://via.placeholder.com/150' } ] },
-      { name: 'Web部', members: [ { name: '2', quote: '1', avatar: 'https://via.placeholder.com/150' }, { name: '1', quote: '1', avatar: 'https://via.placeholder.com/150' } ] },
+      { name: 'APP部', members: [{ name: '1', quote: '1', avatar: 'https://via.placeholder.com/150' }] },
+      { name: 'Web部', members: [{ name: '2', quote: '1', avatar: 'https://via.placeholder.com/150' }, { name: '1', quote: '1', avatar: 'https://via.placeholder.com/150' }] },
       { name: 'IOS部', members: [] },
       { name: 'UI部', members: [] },
-      { name: '游戏部', members: [ { name: '1', quote: '1', avatar: 'https://via.placeholder.com/150' } ] },
+      { name: '游戏部', members: [{ name: '1', quote: '1', avatar: 'https://via.placeholder.com/150' }] },
       { name: '程序部', members: [] }
     ]
   },
@@ -38,9 +42,9 @@ export const teamStructureData = [
     year: '2022',
     departments: [
       { name: 'APP部', members: [] },
-      { name: 'Web部', members: [ { name: '1', quote: '1', avatar: 'https://via.placeholder.com/150' } ] },
+      { name: 'Web部', members: [{ name: '1', quote: '1', avatar: 'https://via.placeholder.com/150' }] },
       { name: 'IOS部', members: [] },
-      { name: 'UI部', members: [ { name: '1', quote: '1。', avatar: 'https://via.placeholder.com/150' }, { name: '1', quote: '2', avatar: 'https://via.placeholder.com/150' } ] },
+      { name: 'UI部', members: [{ name: '1', quote: '1。', avatar: 'https://via.placeholder.com/150' }, { name: '1', quote: '2', avatar: 'https://via.placeholder.com/150' }] },
       { name: '游戏部', members: [] },
       { name: '程序部', members: [] }
     ]

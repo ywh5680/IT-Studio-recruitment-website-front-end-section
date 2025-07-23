@@ -5,41 +5,46 @@
       <p class="slogan">加入我们，开启在海大的技术之旅吧！</p>
       <form @submit.prevent="submitForm">
         <div class="form-group">
-          <input type="text" id="name" v-model="form.name" placeholder="姓名：" required>
+          <input type="text" id="name" v-model="form.name" placeholder="姓名：" required maxlength="20">
         </div>
         <div class="form-group">
-          <input type="text" id="gradeAndMajor" v-model="form.gradeAndMajor" placeholder="年级专业： (如：24级计算机类)" required>
+          <input type="text" id="uid" v-model="form.uid" placeholder="学号： " required pattern="[0-9]+" title="请输入正确的学号">
         </div>
-        
+        <div class="form-group">
+          <input type="text" id="gradeAndMajor" v-model="form.major" placeholder="年级专业： (如：24级计算机类)" required maxlength="20">
+        </div>
+        <div class="form-group">
+          <input type="text" id="phone" v-model="form.phone" placeholder="电话号码：" required pattern="[0-9]+" title="请输入正确的电话号码">
+        </div>
+        <div class="form-group">
+          <input type="text" id="email" v-model="form.email" placeholder="邮箱：" required maxlength="36" pattern="[^\s@]+@[^\s@]+\.[^\s@]+" title="请输入正确的邮箱地址">
+        </div>
         <div class="form-group custom-select-wrapper">
           <div class="custom-select" @click="toggleDropdown">
             <div class="custom-select-trigger">
-              <span>{{ form.department ? form.department : '意向部门：' }}</span>
+              <span>{{ getDepartmentLabel(form.department) || '意向部门：' }}</span>
               <div class="arrow"></div>
             </div>
             <div class="custom-options" v-if="isDropdownOpen">
-              <div class="custom-option" @click="selectOption('程序部')">程序部</div>
-              <div class="custom-option" @click="selectOption('web部')">web部</div>
-              <div class="custom-option" @click="selectOption('游戏部')">游戏部</div>
-              <div class="custom-option" @click="selectOption('UI部')">UI部</div>
-              <div class="custom-option" @click="selectOption('APP部')">APP部</div>
-              <div class="custom-option" @click="selectOption('IOS部')">IOS部</div>
+              <div class="custom-option" v-for="(dept, index) in departments" :key="index" @click="selectOption(dept.value, $event)">
+                {{ dept.label }}
+              </div>
             </div>
           </div>
         </div>
+        <div class="form-group">
+          <input type="text" id="emailVerificationCode" v-model="form.code" placeholder="邮箱验证码：" class="Codebox" required pattern="[0-9]+" title="请输入正确的验证码">
+          <button type="button" class="getCode" @click="getCode" :disabled="isCodeButtonDisabled">
+            {{ codeButtonText }}
+          </button>
+        </div>
+        <div class="form-group">
+          <input type="text" id="content" v-model="form.content" placeholder="加入理由(选填)" maxlength="200">
+        </div>
+        <div class="form-group">
+          <input type="text" id="qq" v-model="form.qq" placeholder="QQ号(选填)：" pattern="[0-9]*" title="请输入正确的QQ号">
+        </div>
 
-        <div class="form-group">
-          <input type="text" id="phone" v-model="form.phone" placeholder="电话号码：" required>
-        </div>
-        <div class="form-group">
-          <input type="text" id="qq" v-model="form.qq" placeholder="QQ号：" required>
-        </div>
-        <div class="form-group">
-          <input type="text" id="email" v-model="form.email" placeholder="邮箱：" required>
-        </div>
-        <div class="form-group">
-          <input type="text" id="emailVerificationCode" v-model="form.emailVerificationCode" placeholder="邮箱验证码：" required>
-        </div>
         <div class="form-actions">
           <button type="submit" class="submit-btn">提交</button>
         </div>
@@ -50,20 +55,34 @@
 
 <script>
 import { theme } from '../theme.js';
+import api from '../services/api.js';
 
 export default {
   name: 'Registration',
   data() {
     return {
       isDropdownOpen: false,
+      isCodeButtonDisabled: false,
+      codeButtonText: '获取验证码',
+      countdown: 60,
+      departments: [
+        { label: '程序开发', value: 0 },
+        { label: 'Web开发', value: 1 },
+        { label: '游戏开发', value: 2 },
+        { label: 'APP开发', value: 3 },
+        { label: 'UI设计', value: 4 },
+        { label: 'ios', value: 5 }
+      ],
       form: {
         name: '',
-        gradeAndMajor: '',
-        department: '',
+        uid: '',
+        major: '',
         phone: '',
-        qq: '',
         email: '',
-        emailVerificationCode: '',
+        department: '',
+        code: '',
+        content: '',
+        qq: '',
       }
     };
   },
@@ -76,17 +95,171 @@ export default {
     toggleDropdown() {
       this.isDropdownOpen = !this.isDropdownOpen;
     },
-    selectOption(option) {
-      this.form.department = option;
+    selectOption(value, e) {
+      e.stopPropagation();
+      this.form.department = value;
       this.isDropdownOpen = false;
     },
-    submitForm() {
-      if (!this.form.department) {
+    getDepartmentLabel(value) {
+      const dept = this.departments.find(d => d.value === value);
+      return dept ? dept.label : '';
+    },
+    validateForm() {
+      // 验证姓名
+      if (!this.form.name || this.form.name.length > 20) {
+        alert('姓名不能为空且长度不能超过20个字符');
+        return false;
+      }
+
+      // 验证学号
+      if (!this.form.uid || !/^\d+$/.test(this.form.uid)) {
+        alert('请输入正确的学号（必须为正整数）');
+        return false;
+      }
+
+      // 验证年级专业
+      if (!this.form.major || this.form.major.length > 20) {
+        alert('年级专业不能为空且长度不能超过20个字符');
+        return false;
+      }
+
+      // 验证手机号
+      if (!this.form.phone || !/^\d+$/.test(this.form.phone)) {
+        alert('请输入正确的手机号码（必须为数字）');
+        return false;
+      }
+
+      // 验证邮箱
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!this.form.email || !emailRegex.test(this.form.email) || this.form.email.length > 36) {
+        alert('请输入正确的邮箱地址（长度不超过36个字符）');
+        return false;
+      }
+
+      // 验证意向部门
+      if (this.form.department === '') {
         alert('请选择意向部门');
+        return false;
+      }
+
+      // 验证验证码
+      if (!this.form.code || !/^\d+$/.test(this.form.code)) {
+        alert('请输入正确的验证码');
+        return false;
+      }
+
+      // 验证加入理由（选填）
+      if (this.form.content && this.form.content.length > 200) {
+        alert('加入理由不能超过200个字符');
+        return false;
+      }
+
+      // 验证QQ号（选填）
+      if (this.form.qq && !/^\d+$/.test(this.form.qq)) {
+        alert('请输入正确的QQ号（必须为数字）');
+        return false;
+      }
+
+      return true;
+    },
+    startCodeCountdown() {
+      this.isCodeButtonDisabled = true;
+      this.countdown = 60;
+      const timer = setInterval(() => {
+        this.countdown--;
+        this.codeButtonText = `${this.countdown}秒后重试`;
+        if (this.countdown <= 0) {
+          clearInterval(timer);
+          this.isCodeButtonDisabled = false;
+          this.codeButtonText = '获取验证码';
+        }
+      }, 1000);
+    },
+    async getCode() {
+      // 检测邮箱格式
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(this.form.email)) {
+        alert("请输入正确的邮箱！");
         return;
       }
-      // 提交逻辑将在这里处理
-      console.log(this.form);
+
+      try {
+      // 发送验证码请求
+        await api.post('/send_code/', { email: this.form.email });
+        this.startCodeCountdown();
+      } catch (error) {
+        console.error('验证码发送失败', error);
+          alert('发送失败，请检查网络后重试！');
+      }
+    },
+    async submitForm() {
+      if (!this.validateForm()) {
+        return;
+      }
+
+      try {
+       
+        const formData = {
+          name: this.form.name.trim(),
+          uid: parseInt(this.form.uid, 10),
+          major: this.form.major.trim(),
+          phone: parseInt(this.form.phone, 10),
+          email: this.form.email.trim(),
+          department: parseInt(this.form.department, 10),
+          code: parseInt(this.form.code, 10),
+          content: this.form.content ? this.form.content.trim() : undefined,
+          qq: this.form.qq ? parseInt(this.form.qq, 10) : undefined
+        };
+
+        Object.keys(formData).forEach(key => {
+          if (formData[key] === undefined) {
+            delete formData[key];
+          }
+        });
+
+        const response = await api.post('/enroll/', formData);
+        console.log('表单提交成功', response);
+        alert('报名成功！');
+        // 清空表单
+        this.form = {
+          name: '',
+          uid: '',
+          major: '',
+          phone: '',
+          email: '',
+          department: '',
+          code: '',
+          content: '',
+          qq: '',
+        };
+      } catch (error) {
+          console.error('表单提交失败: ', error);
+        
+        // 处理特定的错误响应
+        if (error.response) {
+          switch (error.response.status) {
+            case 400:
+              alert('验证码错误，请重新输入');
+              break;
+            case 404:
+              alert('请先获取验证码');
+              break;
+            case 409:
+              alert('已报名，请前往查询');
+              break;
+            case 410:
+              alert('验证码已过期，请重新获取');
+              break;
+            case 422:
+              alert('请检查填写的信息是否正确');
+              break;
+            default:
+              alert('提交失败，请稍后重试');
+          }
+        } else {
+          alert('网络错误，请检查网络连接');
+        }
+      }
     }
   }
 };
@@ -94,10 +267,10 @@ export default {
 
 <style scoped>
 .registration-container {
+  margin: 7vh auto 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
   padding: 2rem;
   box-sizing: border-box;
 }
@@ -106,7 +279,7 @@ export default {
   background-color: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
   border-radius: 20px;
-  padding: 2rem 3rem;
+  padding: 1rem 2rem;
   width: 100%;
   max-width: 500px;
   border: 1px solid rgba(255, 255, 255, 0.2);
@@ -227,12 +400,17 @@ export default {
     color: #333;
 }
 
+.form-group #emailVerificationCode.Codebox  {
+  width: 55%;
+}
+
 .form-actions {
   margin-top: 2.5rem;
   text-align: center;
 }
 
-.submit-btn {
+.submit-btn,
+.getCode {
   background-color: #0071e3;
   color: white;
   border: none;
@@ -245,7 +423,14 @@ export default {
   text-transform: uppercase;
 }
 
-.submit-btn:hover {
+.getCode {
+  margin-left: 5%;
+  width: 40%;
+  font-size: 1rem;
+}
+
+.submit-btn:hover,
+.getCode:hover{
   background-color: #0077f5;
   box-shadow: 0 0 15px #0071e3;
 }
