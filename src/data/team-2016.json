@@ -1,0 +1,48 @@
+[
+  {
+    "year": "2016",
+    "departments": [
+      {
+        "name": "程序部",
+        "members": [
+          { "name": "宿天宇", "quote": "No pain, no gain", "avatar": "/images/2016/cx1.webp" },
+          { "name": "梁颖芳", "quote": "给缺氧的那位递个氧气瓶", "avatar": "/images/2016/cx2.webp" },
+          { "name": "方政", "quote": "只有流过血的手指才能弹出世间的绝唱.", "avatar": "/images/2016/cx3.webp" },
+          { "name": "叶伊凡", "quote": "请称赞我，高贵冷艳", "avatar": "/images/2016/cx4.webp" }
+        ]
+      },
+      {
+        "name": "web部",
+        "members": [
+          { "name": "官欣仪", "quote": "抠脚宅√LLer√经常女装√", "avatar": "/images/2016/web1.webp" },
+          { "name": "李凌宇", "quote": "诶，这里有点缺氧", "avatar": "/images/2016/web2.webp" },
+          { "name": "李楚娇", "quote": "热爱生活，热爱技术", "avatar": "/images/2016/web3.webp" },
+          { "name": "钱怡辰", "quote": "日常敲代码吃东西", "avatar": "/images/2016/web4.webp" },
+          { "name": "刘凡莉", "quote": "人生总会熬出来的", "avatar": "/images/2016/web5.webp" }
+        ]
+      },
+      {
+        "name": "app部",
+        "members": [
+          { "name": "王湘懿", "quote": "腐妹子一只 蛇精病一枚", "avatar": "/images/2016/app1.webp" },
+          { "name": "邓懿康", "quote": "梦想是做个技术宅", "avatar": "/images/2016/app2.webp" }
+        ]
+      },
+      {
+        "name": "ui部",
+        "members": [
+          { "name": "于聪颖", "quote": "性别女，爱好各种adobe家的软件，但不擅长", "avatar": "/images/2016/ui1.webp" },
+          { "name": "翟书言", "quote": "哇这个人为什么这么酷", "avatar": "/images/2016/ui2.webp" },
+          { "name": "李宜璟", "quote": "这个人很懒，神马都没留下…", "avatar": "/images/2016/ui3.webp" },
+          { "name": "廖舒祺", "quote": "额，活泼好动,爱看电影,做运动,旅游,喜欢设计...", "avatar": "/images/2016/ui4.webp" }
+        ]
+      },
+      {
+        "name": "IOS部",
+        "members": [
+          { "name": "郑泽嘉", "quote": "电信-web", "avatar": "/images/2016/ios1.webp" }
+        ]
+      }
+    ]
+  }
+]

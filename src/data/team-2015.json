@@ -1,0 +1,33 @@
+[
+  {
+    "year": "2015",
+    "departments": [
+      {
+        "name": "程序部",
+        "members": [
+          { "name": "张钦贤", "quote": "我就是我，是颜色不一样的烟火", "avatar": "/images/2015/cx1.webp" }
+        ]
+      },
+      {
+        "name": "web部",
+        "members": [
+          { "name": "李策", "quote": "我不是一个伟大的程序员，我只是一个具有良好习惯的优秀程序员―KentBeck", "avatar": "/images/2015/web1.webp" },
+          { "name": "陶赟", "quote": "大部分情况下，构建程序的过程本质上是对规范调试的过程。—FredBrooks", "avatar": "/images/2015/web2.webp" },
+          { "name": "雷镇宇", "quote": "不听不听，王八念经", "avatar": "/images/2015/web3.webp" }
+        ]
+      },
+      {
+        "name": "系统维护部",
+        "members": [
+          { "name": "陈默涵", "quote": "计算机科学领域的所有问题都可以通过其他方式间接解决。—David Wheeler", "avatar": "/images/2015/xt1.webp" }
+        ]
+      },
+      {
+        "name": "IOS部",
+        "members": [
+          { "name": "郑泽嘉", "quote": "电信-web", "avatar": "/images/2015/ios1.webp" }
+        ]
+      }
+    ]
+  }
+]
