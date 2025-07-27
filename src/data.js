@@ -26,7 +26,11 @@ export const projectsData = {
   ],
 };
 
+/* 老数据 + 新生成的 2025 数据 */
+import team2025 from './data/team-2025.json';
+
 export const teamStructureData = [
+  team2025,
   {
     year: '2023',
     departments: [
@@ -49,4 +53,5 @@ export const teamStructureData = [
       { name: '程序部', members: [] }
     ]
   }
-]; 
+  // 新生成的 2025 级成员
+];
