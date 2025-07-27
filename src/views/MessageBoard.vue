@@ -152,7 +152,6 @@ const fetchComments = async (page = 1) => {
   commentsError.value = null;
   try {
     const start = (page - 1) * pageSize.value;
-    console.log(`获取评论，参数: limit=${pageSize.value}, start=${start}`);
     
     const response = await api.get('/comment/', {
       params: {
@@ -161,27 +160,8 @@ const fetchComments = async (page = 1) => {
       }
     });
     
-    // 记录API返回的原始数据，查看结构
-    console.log('API返回的评论数据:', JSON.stringify(response.data, null, 2));
-    console.log('返回评论数量:', response.data.length);
-    
-    // 检查返回的评论是否包含嵌套结构
-    let hasNested = false;
-    response.data.forEach(comment => {
-      if (comment.children && comment.children.length > 0) {
-        hasNested = true;
-        console.log(`评论 #${comment.id} 有 ${comment.children.length} 个子评论`);
-      }
-    });
-    
-    if (!hasNested) {
-      console.warn('API返回的数据没有嵌套的子评论结构');
-    }
-    
     comments.value = response.data;
     
-    // 假设我们从响应头或其他方式获取总页数
-    // 如果API没有提供总数信息，可以根据返回的数据长度来估算
     if (comments.value.length < pageSize.value && page === 1) {
       totalPages.value = 1;
     } else if (comments.value.length < pageSize.value) {
@@ -222,10 +202,8 @@ const handleSubmit = async () => {
     if (newComment.value.qq) body.qq = newComment.value.qq;
     if (replyingTo.value) body.parent = replyingTo.value;
 
-    console.log('提交评论:', body);
     
     const response = await api.post('/comment/', body);
-    console.log('评论提交成功:', response.data);
     
     // 成功后清空表单
     newComment.value = { content: '', email: '', qq: '' };
