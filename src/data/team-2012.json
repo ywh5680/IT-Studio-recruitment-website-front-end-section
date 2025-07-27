@@ -1,0 +1,65 @@
+{
+  "year": "2012",
+  "departments": [
+    {
+      "name": "程序部",
+      "members": [
+        {
+          "name": "凌霄",
+          "quote": "当你试图解决一个你不理解的问题时，复杂化就产成了。——Andy Boothe",
+          "avatar": "/images/2012/cx1.7ded97be.webp"
+        },
+        {
+          "name": "李一诺",
+          "quote": "控制复杂性是计算机编程的本质。——Brian Kernighan",
+          "avatar": "/images/2012/cx2.30036951.webp"
+        },
+        {
+          "name": "李昱坤",
+          "quote": "用几个小时来制定计划，可以节省几周的编程时间。——佚名",
+          "avatar": "/images/2012/1.webp"
+        },
+        {
+          "name": "刘嘉爱",
+          "quote": "当你选择了一种语言，意味着你还选择了一组技术、一个社区。——Joshua Bloch",
+          "avatar": "/images/2012/2.webp"
+        }
+      ]
+    },
+    {
+      "name": "Web部",
+      "members": [
+        {
+          "name": "林皇",
+          "quote": "一个人在教会电脑之前，别说他真正理解这个东西了。",
+          "avatar": "/images/2012/web1.95318d57.webp"
+        }
+      ]
+    },
+    {
+      "name": "UI部",
+      "members": [
+        {
+          "name": "罗聿聪",
+          "quote": "它在我的机器上可以很好运行！——大部分程序员",
+          "avatar": "/images/2012/ui1.966dcb55.webp"
+        },
+        {
+          "name": "肖宇恬",
+          "quote": "复制粘贴是一个设计错误。——David Parnas",
+          "avatar": "/images/2012/ui2.5b4550dc.webp"
+        }
+      ]
+    },
+    {
+      "name": "系统维护部",
+      "members": [
+        {
+          "name": "李思源",
+          "quote": "没有什么代码的执行速度比空代码更快。——Merb 核心原则",
+          "avatar": "/images/2012/xt1.86ad74ed.webp"
+        }
+      ]
+    }
+  ]
+} 

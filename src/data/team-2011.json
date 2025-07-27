@@ -1,0 +1,25 @@
+{
+  "year": "2011",
+  "departments": [
+    {
+      "name": "UI部",
+      "members": [
+        {
+          "name": "张兆业",
+          "quote": "我不是一个伟大的程序员，我只是一个具有良好习惯的优秀程序员——Kent Beck",
+          "avatar": "/images/2011/ui1.2e66052d.webp"
+        }
+      ]
+    },
+    {
+      "name": "系统维护部",
+      "members": [
+        {
+          "name": "曹刚",
+          "quote": "这不是一个 bug，这只是一个未列出来的特性。——匿名",
+          "avatar": "/images/2011/xt1.f4800bbc.webp"
+        }
+      ]
+    }
+  ]
+} 

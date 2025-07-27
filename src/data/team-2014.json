@@ -1,0 +1,65 @@
+{
+  "year": "2014",
+  "departments": [
+    {
+      "name": "程序部",
+      "members": [
+        {
+          "name": "申一鸣",
+          "quote": "好代码本身就是最好的文档—Steve McConnell",
+          "avatar": "/images/2014/cx1.8442cdff.webp"
+        },
+        {
+          "name": "李春林",
+          "quote": "过早的优化是罪恶之源。——Donald Knuth",
+          "avatar": "/images/2014/cx2.5c24d96d.webp"
+        },
+        {
+          "name": "王恺鹏",
+          "quote": "一切奇怪的现象都是有原因的——佚名",
+          "avatar": "/images/2014/cx3.2040c61d.webp"
+        },
+        {
+          "name": "郑作武",
+          "quote": "设计是一个发现问题、而不是发现解决方案的过程——Leslie Chicoine",
+          "avatar": "/images/2014/cx4.72e71ef2.webp"
+        },
+        {
+          "name": "王晓瑞",
+          "quote": "诚信自由平等爱国文明诚信民主诚信民主诚信自由敬业爱国富强友善平等友善公正",
+          "avatar": "/images/2014/cx5.24772203.webp"
+        }
+      ]
+    },
+    {
+      "name": "Web部",
+      "members": [
+        {
+          "name": "张竣凯",
+          "quote": "质量、速度、廉价，选择其中两个。——佚名",
+          "avatar": "/images/2014/web1.6ba234a3.webp"
+        }
+      ]
+    },
+    {
+      "name": "UI部",
+      "members": [
+        {
+          "name": "成亚男",
+          "quote": "设计中最难的部分……是阻止功能。——佚名",
+          "avatar": "/images/2014/ui1.7545b49d.webp"
+        }
+      ]
+    },
+    {
+      "name": "系统维护部",
+      "members": [
+        {
+          "name": "蒙煜明",
+          "quote": "如果你是房间里最聪明的人，那么你走错房间了。——佚名",
+          "avatar": "/images/2014/xt1.0c6f0aa0.webp"
+        }
+      ]
+    }
+  ]
+} 

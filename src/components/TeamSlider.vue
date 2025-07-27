@@ -92,7 +92,7 @@
 </template>
 
 <script>
-import { teamStructureData, departmentsData } from '../data.js';
+import { teamStructureData } from '../data.js';
 
 export default {
   name: 'TeamSlider',
@@ -100,16 +100,23 @@ export default {
     return {
       teamStructure: teamStructureData,
       selectedYear: teamStructureData[0]?.year || null,
-      departments: ['全部', ...departmentsData.map(d => d.name)],
       selectedDepartment: '全部',
     };
   },
   computed: {
+    currentYearData() {
+      return this.teamStructure.find(y => y.year === this.selectedYear);
+    },
+    departments() {
+      if (!this.currentYearData) return ['全部'];
+      // 基于当前年份实际拥有的部门
+      const actualDepartments = this.currentYearData.departments.map(d => d.name);
+      return ['全部', ...actualDepartments];
+    },
     members() {
-      const yearData = this.teamStructure.find(y => y.year === this.selectedYear);
-      if (!yearData) return [];
+      if (!this.currentYearData) return [];
       
-      const allMembers = yearData.departments.flatMap(d => d.members.map(m => ({ ...m, department: d.name })));
+      const allMembers = this.currentYearData.departments.flatMap(d => d.members.map(m => ({ ...m, department: d.name })));
 
       if (this.selectedDepartment === '全部') {
         return allMembers;
@@ -121,6 +128,14 @@ export default {
     },
     departmentOptions() {
       return this.departments;
+    }
+  },
+  watch: {
+    selectedYear() {
+      // 当年份切换时，如果当前选中的部门在新年份中不存在，重置为"全部"
+      if (this.selectedDepartment !== '全部' && !this.departments.includes(this.selectedDepartment)) {
+        this.selectedDepartment = '全部';
+      }
     }
   }
 };

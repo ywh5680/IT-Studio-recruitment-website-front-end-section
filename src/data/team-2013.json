@@ -1,0 +1,55 @@
+{
+  "year": "2013",
+  "departments": [
+    {
+      "name": "程序部",
+      "members": [
+        {
+          "name": "徐永亮",
+          "quote": "优秀的代码是它自己最好的文档——Steve McConnell",
+          "avatar": "/images/2013/cx1.054a3fd2.webp"
+        },
+        {
+          "name": "杨旭",
+          "quote": "优秀的判断力来自经验，但经验来自于错误的判断。——Fred Brooks",
+          "avatar": "/images/2013/cx2.23650b2f.webp"
+        },
+        {
+          "name": "张静",
+          "quote": "简单不先于复杂，而是在复杂之后——Alan Perlis",
+          "avatar": "/images/2013/cx3.0525bcaf.webp"
+        }
+      ]
+    },
+    {
+      "name": "Web部",
+      "members": [
+        {
+          "name": "何珺",
+          "quote": "测试是来表明bug的存在而不是不存在——Edsger Dijkstra",
+          "avatar": "/images/2013/web1.c9ecb4a7.webp"
+        },
+        {
+          "name": "刘祯昆",
+          "quote": "代码如诗，简洁而优雅",
+          "avatar": "/images/2013/lzq.webp"
+        }
+      ]
+    },
+    {
+      "name": "系统维护部",
+      "members": [
+        {
+          "name": "刘天峰",
+          "quote": "软件在能够复用前必须先能用。——Ralph Johnson",
+          "avatar": "/images/2013/xt1.1628f62d.webp"
+        },
+        {
+          "name": "陶孟旭",
+          "quote": "最便宜，最快和最可靠的组件是不存在的。——佚名",
+          "avatar": "/images/2013/xt2.09bd8234.webp"
+        }
+      ]
+    }
+  ]
+} 

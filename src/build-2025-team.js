@@ -4,8 +4,8 @@ const path = require('path');
 const csv  = require('csv-parser');       // npm i csv-parser
 
 const results = [];
-const imgDir  = 'public/images/2025';     // 头像相对 public 的目录
-const outFile = 'src/data/team-2025.json';
+const imgDir  = 'public/images/2024';     // 头像相对 public 的目录
+const outFile = 'src/data/team-2024.json';
 
 // 1. 读 CSV
 fs.createReadStream('members.csv')
@@ -21,7 +21,7 @@ fs.createReadStream('members.csv')
       // 头像文件名 = 最后一列“提交者”对应图片文件
       const rawPhoto = r['请上传你的照片（必填）'] || '';
       const avatarFile = rawPhoto.split('_')[0] || '';
-      // 在 images/2025 里找匹配文件
+      // 在 images/2024 里找匹配文件
       const files = fs.readdirSync(imgDir);
       const target = files.find(f => f.startsWith(r['提交者（自动）']));
       const avatar = target ? `/images/2025/${target}` : '/images/placeholder.png';
@@ -32,7 +32,7 @@ fs.createReadStream('members.csv')
 
     // 3. 组装符合 data.js 的结构
     const structure = {
-      year: '2025',
+      year: '2024',
       departments: Object.entries(deptMap).map(([name, members]) => ({ name, members }))
     };
 

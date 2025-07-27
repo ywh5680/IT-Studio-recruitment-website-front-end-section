@@ -53,16 +53,23 @@ export const projectsData = {
   ]
 };
 
-/* 老数据 + 新生成的 2025 数据 */
-import team2025 from './data/team-2025.json';
+/* 团队数据按年份降序排列 */
+import team2024 from './data/team-2024.json';
 import team2023 from './data/team-2023.json';
 import team2022 from './data/team-2022.json';
 import team2021 from './data/team-2021.json';
+import team2014 from './data/team-2014.json';
+import team2013 from './data/team-2013.json';
+import team2012 from './data/team-2012.json';
+import team2011 from './data/team-2011.json';
 
 export const teamStructureData = [
-  team2025,
+  team2024,
   team2023,
   team2022,
-  team2021
-  // 新生成的 2025 级成员
+  team2021,
+  team2014,
+  team2013,
+  team2012,
+  team2011
 ];

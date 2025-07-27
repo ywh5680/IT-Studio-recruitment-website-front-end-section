@@ -1,5 +1,5 @@
 {
-  "year": "2025",
+  "year": "2024",
   "departments": [
     {
       "name": "程序部",
@@ -132,7 +132,7 @@
       ]
     },
     {
-      "name": "ios部",
+      "name": "IOS部",
       "members": [
         {
           "name": "赵禹惟",
@@ -162,7 +162,7 @@
       ]
     },
     {
-      "name": "web部",
+      "name": "Web部",
       "members": [
         {
           "name": "杨昊昀",
@@ -172,7 +172,7 @@
         {
           "name": "郑泽嘉",
           "quote": "神作必须买三套，一看一藏一传教。",
-          "avatar": "/images/placeholder.png"
+          "avatar": "/images/chino.png"
         },
         {
           "name": "刘翼晨",
@@ -192,7 +192,7 @@
       ]
     },
     {
-      "name": "app部",
+      "name": "APP部",
       "members": [
         {
           "name": "宋志恒",
@@ -217,7 +217,7 @@
       ]
     },
     {
-      "name": "ui部",
+      "name": "UI部",
       "members": [
         {
           "name": "圣江微",
