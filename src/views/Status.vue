@@ -107,7 +107,7 @@
 
 <script>
 import { ref, computed } from 'vue';
-import axios from 'axios';
+import api from '@/services/api.js';
 import StarfieldBackground from '@/components/StarfieldBackground.vue';
 import { theme } from '@/theme.js';
 
@@ -160,22 +160,28 @@ export default {
       error.value = null;
       result.value = null;
 
-      try {
-        const input = queryInput.value.trim();
-        const body = {};
+              try {
+          const input = queryInput.value.trim();
+          let body = {};
 
-        if (input.includes('@')) {
-          body.email = input;
-        } else if (/^\d+$/.test(input)) {
-          body.phone = input;
-          body.qq = input;
-          body.uid = input;
-        } else {
-          body.name = input;
-        }
-        
-        const response = await axios.post('/api/get_status/', body);
-        result.value = response.data;
+          if (input.includes('@')) {
+            // 邮箱
+            body = {"email": input};
+          } else if (/^\d+$/.test(input)) {
+            if (input.length === 11 && input.startsWith('1')) {
+              body = {"phone": parseInt(input)};
+            } else if(input.length === 11) {
+              body = {"uid": parseInt(input)};
+            }
+            else {
+            body = {"qq":parseInt(input)};
+            }
+          } else {
+            body = {"name":input};
+          }
+          
+          const response = await api.post('/get_status/', body);
+          result.value = response.data;
         
       } catch (e) {
         const status = e.response?.status;
