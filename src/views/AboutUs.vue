@@ -39,6 +39,7 @@
 <script>
 import StarfieldBackground from '@/components/StarfieldBackground.vue';
 import { theme } from '@/theme.js';
+import {promotionalImages} from '../data.js'
 
 export default {
   name: 'AboutUsView',
@@ -52,11 +53,7 @@ export default {
   },
   data() {
     return {
-      carouselImages: [
-        'https://picsum.photos/id/1015/800/600',
-        'https://picsum.photos/id/1016/800/600',
-        'https://picsum.photos/id/1018/800/600'
-      ],
+      carouselImages : promotionalImages
     };
   },
   mounted() {
