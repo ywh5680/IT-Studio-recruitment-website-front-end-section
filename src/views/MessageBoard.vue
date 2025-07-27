@@ -203,7 +203,7 @@ const handleSubmit = async () => {
     if (replyingTo.value) body.parent = replyingTo.value;
 
     
-    const response = await api.post('/comment/', body);
+    await api.post('/comment/', body);
     
     // 成功后清空表单
     newComment.value = { content: '', email: '', qq: '' };
