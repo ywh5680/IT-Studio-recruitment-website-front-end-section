@@ -27,6 +27,16 @@
             </v-card>
           </div>
 
+          <!-- 分页控件 -->
+          <div class="text-center mb-6" v-if="comments.length > 0">
+            <v-pagination
+              v-model="currentPage"
+              :length="totalPages"
+              @update:modelValue="handlePageChange"
+              rounded
+            ></v-pagination>
+          </div>
+
           <!-- 留言表单 -->
           <v-card class="message-form-card" elevation="12">
             <v-card-title class="text-h5">
@@ -34,6 +44,21 @@
             </v-card-title>
             <v-card-text>
               <v-form @submit.prevent="handleSubmit">
+                <!-- 显示被回复的评论内容 -->
+                <v-alert v-if="replyingToInfo" type="info" variant="tonal" class="mb-4" border="start">
+                  <div class="d-flex justify-space-between align-center">
+                    <div>
+                      <div class="text-caption">
+                        回复给: <strong>{{ replyingToInfo.author }}</strong>
+                      </div>
+                      <div class="text-body-2 original-comment">
+                        "{{ replyingToInfo.content }}"
+                      </div>
+                    </div>
+                    <v-btn size="x-small" icon="mdi-close" variant="text" @click="cancelReply"></v-btn>
+                  </div>
+                </v-alert>
+                
                 <v-textarea
                   v-model="newComment.content"
                   label="说点什么吧..."
@@ -63,11 +88,6 @@
                     ></v-text-field>
                   </v-col>
                 </v-row>
-                
-                <v-alert v-if="replyingTo" type="info" variant="tonal" class="mb-4" dense>
-                  正在回复评论 #{{ replyingTo }}
-                  <v-btn size="x-small" icon="mdi-close" variant="text" @click="cancelReply"></v-btn>
-                </v-alert>
 
                 <v-alert v-if="error" type="error" variant="tonal" class="mb-4" dense>
                   {{ error }}
@@ -94,7 +114,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-import axios from 'axios';
+import api from '@/services/api';
 import StarfieldBackground from '@/components/StarfieldBackground.vue';
 import CommentItem from '@/components/CommentItem.vue';
 import { theme } from '@/theme.js';
@@ -102,6 +122,11 @@ import { theme } from '@/theme.js';
 const comments = ref([]);
 const commentsLoading = ref(true);
 const commentsError = ref(null);
+
+// 分页参数
+const pageSize = ref(20);
+const currentPage = ref(1);
+const totalPages = ref(1);
 
 const newComment = ref({
   content: '',
@@ -111,7 +136,8 @@ const newComment = ref({
 
 const loading = ref(false);
 const error = ref(null);
-const replyingTo = ref(null);
+const replyingTo = ref(null); // 只存id
+const replyingToInfo = ref(null); // 存简要信息
 
 const formTitle = computed(() => {
   return replyingTo.value ? `回复评论 #${replyingTo.value}` : '留下你的足迹';
@@ -121,17 +147,65 @@ const isSubmitDisabled = computed(() => {
   return !newComment.value.content.trim() || (!newComment.value.email && !newComment.value.qq);
 });
 
-const fetchComments = async () => {
+const fetchComments = async (page = 1) => {
   commentsLoading.value = true;
   commentsError.value = null;
   try {
-    const response = await axios.get('/api/comments/');
+    const start = (page - 1) * pageSize.value;
+    console.log(`获取评论，参数: limit=${pageSize.value}, start=${start}`);
+    
+    const response = await api.get('/comment/', {
+      params: {
+        limit: pageSize.value,
+        start: start
+      }
+    });
+    
+    // 记录API返回的原始数据，查看结构
+    console.log('API返回的评论数据:', JSON.stringify(response.data, null, 2));
+    console.log('返回评论数量:', response.data.length);
+    
+    // 检查返回的评论是否包含嵌套结构
+    let hasNested = false;
+    response.data.forEach(comment => {
+      if (comment.children && comment.children.length > 0) {
+        hasNested = true;
+        console.log(`评论 #${comment.id} 有 ${comment.children.length} 个子评论`);
+      }
+    });
+    
+    if (!hasNested) {
+      console.warn('API返回的数据没有嵌套的子评论结构');
+    }
+    
     comments.value = response.data;
+    
+    // 假设我们从响应头或其他方式获取总页数
+    // 如果API没有提供总数信息，可以根据返回的数据长度来估算
+    if (comments.value.length < pageSize.value && page === 1) {
+      totalPages.value = 1;
+    } else if (comments.value.length < pageSize.value) {
+      totalPages.value = page;
+    } else {
+      // 这里可能需要根据API的实际情况调整
+      totalPages.value = Math.max(page, totalPages.value + 1);
+    }
+
+    // 提交评论后，确保重新获取最新的评论列表
+    if (page === 1 && replyingTo.value !== null) {
+      replyingTo.value = null;
+      replyingToInfo.value = null;
+    }
   } catch (e) {
+    console.error('获取评论失败:', e);
     commentsError.value = e.response?.data?.message || '无法加载评论，请稍后刷新重试';
   } finally {
     commentsLoading.value = false;
   }
+};
+
+const handlePageChange = (page) => {
+  fetchComments(page);
 };
 
 const handleSubmit = async () => {
@@ -148,13 +222,23 @@ const handleSubmit = async () => {
     if (newComment.value.qq) body.qq = newComment.value.qq;
     if (replyingTo.value) body.parent = replyingTo.value;
 
-    await axios.post('/api/comment/', body);
+    console.log('提交评论:', body);
     
-    // 成功后清空表单并刷新列表
+    const response = await api.post('/comment/', body);
+    console.log('评论提交成功:', response.data);
+    
+    // 成功后清空表单
     newComment.value = { content: '', email: '', qq: '' };
+    
+    // 完全刷新评论列表以获取最新的完整嵌套结构
+    currentPage.value = 1; // 回到第一页
+    await fetchComments(1); // 刷新评论列表
+    
+    // 重置回复状态
     replyingTo.value = null;
-    await fetchComments(); // 刷新评论列表
+    replyingToInfo.value = null;
   } catch (e) {
+    console.error('评论提交失败:', e);
     const status = e.response?.status;
     if (status === 400) error.value = '缺少必要参数';
     else if (status === 404) error.value = '回复的评论不存在';
@@ -165,17 +249,19 @@ const handleSubmit = async () => {
   }
 };
 
-const setReply = (parentId) => {
-  replyingTo.value = parentId;
+const setReply = ({ id, content, author }) => {
+  replyingTo.value = id;
+  replyingToInfo.value = { content, author };
   document.querySelector('.message-form-card').scrollIntoView({ behavior: 'smooth' });
 };
 
 const cancelReply = () => {
   replyingTo.value = null;
+  replyingToInfo.value = null;
 };
 
 onMounted(() => {
-  fetchComments();
+  fetchComments(1);
 });
 </script>
 
@@ -240,5 +326,11 @@ onMounted(() => {
 .no-comments-card {
   background-color: transparent !important;
   padding: 40px 0;
+}
+
+.original-comment {
+  font-style: italic;
+  opacity: 0.8;
+  margin-top: 4px;
 }
 </style> 
