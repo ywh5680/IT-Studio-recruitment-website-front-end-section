@@ -274,18 +274,19 @@ export default {
 
 .pro-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
-  gap: 1.5rem; 
-  width: 100%; 
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* 固定最小宽度 */
+  gap: 1.5rem;
+  width: 100%;
 }
 
 .projects {
+  width: 100%; /* 强制宽度为100% */
+  min-height: 200px; /* 固定高度 */
   position: relative;
   background: rgba(17, 24, 39, 0.7);
   border: 1px solid rgba(99, 102, 241, 0.2);
   border-radius: 0.75rem;
   padding: 1.5rem;
-  height: 200px;
   overflow: hidden;
   transition: all 0.3s ease;
   cursor: pointer;
@@ -339,6 +340,7 @@ export default {
   flex-direction: column;
   justify-content: flex-end; 
   transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  width: 100%; /* 确保文本容器不溢出 */
 }
 
 .title {
@@ -455,7 +457,7 @@ export default {
 .modal-text {
   flex: 1;
   color: #e5e7eb;
-  overflow-y: auto;
+  max-width: 100%; /* 防止溢出 */
 }
 
 .modal-text h2 {
@@ -471,6 +473,9 @@ export default {
   font-size: 1.1rem;
   line-height: 1.6;
   margin-bottom: 1.5rem;
+  white-space: normal;
+  word-break: break-word; 
+  overflow-wrap: break-word; 
 }
 
 .modal-details {

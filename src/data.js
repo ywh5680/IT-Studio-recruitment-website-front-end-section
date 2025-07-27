@@ -7,51 +7,62 @@ export const departmentsData = [
   { name: '程序部', description: '程序部主要负责社团的网站开发、应用程序设计、技术支持、技术培训等工作。在这里，你可以学习使用Python开发服务器后端，亲手打造网站。' }
 ];
 
+export const promotionalImages = [
+  '/images/promotionalImages/宣传1.jpg',
+  '/images/promotionalImages/宣传2.webp',
+  '/images/promotionalImages/宣传3.jpg'
+]
+
 export const projectsData = {
-  '2024': [
-    { name: '1', description: '3111', image: '/images/2023project.webp' },
-    { name: '21111', description: '41111', image: 'https://via.placeholder.com/300x200/ADD8E6/000000?text=Cross-Platform' }
-  ],
   '2023': [
-    { name: '小程序开发', description: '中国海洋大学信息科学与工程学部百年校庆小程序', image: '/images/2023project.webp' },
-    { name: '11', description: '111111', image: 'https://via.placeholder.com/300x200' }
+    { name: '中国海洋大学百年校庆小程序', description: '', image: '/images/Projects/2023百年校庆小程序-2.webp' },
   ],
   '2022': [
-    { name: '1', description: '111', image: 'https://via.placeholder.com/300x200' },
-    { name: '111', description: '1111', image: 'https://via.placeholder.com/300x200' }
+    { name: '工程学院中英海洋能研究基地网站', description: '', image: '/images/Projects/2022工程学院中英海洋能研究基地制作展示网站.webp' },
+    { name: '《大地之歌》', description: '游戏部门独立完成一款横版闯关类游戏《大地之歌》', image: '/images/Projects/2022游戏部门大地之歌.webp' },
+    { name: '校友企业电商购物平台', description: '', image: '/images/Projects/2022电商购物平台.webp' },
+    { name: '校外企业物联网数据实时展示平台', description: '', image: '/images/Projects/2022物联网数据实时展示平台.webp' }
   ],
-  '2025': [
-    { name: '1', description: '3111', image: '/images/2023project.webp' },
-    { name: '21111', description: '41111', image: 'https://via.placeholder.com/300x200/ADD8E6/000000?text=Cross-Platform' }
+  '2021': [
+    { name: '校团委网站', description: '由爱特制作的中国海洋大学网站成功上线运行', image: '/images/Projects/2021中国海洋大学网站.webp' }
   ],
+  '2020': [
+    { name: '《幽灵骑士》', description: '游戏部门独立完成了一款PC端的2.5D游戏《幽灵骑士》', image: '' },
+    { name: '爱特展示网、海迅APP', description: '程序、APP与UI合作完成了爱特展示网、海迅APP等作品', image: '' }
+  ],
+  '2019': [
+    { name: '《达拉崩吧》', description: '19年游戏部合作完成了一个可联网、能存档的俯视角射击游戏', image: '/images/Projects/2019游戏部合作射击游戏.webp' },
+    { name: '部门合作作品', description: 'Ul与web开发、APP、程序合作设计了爱特读书及爱特读书APP、爱特展示网、IT日程APP', image: '' }
+  ],
+  '2018': [
+    { name: '爱特展示网', description: '开拓爱特展示网，成功上线运行', image: '' },
+    { name: '众创空间预约系统', description: '制作众创空间预约系统，成功上线运行', image: '' }
+  ],
+  '2017': [
+    { name: '开拓信院网站', description: '开拓信息科学与工程学院网站，成功上线运行', image: '' }
+  ],
+  '2016': [
+    { name: '上线网站', description: '由爱特制作的中国海洋大学计算机系网站成功上线', image: '/images/Projects/2016国际教育学院展示网.webp' }
+  ],
+  '2015': [
+    { name: 'IGEM比赛团队展示页面', description: '为iGEM比赛团队制作静态展示页面', image: '/images/Projects/2015iGEM比赛团队静态展示页面.webp' },
+    { name: '新网站上线', description: '中国海洋大学海洋技术系网站成功上线运行', image: '/images/Projects/2015海洋技术系网站.webp' }
+  ],
+  '2014': [
+    { name: '信息科学与工程学部网站', description: '设计信息科学与工程学部网站，成功上线运行', image: '/images/Projects/2014信息科学与工程学部网站.webp' }
+  ]
 };
 
 /* 老数据 + 新生成的 2025 数据 */
 import team2025 from './data/team-2025.json';
+import team2023 from './data/team-2023.json';
+import team2022 from './data/team-2022.json';
+import team2021 from './data/team-2021.json';
 
 export const teamStructureData = [
   team2025,
-  {
-    year: '2023',
-    departments: [
-      { name: 'APP部', members: [{ name: '1', quote: '1', avatar: 'https://via.placeholder.com/150' }] },
-      { name: 'Web部', members: [{ name: '2', quote: '1', avatar: 'https://via.placeholder.com/150' }, { name: '1', quote: '1', avatar: 'https://via.placeholder.com/150' }] },
-      { name: 'IOS部', members: [] },
-      { name: 'UI部', members: [] },
-      { name: '游戏部', members: [{ name: '1', quote: '1', avatar: 'https://via.placeholder.com/150' }] },
-      { name: '程序部', members: [] }
-    ]
-  },
-  {
-    year: '2022',
-    departments: [
-      { name: 'APP部', members: [] },
-      { name: 'Web部', members: [{ name: '1', quote: '1', avatar: 'https://via.placeholder.com/150' }] },
-      { name: 'IOS部', members: [] },
-      { name: 'UI部', members: [{ name: '1', quote: '1。', avatar: 'https://via.placeholder.com/150' }, { name: '1', quote: '2', avatar: 'https://via.placeholder.com/150' }] },
-      { name: '游戏部', members: [] },
-      { name: '程序部', members: [] }
-    ]
-  }
+  team2023,
+  team2022,
+  team2021
   // 新生成的 2025 级成员
 ];

@@ -8,7 +8,8 @@
     <div class="actions-fixed">
       <div class="actions">
         <router-link to="/registration" class="button button-more">进入报名处</router-link>
-        <a href="#" class="button button-join">加入招新群</a>
+        <a href="https://qm.qq.com/cgi-bin/qm/qr?k=E5wiVyRKEOWufxlLJztPLNjyFPDdUzg2&jump_from=webapi&authKey=5lupAPufuYP7fufM/vpKcZOKmZS3QPi3v/sOZTKL5k1okjFRpoPm64rKD4VacxKS"
+        class="button button-join" target="_blank">加入招新群</a>
       </div>
     </div>
   </div>

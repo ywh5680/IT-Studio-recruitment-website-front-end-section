@@ -1,0 +1,160 @@
+{
+  "year": "2022",
+  "departments": [
+    {
+      "name": "程序部",
+      "members": [
+        {
+          "name": "路修哲",
+          "quote": "哪有什么身不由己，己不由心，身又怎能由己。",
+          "avatar": "/images/2022/程序/luxiuzhe.c45d8d40.webp"
+        },
+        {
+          "name": "方诗颖",
+          "quote": "吃饭!",
+          "avatar": "/images/2022/程序/fangshiying.18804c28.webp"
+        },
+        {
+          "name": "雷祥宁",
+          "quote": "迟早猝死",
+          "avatar": "/images/2022/程序/lxn.0b7daba4.webp"
+        }
+      ]
+    },
+    {
+      "name": "游戏部",
+      "members": [
+        {
+          "name": "梁芷菁",
+          "quote": "能以知识描绘，亦可以爱描绘，唯独不能用奇迹来描绘",
+          "avatar": "/images/2022/游戏/lzj.ad840f3d.webp"
+        },
+        {
+          "name": "潘熙阳",
+          "quote": "想冲天天",
+          "avatar": "/images/2022/游戏/panxiyang2.62f3d00f.webp"
+        },
+        {
+          "name": "金鑫溢",
+          "quote": "指鹿为马不负韶华",
+          "avatar": "/images/2022/游戏/jxy2.58119275.webp"
+        },
+        {
+          "name": "姚茂琪",
+          "quote": "呃呃",
+          "avatar": "/images/2022/游戏/yaomaoqi.fccf9b78.webp"
+        },
+        {
+          "name": "岳一磊",
+          "quote": "程序员终成大牛",
+          "avatar": "/images/2022/游戏/yueyilei.11358b6b.webp"
+        },
+        {
+          "name": "王铭新",
+          "quote": "你说得对，但是",
+          "avatar": "/images/2022/游戏/wangmingxin.4e03f4dc.webp"
+        },
+        {
+          "name": "时晓天",
+          "quote": "这个人很懒，什么都没有留下",
+          "avatar": "/images/2022/shixiaotian.41d36dbc.webp"
+        },
+        {
+          "name": "许其鸿",
+          "quote": "卷不过卷不过",
+          "avatar": "/images/2022/xuqihong.1ee57236.webp"
+        },
+        {
+          "name": "陈子荣",
+          "quote": "我不是二次元",
+          "avatar": "/images/2022/czr.7f176afa.webp"
+        }
+      ]
+    },
+    {
+      "name": "web部",
+      "members": [
+        {
+          "name": "张世卿",
+          "quote": "关注永雏塔菲喵，关注永雏塔菲谢谢喵",
+          "avatar": "/images/2022/web/zhangshiqing.0883ed3d.webp"
+        },
+        {
+          "name": "冷越",
+          "quote": "在潮湿里种水仙吧",
+          "avatar": "/images/2022/web/lengyue.895f7176.webp"
+        },
+        {
+          "name": "卢育彬",
+          "quote": "生活索然无味 尸体cos人类",
+          "avatar": "/images/2022/web/luyubin.webp"
+        },
+        {
+          "name": "路畅",
+          "quote": "道阻且长，行则将至。行而不辍，未来可期",
+          "avatar": "/images/2022/web/lc.06760a7b.jpg"
+        },
+        {
+          "name": "廉嘉蕊",
+          "quote": "事了拂衣去，深藏功与名",
+          "avatar": "/images/2022/web/lianjiarui.023f7224.webp"
+        },
+        {
+          "name": "李伯辉",
+          "quote": "坤粉一万年",
+          "avatar": "/images/2022/web/libohui.webp"
+        },
+        {
+          "name": "雷志良",
+          "quote": "CSGO，启动",
+          "avatar": "/images/2022/web/leizhiliang.a9488198.webp"
+        }
+      ]
+    },
+    {
+      "name": "app部",
+      "members": [
+        {
+          "name": "王建享",
+          "quote": "欢迎加入APP部",
+          "avatar": "/images/2022/app/wjx.f2ccc4d9.webp"
+        },
+        {
+          "name": "王佳俊",
+          "quote": "吃面",
+          "avatar": "/images/2022/app/wjj.aed868c9.webp"
+        }
+      ]
+    },
+    {
+      "name": "ui部",
+      "members": [
+        {
+          "name": "董芯汝",
+          "quote": "This is Mr.White.",
+          "avatar": "/images/2022/UI/download.webp"
+        },
+        {
+          "name": "马琪颖",
+          "quote": "知足常乐~",
+          "avatar": "/images/2022/UI/maqiying3.cbf68648.webp"
+        },
+        {
+          "name": "陈静",
+          "quote": "感情…哈哈哈哈哈哈！感情才是这个世界上最可笑的东西！",
+          "avatar": "/images/2022/UI/chenjing.841ca3a5.webp"
+        },
+        {
+          "name": "曹瑜",
+          "quote": "注意看，这个女孩叫小美",
+          "avatar": "/images/2022/UI/caoyu.9dfb75c7.webp"
+        },
+        {
+          "name": "韦万蓓",
+          "quote": "来摆摆手，再嫣然晃个头，无限春光献祖国。",
+          "avatar": "/images/2022/UI/wwb.046fa56e.webp"
+        }
+      ]
+    }
+  ]
+}

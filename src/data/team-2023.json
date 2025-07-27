@@ -1,0 +1,135 @@
+{
+  "year": "2023",
+  "departments": [
+    {
+      "name": "程序部",
+      "members": [
+        {
+          "name": "蔺春名",
+          "quote": "It is better to be Socrates dissatisfied than a fool satisfied.",
+          "avatar": "/images/2023/cxlcm.cc8d485f.png"
+        },
+        {
+          "name": "孙安琪",
+          "quote": "∀ε＞0，|me-fw|＜ε",
+          "avatar": "/images/2023/cxsaq.2d12d01b.png"
+        },
+        {
+          "name": "彭传喜",
+          "quote": "逸一时，误一世，忆旧亦疚罢己龄。",
+          "avatar": "/images/2023/cxpcx.92bf1cd3.webp"
+        },
+        {
+          "name": "任程枫",
+          "quote": "I am iron man!",
+          "avatar": "/images/2023/cxrcf.6d333d43.webp"
+        },
+        {
+          "name": "袁 健",
+          "quote": "...",
+          "avatar": "/images/2023/cxyj.6441bc5c.webp"
+        },
+        {
+          "name": "李仁杰",
+          "quote": "技术立身",
+          "avatar": "/images/2023/cxlrj.4f8b5266.webp"
+        },
+        {
+          "name": "陈祺新",
+          "quote": "你好",
+          "avatar": "/images/2023/cxcqx.c507fcf0.webp"
+        }
+      ]
+    },
+    {
+      "name": "游戏部",
+      "members": [
+        {
+          "name": "袁庆康",
+          "quote": "究极缝补匠",
+          "avatar": "/images/2023/yxyqk.b9409e38.webp"
+        },
+        {
+          "name": "赖 欣",
+          "quote": "拯救世界!",
+          "avatar": "/images/2023/yxlx.5f029dd3.webp"
+        },
+        {
+          "name": "张开元",
+          "quote": "无",
+          "avatar": "/images/2023/yxzky.f2eb86e0.png"
+        },
+        {
+          "name": "黄乐煊",
+          "quote": "DONE AND DUSTED.",
+          "avatar": "/images/2023/yxhlx.128f80d7.webp"
+        }
+      ]
+    },
+    {
+      "name": "web部",
+      "members": [
+        {
+          "name": "李德儒",
+          "quote": "什么比七个工作日更不爽？第八个（debug）",
+          "avatar": "/images/2023/webldr.82def27a.webp"
+        },
+        {
+          "name": "李佳潼",
+          "quote": "web人很好的捏",
+          "avatar": "/images/2023/webljt.4ee6e9cc.webp"
+        },
+        {
+          "name": "何 瑶",
+          "quote": "小小世界开心至上！",
+          "avatar": "/images/2023/webhy.cafed54b.jpg"
+        },
+        {
+          "name": "姚佳瑜",
+          "quote": "好好学习，天天向上",
+          "avatar": "/images/2023/webyjy.2f4e0058.jpg"
+        },
+        {
+          "name": "黄明宇",
+          "quote": "长期素食导致的",
+          "avatar": "/images/2023/webhmy.666c16ea.webp"
+        }
+      ]
+    },
+    {
+      "name": "app部",
+      "members": [
+        {
+          "name": "徐启睿",
+          "quote": "尽力而为，随遇而安",
+          "avatar": "/images/2023/appxqr.2704542e.png"
+        },
+        {
+          "name": "李佳潼",
+          "quote": "app人很好的捏",
+          "avatar": "/images/2023/appljt.4ee6e9cc.webp"
+        }
+      ]
+    },
+    {
+      "name": "ui部",
+      "members": [
+        {
+          "name": "李瑜玥",
+          "quote": "要smile面对ddl ◝(　ﾟ∀ ﾟ )◟",
+          "avatar": "/images/2023/uilyy.d18b8d26.webp"
+        },
+        {
+          "name": "刘雅璇",
+          "quote": "等花盛开",
+          "avatar": "/images/2023/uilyx.a17ce0c9.jpg"
+        },
+        {
+          "name": "潘奕霖",
+          "quote": "Man! What can I say!",
+          "avatar": "/images/2023/uipyl.b9532090.png"
+        }
+      ]
+    }
+  ]
+}

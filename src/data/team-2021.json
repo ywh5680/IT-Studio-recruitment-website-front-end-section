@@ -1,0 +1,140 @@
+{
+  "year": "2021",
+  "departments": [
+    {
+      "name": "程序部",
+      "members": [
+        {
+          "name": "刘襄琪",
+          "quote": "阿巴阿巴阿巴",
+          "avatar": "/images/2021/cx1.3abad63f.webp"
+        },
+        {
+          "name": "康家辉",
+          "quote": "人生苦短，我用Python",
+          "avatar": "/images/2021/cx2.360430c0.webp"
+        },
+        {
+          "name": "唐玉硕",
+          "quote": "Programming makes heads bald.",
+          "avatar": "/images/2021/cx3.31a3afa0.webp"
+        },
+        {
+          "name": "甘海",
+          "quote": "其作始也简，其将毕也必巨",
+          "avatar": "/images/2021/cx4.58bb754c.webp"
+        },
+        {
+          "name": "黄乃煊",
+          "quote": "Change the world by programmmmmm!",
+          "avatar": "/images/2021/cx5.6696bc20.webp"
+        },
+        {
+          "name": "刘宇璨",
+          "quote": "晚点再摆!",
+          "avatar": "/images/2021/cx6.f5565252.webp"
+        },
+        {
+          "name": "孟广樾",
+          "quote": "好好学习，天天向上！",
+          "avatar": "/images/2021/cx7.e9da1c0f.webp"
+        },
+        {
+          "name": "吴卓衡",
+          "quote": "Bug退散！！！！",
+          "avatar": "/images/2021/cx8.36681b11.webp"
+        }
+      ]
+    },
+    {
+      "name": "游戏部",
+      "members": [
+        {
+          "name": "刘宇宙",
+          "quote": "你说得对，但是《鬼泣5》是由卡普空自主研发的一款全新动作类冒险游戏。游戏发生在一个被称作「红墓市」的幻想世界，在这里，被斯巴达选中的人将被授予「魔人」，导引恶魔之力。你将扮演一位名为「恶魔猎人」的神秘角色，在自由的旅行中邂逅性格各异、能力独特的同伴们，和他们一起击败强敌，阻止魔树侵袭的同时，逐步发掘「V」的真相。",
+          "avatar": "/images/2021/game1.77d1236a.webp"
+        },
+        {
+          "name": "戴立桓",
+          "quote": "游戏爱好者，不过是手残",
+          "avatar": "/images/2021/game2.webp"
+        },
+        {
+          "name": "安戈新",
+          "quote": "能躺着就不坐着",
+          "avatar": "/images/2021/game3.6eb7ae4b.webp"
+        },
+        {
+          "name": "陈嘉鹏",
+          "quote": "此广告位长期招租",
+          "avatar": "/images/2021/game4.8ff01577.webp"
+        },
+        {
+          "name": "彭程",
+          "quote": "智商在线，没有解决不掉的问题",
+          "avatar": "/images/2021/game5.webp"
+        },
+        {
+          "name": "杨飏",
+          "quote": "客观是高枕无忧之人的挡箭牌",
+          "avatar": "/images/2021/game6.ebb67251.webp"
+        },
+        {
+          "name": "邹雨潼",
+          "quote": "好好学习",
+          "avatar": "/images/2021/game7.acdce064.webp"
+        }
+      ]
+    },
+    {
+      "name": "web部",
+      "members": [
+        {
+          "name": "张润宁",
+          "quote": "禁止摆烂-",
+          "avatar": "/images/2021/web1.c73e477c.webp"
+        },
+        {
+          "name": "汪洋",
+          "quote": "咸鱼翻身||",
+          "avatar": "/images/2021/web2.26692481.webp"
+        },
+        {
+          "name": "符谷泰",
+          "quote": "bug别来了",
+          "avatar": "/images/2021/web3.ac9d2966.webp"
+        }
+      ]
+    },
+    {
+      "name": "app部",
+      "members": [
+        {
+          "name": "刘彩鑫",
+          "quote": "心之所向，无问西东",
+          "avatar": "/images/2021/app1.36c83231.webp"
+        },
+        {
+          "name": "张泽峰",
+          "quote": "没啥可说的",
+          "avatar": "/images/2021/app2.83104111.webp"
+        },
+        {
+          "name": "吴东升",
+          "quote": "开摆!",
+          "avatar": "/images/2021/app3.b1cff91d.webp"
+        }
+      ]
+    },
+    {
+      "name": "ui部",
+      "members": [
+        {
+          "name": "吴文楠",
+          "quote": "今天也是困困的一天",
+          "avatar": "/images/2021/ui1.d6ae6240.webp"
+        }
+      ]
+    }
+  ]
+}
