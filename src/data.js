@@ -21,7 +21,8 @@ export const projectsData = {
     { name: '工程学院中英海洋能研究基地网站', description: '', image: '/images/Projects/2022工程学院中英海洋能研究基地制作展示网站.webp' },
     { name: '《大地之歌》', description: '游戏部门独立完成一款横版闯关类游戏《大地之歌》', image: '/images/Projects/2022游戏部门大地之歌.webp' },
     { name: '校友企业电商购物平台', description: '', image: '/images/Projects/2022电商购物平台.webp' },
-    { name: '校外企业物联网数据实时展示平台', description: '', image: '/images/Projects/2022物联网数据实时展示平台.webp' }
+    { name: '校外企业物联网数据实时展示平台', description: '', image: '/images/Projects/2022物联网数据实时展示平台.webp' },
+    { name: 'Delete it', description: '由游戏部成员独立创作的参赛作品', image: '/images/Projects/2022DeleteIt.png' }
   ],
   '2021': [
     { name: '校团委网站', description: '由爱特制作的中国海洋大学网站成功上线运行', image: '/images/Projects/2021中国海洋大学网站.webp' },
