@@ -2,7 +2,7 @@
   <div class="message-board-container">
     <StarfieldBackground :is-dark="theme.isDark" />
     <v-container class="message-board-content">
-      <h3 class="text-h3 text-center font-weight-bold mb-8">留言板</h3>
+      <h3 class="text-h3 text-center font-weight-bold mb-8 text-white">留言板</h3>
       
       <v-row justify="center">
         <v-col cols="12" md="8">
@@ -89,6 +89,7 @@
         </v-col>
       </v-row>
     </v-container>
+    <WebsiteFooter></WebsiteFooter>
   </div>
 </template>
 
@@ -98,6 +99,7 @@ import axios from 'axios';
 import StarfieldBackground from '@/components/StarfieldBackground.vue';
 import CommentItem from '@/components/CommentItem.vue';
 import { theme } from '@/theme.js';
+import WebsiteFooter from '@/components/WebsiteFooter.vue';
 
 const comments = ref([]);
 const commentsLoading = ref(true);

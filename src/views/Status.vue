@@ -103,6 +103,7 @@
       </v-row>
     </v-container>
   </div>
+  <WebsiteFooter></WebsiteFooter>
 </template>
 
 <script>
@@ -110,11 +111,13 @@ import { ref, computed } from 'vue';
 import axios from 'axios';
 import StarfieldBackground from '@/components/StarfieldBackground.vue';
 import { theme } from '@/theme.js';
+import WebsiteFooter from '@/components/WebsiteFooter.vue';
 
 export default {
   name: 'StatusView',
   components: {
     StarfieldBackground,
+    WebsiteFooter
   },
   setup() {
     const queryInput = ref('');

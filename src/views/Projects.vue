@@ -52,6 +52,7 @@
       </div>
     </div>
   </transition>
+  <WebsiteFooter></WebsiteFooter>
   </div>
 </template>
 
@@ -59,11 +60,13 @@
 import { projectsData } from '../data.js';
 import StarfieldBackground from '@/components/StarfieldBackground.vue';
 import { theme } from '@/theme.js';
+import WebsiteFooter from '@/components/WebsiteFooter.vue';
 
 export default {
   name: 'ProjectsView',
   components: {
     StarfieldBackground,
+    WebsiteFooter
   },
   setup() {
     return {

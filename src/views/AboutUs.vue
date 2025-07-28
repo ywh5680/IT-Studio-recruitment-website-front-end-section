@@ -33,18 +33,21 @@
         </v-carousel>
       </div>
     </section>
+    <WebsiteFooter class="footer"></WebsiteFooter>
   </div>
 </template>
 
 <script>
 import StarfieldBackground from '@/components/StarfieldBackground.vue';
 import { theme } from '@/theme.js';
-import {promotionalImages} from '../data.js'
+import {promotionalImages} from '../data.js';
+import WebsiteFooter from '@/components/WebsiteFooter.vue';
 
 export default {
   name: 'AboutUsView',
   components: {
     StarfieldBackground,
+    WebsiteFooter
   },
   setup() {
     return {

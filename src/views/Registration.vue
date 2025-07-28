@@ -51,14 +51,19 @@
       </form>
     </div>
   </div>
+  <WebsiteFooter></WebsiteFooter>
 </template>
 
 <script>
 import { theme } from '../theme.js';
 import api from '../services/api.js';
+import WebsiteFooter from '@/components/WebsiteFooter.vue';
 
 export default {
   name: 'Registration',
+  components:{
+    WebsiteFooter
+  },
   data() {
     return {
       isDropdownOpen: false,

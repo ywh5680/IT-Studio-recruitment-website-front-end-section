@@ -46,6 +46,7 @@
           左右滑动查看其他部门</p>
       </footer>
     </div>
+    <WebsiteFooter style="margin: 25vh 0 0"></WebsiteFooter>
   </div>
 </template>
 
@@ -53,11 +54,13 @@
 import { departmentsData } from '../data.js';
 import StarfieldBackground from '@/components/StarfieldBackground.vue';
 import { theme } from '@/theme.js';
+import WebsiteFooter from '@/components/WebsiteFooter.vue';
 
 export default {
   name: 'DepartmentsView',
   components: {
-    StarfieldBackground
+    StarfieldBackground,
+    WebsiteFooter
   },
   setup() {
     return {
@@ -205,11 +208,11 @@ export default {
     getDepartmentIcon(deptName) {
       const iconMap = {
         'APP部': 'fa fa-mobile fa-4x',
-        'Web部': 'fa fa-globe fa-4x',
+        'Web部': 'fa fa-html5 fa-4x',
         'IOS部': 'fa fa-apple fa-4x',
         'UI部': 'fa fa-paint-brush fa-4x',
         '游戏部': 'fa fa-gamepad fa-4x',
-        '程序部': 'fa fa-code fa-4x'
+        '程序部': 'fa fa-cogs fa-4x'
       };
       return iconMap[deptName] || 'fa fa-cogs fa-4x';
     },
@@ -321,6 +324,10 @@ export default {
   border-radius: 15px;
   width: 100%;
   height: 100%;
+  user-select: none;
+  -webkit-user-select: none; /* 兼容 Safari */
+  -moz-user-select: none; /* 兼容 Firefox */
+  -ms-user-select: none; /* 兼容 IE/Edge */
   transform-style: preserve-3d;
   transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
