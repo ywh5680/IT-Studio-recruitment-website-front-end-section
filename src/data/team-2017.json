@@ -1,0 +1,44 @@
+{
+  "year": "2017",
+  "departments": [
+    {
+      "name": "程序部",
+      "members": [
+        { "name": "谭坚铭", "quote": "既且,且往观乎?", "avatar": "/images/2017/cx1.webp" },
+        { "name": "陈开拓", "quote": "睡觉是第一生产力", "avatar": "/images/2017/cx2.webp" },
+        { "name": "陈尊龙", "quote": "健忘是头秃的前兆——谁说的来着", "avatar": "/images/2017/cx4.webp" }
+      ]
+    },
+    {
+      "name": "web部",
+      "members": [
+        { "name": "陈玉沅", "quote": "面向百度编程", "avatar": "/images/2017/web1.webp" }
+      ]
+    },
+    {
+      "name": "游戏部",
+      "members": [
+        { "name": "李岩", "quote": "我们每天度过的称之为日常的生活，其实是一个个奇迹的连续也说不定。", "avatar": "/images/2017/game1.webp" }
+      ]
+    },
+    {
+      "name": "app部",
+      "members": [
+        { "name": "李林宇", "quote": "现在是过去的未来，亦是未来的过去。", "avatar": "/images/2017/app1.webp" },
+        { "name": "弋晓洋", "quote": "带我，发出萌新的声音", "avatar": "/images/2017/app2.webp" }
+      ]
+    },
+    {
+      "name": "ui部",
+      "members": [
+        { "name": "浦泽元", "quote": "less is more 少即是多", "avatar": "/images/2017/ui1.webp" }
+      ]
+    },
+    {
+      "name": "IOS部",
+      "members": [
+        { "name": "郑泽嘉", "quote": "电信-web", "avatar": "/images/2017/ios1.webp" }
+      ]
+    }
+  ]
+}
