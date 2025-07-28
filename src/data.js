@@ -14,6 +14,10 @@ export const promotionalImages = [
 ]
 
 export const projectsData = {
+  '2024': [
+    { name: '爱特博客网站', description: '', image: '/images/Projects/2024爱特博客网.png' },
+    { name: '风速温度数据预测展示网站', description: '', image: '/images/Projects/2024风速温度数据预测展示网站.png' },
+  ],
   '2023': [
     { name: '中国海洋大学百年校庆小程序', description: '', image: '/images/Projects/2023百年校庆小程序-2.webp' },
   ],
