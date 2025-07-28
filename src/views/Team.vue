@@ -4,6 +4,7 @@
     <section id="team-members" class="team-members">
       <TeamSlider />
     </section>
+    <WebsiteFooter></WebsiteFooter>
   </div>
 </template>
 
@@ -11,12 +12,14 @@
 import TeamSlider from '../components/TeamSlider.vue';
 import StarfieldBackground from '@/components/StarfieldBackground.vue';
 import { theme } from '@/theme.js';
+import WebsiteFooter from '@/components/WebsiteFooter.vue';
 
 export default {
   name: 'TeamView',
   components: {
     TeamSlider,
     StarfieldBackground,
+    WebsiteFooter
   },
   setup() {
     return {

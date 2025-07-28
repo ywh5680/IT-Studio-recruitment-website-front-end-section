@@ -24,15 +24,16 @@ export const projectsData = {
     { name: '校外企业物联网数据实时展示平台', description: '', image: '/images/Projects/2022物联网数据实时展示平台.webp' }
   ],
   '2021': [
-    { name: '校团委网站', description: '由爱特制作的中国海洋大学网站成功上线运行', image: '/images/Projects/2021中国海洋大学网站.webp' }
+    { name: '校团委网站', description: '由爱特制作的中国海洋大学网站成功上线运行', image: '/images/Projects/2021中国海洋大学网站.webp' },
+    { name: '捕手麦德', description: '', image: '/images/Projects/2021捕手麦德.png' }
   ],
   '2020': [
-    { name: '《幽灵骑士》', description: '游戏部门独立完成了一款PC端的2.5D游戏《幽灵骑士》', image: '' },
+    { name: '《幽灵骑士》', description: '游戏部门独立完成了一款PC端的2.5D游戏《幽灵骑士》', image: '/images/Projects/2020幽灵骑士.jpg' },
     { name: '爱特展示网、海迅APP', description: '程序、APP与UI合作完成了爱特展示网、海迅APP等作品', image: '' }
   ],
   '2019': [
     { name: '《达拉崩吧》', description: '19年游戏部合作完成了一个可联网、能存档的俯视角射击游戏', image: '/images/Projects/2019游戏部合作射击游戏.webp' },
-    { name: '部门合作作品', description: 'Ul与web开发、APP、程序合作设计了爱特读书及爱特读书APP、爱特展示网、IT日程APP', image: '' }
+    { name: '部门合作作品', description: 'Ul与web开发、APP、程序合作设计了爱特读书及爱特读书APP、爱特展示网、IT日程APP', image: '/images/Projects/2019爱特展示网.png' }
   ],
   '2018': [
     { name: '爱特展示网', description: '开拓爱特展示网，成功上线运行', image: '' },
