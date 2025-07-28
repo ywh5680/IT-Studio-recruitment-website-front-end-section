@@ -102,8 +102,9 @@
         </v-col>
       </v-row>
     </v-container>
+    <WebsiteFooter class="footer"></WebsiteFooter>
   </div>
-  <WebsiteFooter></WebsiteFooter>
+
 </template>
 
 <script>
@@ -306,9 +307,18 @@ export default {
   color: #f44336; /* Vuetify error color */
 }
 
-@media (max-width: 600px) {
+.footer {
+  margin-top: -30px;
+  z-index: 2;
+}
+
+@media (max-width: 590px) {
   .v-card-title {
     font-size: 1.8rem !important;
+  }
+
+  .footer {
+    margin-top: -60px;
   }
 }
 </style> 

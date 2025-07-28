@@ -1,0 +1,90 @@
+{
+  "year": "2020",
+  "departments": [
+    {
+      "name": "程序部",
+      "members": [
+        {
+          "name": "刘召",
+          "quote": "諸隸僧降吽無諸陀摩隸僧缽薩嚤無劫陀無伏所蜜嚤咒寂聞喃缽囉愍寂摩囉喃叻無嚩諸嚩僧諸隸諸訶嚤劫僧無愍尊闍無般無吽即無慧吽祗嚩須無降薩無吶嚤諸斯彌心眾嚤空無嘚心所伏波如阿如",
+          "avatar": "/images/2020/cx1.06db26ea.webp"
+        },
+        {
+          "name": "姚梦迪",
+          "quote": "别垂头丧气，显矮。",
+          "avatar": "/images/2020/cx2.webp"
+        },
+        {
+          "name": "杨泽晨",
+          "quote": "要做人民的先生，先做人民的学生。——毛泽东",
+          "avatar": "/images/2020/cx3.18fd0aa8.webp"
+        }
+      ]
+    },
+    {
+      "name": "Web部",
+      "members": [
+        {
+          "name": "陈江栋",
+          "quote": "禁止低头",
+          "avatar": "/images/2020/web1.cbd8ba72.webp"
+        },
+        {
+          "name": "陈李焘",
+          "quote": "debug冲冲冲",
+          "avatar": "/images/2020/web2.9d99b217.webp"
+        }
+      ]
+    },
+    {
+      "name": "游戏部",
+      "members": [
+        {
+          "name": "李昱辉",
+          "quote": "收获很大，必可活用于下一次……",
+          "avatar": "/images/2020/game1.e1d56db3.webp"
+        },
+        {
+          "name": "颜慧敏",
+          "quote": "······",
+          "avatar": "/images/2020/game2.webp"
+        },
+        {
+          "name": "尹嘉豪",
+          "quote": "功不唐捐",
+          "avatar": "/images/2020/game3.fd3906a1.webp"
+        }
+      ]
+    },
+    {
+      "name": "APP部",
+      "members": [
+        {
+          "name": "黄博斌",
+          "quote": "心有猛虎，细嗅蔷薇",
+          "avatar": "/images/2020/app1.bde25610.webp"
+        },
+        {
+          "name": "王梓懿",
+          "quote": "过去可知不可空，未来可控不可知——Claude Shannon",
+          "avatar": "/images/2020/app2.6e87100b.webp"
+        },
+        {
+          "name": "张凯",
+          "quote": "万物皆可卷积",
+          "avatar": "/images/2020/app3.webp"
+        }
+      ]
+    },
+    {
+      "name": "UI部",
+      "members": [
+        {
+          "name": "吴慧敏",
+          "quote": "我们有一部实际存在的普世之法，其目的正是为了避免完全的功利主义。",
+          "avatar": "/images/2020/ui1.5d357908.webp"
+        }
+      ]
+    }
+  ]
+}

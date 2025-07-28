@@ -46,7 +46,7 @@
           左右滑动查看其他部门</p>
       </footer>
     </div>
-    <WebsiteFooter style="margin: 25vh 0 0"></WebsiteFooter>
+    <WebsiteFooter></WebsiteFooter>
   </div>
 </template>
 
@@ -227,7 +227,7 @@ export default {
 }
 
 .departments-container {
-  height: 100%;
+  min-height: 100%;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -461,6 +461,8 @@ export default {
   color: #a1a1a6;
   opacity: 0.8;
 }
+
+
 
 /* Animations */
 @keyframes pulse {

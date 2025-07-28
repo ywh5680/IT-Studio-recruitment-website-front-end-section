@@ -18,6 +18,6 @@
     line-height: 30px;
     background-color: #000c29;
     color: white;
-    font-size: 0.8rem;
+    font-size: 12px;
 }
 </style>

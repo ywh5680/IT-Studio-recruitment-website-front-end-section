@@ -1,0 +1,115 @@
+{
+  "year": "2019",
+  "departments": [
+    {
+      "name": "程序部",
+      "members": [
+        {
+          "name": "帅翔宇",
+          "quote": "生而不有，为而不恃，长而不宰",
+          "avatar": "/images/2019/cx1.7f05c327.webp"
+        },
+        {
+          "name": "戴俞成",
+          "quote": "undefined",
+          "avatar": "/images/2019/cx2.5cdc3caa.webp"
+        },
+        {
+          "name": "程传奇",
+          "quote": "不必每天早睡早起，但要注意锻炼身体",
+          "avatar": "/images/2019/cx3.fc917ae4.webp"
+        },
+        {
+          "name": "花如壮",
+          "quote": "要么孤独，要么庸俗",
+          "avatar": "/images/2019/cx4.5ae1ae42.webp"
+        }
+      ]
+    },
+    {
+      "name": "Web部",
+      "members": [
+        {
+          "name": "高可欣",
+          "quote": "#NAME?",
+          "avatar": "/images/2019/web1.d1b31ae4.webp"
+        }
+      ]
+    },
+    {
+      "name": "游戏部",
+      "members": [
+        {
+          "name": "陈子骞",
+          "quote": "整点新玩具",
+          "avatar": "/images/2019/game1.7c468cf6.webp"
+        },
+        {
+          "name": "张浩宇",
+          "quote": "兴趣是第一动力。",
+          "avatar": "/images/2019/game2.webp"
+        }
+      ]
+    },
+    {
+      "name": "APP部",
+      "members": [
+        {
+          "name": "赵艳然",
+          "quote": "努力成长",
+          "avatar": "/images/2019/app11.27bcf971.webp"
+        },
+        {
+          "name": "岳宇轩",
+          "quote": "我们的工作是搬运知识和技能。",
+          "avatar": "/images/2019/app22.8a883ec0.webp"
+        },
+        {
+          "name": "钱思航",
+          "quote": "广告位招租",
+          "avatar": "/images/2019/app33.c6cf6cf2.webp"
+        }
+      ]
+    },
+    {
+      "name": "UI部",
+      "members": [
+        {
+          "name": "陈熠欣",
+          "quote": "感恩的心 感谢有你",
+          "avatar": "/images/2019/ui1.15b67a8a.webp"
+        },
+        {
+          "name": "林子靖",
+          "quote": "虽千万人吾往矣。",
+          "avatar": "/images/2019/ui2.79f21d05.webp"
+        },
+        {
+          "name": "刘思佳",
+          "quote": "······",
+          "avatar": "/images/2019/ui3.webp"
+        },
+        {
+          "name": "许胤韬",
+          "quote": "雄鹿粉丝互删一下",
+          "avatar": "/images/2019/ui44.178c7bf7.webp"
+        },
+        {
+          "name": "付翔宇",
+          "quote": "宁静致远",
+          "avatar": "/images/2019/ui5.6d8a8c2c.webp"
+        },
+        {
+          "name": "葛畅",
+          "quote": "好好学习不要摸鱼",
+          "avatar": "/images/2019/ui6.56970277.webp"
+        },
+        {
+          "name": "浦绍英",
+          "quote": "弃捐勿复道，努力加餐饭。",
+          "avatar": "/images/2019/ui77.4754fc85.webp"
+        }
+      ]
+    }
+  ]
+}
