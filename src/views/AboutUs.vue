@@ -85,6 +85,7 @@ export default {
   justify-content: center;
   overflow: hidden;
   z-index: 1;
+  min-height: calc(100vh - 30px);
 }
 
 .about-container {

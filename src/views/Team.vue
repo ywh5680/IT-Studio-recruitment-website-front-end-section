@@ -33,6 +33,7 @@ export default {
 .team-members {
   padding: 40px 0;
   position: relative;
+  min-height: calc(100vh - 30px);
   z-index: 1;
 }
 

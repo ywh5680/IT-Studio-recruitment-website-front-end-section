@@ -1,0 +1,90 @@
+{
+  "year": "2018",
+  "departments": [
+    {
+      "name": "程序部",
+      "members": [
+        {
+          "name": "蔡宇翔",
+          "quote": "学计算机不coding，死路一条",
+          "avatar": "/images/2018/cx1.e0523781.webp"
+        },
+        {
+          "name": "刘阳",
+          "quote": "编(de)程(bug)",
+          "avatar": "/images/2018/cx2.3b23e0be.webp"
+        },
+        {
+          "name": "慈浩艺",
+          "quote": "bug的数量可能与你勤奋程度成正相关。",
+          "avatar": "/images/2018/cx3.webp"
+        }
+      ]
+    },
+    {
+      "name": "web部",
+      "members": [
+        {
+          "name": "赵有为",
+          "quote": "Gu?Gu...Gu!",
+          "avatar": "/images/2018/web1.14862dc0.webp"
+        },
+        {
+          "name": "沈世纪",
+          "quote": "。。。咕咕咕？",
+          "avatar": "/images/2018/web2.1456b43f.webp"
+        }
+      ]
+    },
+    {
+      "name": "游戏部",
+      "members": [
+        {
+          "name": "陈祺龙",
+          "quote": "缘，妙不可言。",
+          "avatar": "/images/2018/game1.7d8b2a1e.webp"
+        },
+        {
+          "name": "张云涛",
+          "quote": "Coding is not about typing, is about thinking.",
+          "avatar": "/images/2018/game2.54d119d3.webp"
+        }
+      ]
+    },
+    {
+      "name": "APP部",
+      "members": [
+        {
+          "name": "田同晓",
+          "quote": "deadline是第一生产力",
+          "avatar": "/images/2018/app1.webp"
+        },
+        {
+          "name": "马良吉",
+          "quote": "你比你想象的更强大",
+          "avatar": "/images/2018/app2.webp"
+        },
+        {
+          "name": "曾广豪",
+          "quote": "干就完事了",
+          "avatar": "/images/2018/app3.eb32ea00.webp"
+        },
+        {
+          "name": "马良吉",
+          "quote": "Talk is cheap, show me the code.",
+          "avatar": "/images/2018/app4.7578c265.webp"
+        }
+      ]
+    },
+    {
+      "name": "UI部",
+      "members": [
+        {
+          "name": "诸彦甫",
+          "quote": "······",
+          "avatar": "/images/2018/ui1.webp"
+        }
+      ]
+    }
+  ]
+}

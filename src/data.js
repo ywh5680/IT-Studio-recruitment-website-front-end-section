@@ -60,6 +60,9 @@ import team2024 from './data/team-2024.json';
 import team2023 from './data/team-2023.json';
 import team2022 from './data/team-2022.json';
 import team2021 from './data/team-2021.json';
+import team2020 from './data/team-2020.json';
+import team2019 from './data/team-2019.json';
+import team2018 from './data/team-2018.json';
 import team2017 from './data/team-2017.json';
 import team2016 from './data/team-2016.json';
 import team2015 from './data/team-2015.json';
@@ -73,6 +76,9 @@ export const teamStructureData = [
   team2023,
   team2022,
   team2021,
+  team2020,
+  team2019,
+  team2018,
   team2017,
   team2016,
   team2015,
