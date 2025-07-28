@@ -22,22 +22,16 @@
       ]
     },
     {
-      "name": "app部",
+      "name": "APP部",
       "members": [
         { "name": "李林宇", "quote": "现在是过去的未来，亦是未来的过去。", "avatar": "/images/2017/app1.webp" },
         { "name": "弋晓洋", "quote": "带我，发出萌新的声音", "avatar": "/images/2017/app2.webp" }
       ]
     },
     {
-      "name": "ui部",
+      "name": "UI部",
       "members": [
         { "name": "浦泽元", "quote": "less is more 少即是多", "avatar": "/images/2017/ui1.webp" }
-      ]
-    },
-    {
-      "name": "IOS部",
-      "members": [
-        { "name": "郑泽嘉", "quote": "电信-web", "avatar": "/images/2017/ios1.webp" }
       ]
     }
   ]

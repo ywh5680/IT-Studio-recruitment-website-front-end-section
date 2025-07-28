@@ -48,6 +48,7 @@
           v-model="selectedYear"
           :items="yearOptions"
           :item-title="(item) => item + '届'"
+          :item-value="(item) => item"
           label="选择届数"
           outlined
           dense
@@ -58,6 +59,8 @@
         <v-select
           v-model="selectedDepartment"
           :items="departmentOptions"
+          :item-title="(item) => item"
+          :item-value="(item) => item"
           label="选择部门"
           outlined
           dense
@@ -100,7 +103,7 @@ export default {
     return {
       teamStructure: teamStructureData,
       selectedYear: teamStructureData[0]?.year || null,
-      selectedDepartment: '全部',
+      selectedDepartment: null,
     };
   },
   computed: {
@@ -108,19 +111,16 @@ export default {
       return this.teamStructure.find(y => y.year === this.selectedYear);
     },
     departments() {
-      if (!this.currentYearData) return ['全部'];
+      if (!this.currentYearData) return [];
       // 基于当前年份实际拥有的部门
       const actualDepartments = this.currentYearData.departments.map(d => d.name);
-      return ['全部', ...actualDepartments];
+      return actualDepartments;
     },
     members() {
-      if (!this.currentYearData) return [];
+      if (!this.currentYearData || !this.selectedDepartment) return [];
       
       const allMembers = this.currentYearData.departments.flatMap(d => d.members.map(m => ({ ...m, department: d.name })));
 
-      if (this.selectedDepartment === '全部') {
-        return allMembers;
-      }
       return allMembers.filter(m => m.department === this.selectedDepartment);
     },
     yearOptions() {
@@ -132,10 +132,25 @@ export default {
   },
   watch: {
     selectedYear() {
-      // 当年份切换时，如果当前选中的部门在新年份中不存在，重置为"全部"
-      if (this.selectedDepartment !== '全部' && !this.departments.includes(this.selectedDepartment)) {
-        this.selectedDepartment = '全部';
+      // 使用 nextTick 确保计算属性已更新
+      this.$nextTick(() => {
+        // 当年份切换时，如果当前选中的部门在新年份中不存在，选择第一个可用部门
+        if (!this.departments.includes(this.selectedDepartment)) {
+          this.selectedDepartment = this.departments[0] || null;
+        }
+      });
+    },
+    departments() {
+      // 当可用部门列表改变时，确保有默认选择
+      if (!this.selectedDepartment && this.departments.length > 0) {
+        this.selectedDepartment = this.departments[0];
       }
+    }
+  },
+  mounted() {
+    // 组件挂载时设置默认选中的部门
+    if (!this.selectedDepartment && this.departments.length > 0) {
+      this.selectedDepartment = this.departments[0];
     }
   }
 };
@@ -322,6 +337,7 @@ export default {
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 20px;
     margin-top: 30px;
+    justify-items: center;
   }
   
   .member-card {
@@ -362,6 +378,7 @@ export default {
     grid-template-columns: 1fr;
     gap: 16px;
     margin-top: 20px;
+    justify-items: center;
   }
   
   .member-card {

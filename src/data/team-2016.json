@@ -11,7 +11,7 @@
       ]
     },
     {
-      "name": "web部",
+      "name": "Web部",
       "members": [
         { "name": "官欣仪", "quote": "抠脚宅√LLer√经常女装√", "avatar": "/images/2016/web1.webp" },
         { "name": "李凌宇", "quote": "诶，这里有点缺氧", "avatar": "/images/2016/web2.webp" },
@@ -21,25 +21,19 @@
       ]
     },
     {
-      "name": "app部",
+      "name": "APP部",
       "members": [
         { "name": "王湘懿", "quote": "腐妹子一只 蛇精病一枚", "avatar": "/images/2016/app1.webp" },
         { "name": "邓懿康", "quote": "梦想是做个技术宅", "avatar": "/images/2016/app2.webp" }
       ]
     },
     {
-      "name": "ui部",
+      "name": "UI部",
       "members": [
         { "name": "于聪颖", "quote": "性别女，爱好各种adobe家的软件，但不擅长", "avatar": "/images/2016/ui1.webp" },
         { "name": "翟书言", "quote": "哇这个人为什么这么酷", "avatar": "/images/2016/ui2.webp" },
         { "name": "李宜璟", "quote": "这个人很懒，神马都没留下…", "avatar": "/images/2016/ui3.webp" },
         { "name": "廖舒祺", "quote": "额，活泼好动,爱看电影,做运动,旅游,喜欢设计...", "avatar": "/images/2016/ui4.webp" }
-      ]
-    },
-    {
-      "name": "IOS部",
-      "members": [
-        { "name": "郑泽嘉", "quote": "电信-web", "avatar": "/images/2016/ios1.webp" }
       ]
     }
   ]
