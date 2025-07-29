@@ -313,4 +313,20 @@ onMounted(() => {
   opacity: 0.8;
   margin-top: 4px;
 }
-</style> 
+
+.message-board-container {
+  min-height: 100vh;
+  /* --- 新增的 Flexbox 布局 --- */
+  display: flex;
+  flex-direction: column;
+}
+
+.message-board-content {
+  padding: 120px 20px 80px;
+  position: relative;
+  z-index: 1;
+  /* --- 新增的 flex: 1 --- */
+  /* 让内容区域自动伸展，将页脚推到底部 */
+  flex: 1;
+}
+</style>
