@@ -32,7 +32,7 @@
             </div>
           </div>
         </div>
-        <div class="form-group">
+        <div class="form-group verification-code-group">
           <input type="text" id="emailVerificationCode" v-model="form.code" placeholder="邮箱验证码：" class="Codebox" required pattern="[0-9]+" title="请输入正确的验证码">
           <button type="button" class="getCode" @click="getCode" :disabled="isCodeButtonDisabled">
             {{ codeButtonText }}
@@ -129,7 +129,7 @@ export default {
       }
 
       // 验证手机号
-      if (!this.form.phone || !/^\d+$/.test(this.form.phone)) {
+      if (!this.form.phone || !/^\d+$/.test(this.form.phone) || this.form.phone.length !== 11) {
         alert('请输入正确的手机号码（必须为数字）');
         return false;
       }
@@ -405,8 +405,16 @@ export default {
     color: #333;
 }
 
-.form-group #emailVerificationCode.Codebox  {
-  width: 55%;
+/* 验证码输入框和按钮的容器 */
+.verification-code-group {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.form-group #emailVerificationCode.Codebox {
+  flex: 1;
+  min-width: 0; /* 防止flex项目溢出 */
 }
 
 .form-actions {
@@ -429,9 +437,46 @@ export default {
 }
 
 .getCode {
-  margin-left: 5%;
-  width: 40%;
+  flex-shrink: 0; /* 防止按钮被压缩 */
+  white-space: nowrap; /* 防止文字换行 */
   font-size: 1rem;
+  padding: 0.8rem 1.5rem; /* 调整内边距以适应手机端 */
+}
+
+/* 手机端适配 */
+@media (max-width: 768px) {
+  .verification-code-group {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .form-group #emailVerificationCode.Codebox {
+    width: 100%;
+  }
+  
+  .getCode {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 50px;
+  }
+  
+  /* 确保按钮在手机端有足够的点击区域 */
+  .getCode:active {
+    transform: scale(0.98);
+  }
+}
+
+/* 超小屏幕适配 */
+@media (max-width: 480px) {
+  .registration-form-wrapper {
+    padding: 1rem;
+  }
+  
+  .getCode {
+    padding: 1.2rem 1.5rem;
+    font-size: 0.9rem;
+  }
 }
 
 .submit-btn:hover,

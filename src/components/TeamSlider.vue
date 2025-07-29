@@ -16,7 +16,7 @@
             :value="yearData.year"
             class="filter-chip"
           >
-            {{ yearData.year }}届
+            {{ yearData.year }}级
           </v-chip>
         </v-chip-group>
       </div>
@@ -47,9 +47,9 @@
         <v-select
           v-model="selectedYear"
           :items="yearOptions"
-          :item-title="(item) => item + '届'"
+          :item-title="(item) => item + '级'"
           :item-value="(item) => item"
-          label="选择届数"
+          label="选择级数"
           outlined
           dense
           hide-details
