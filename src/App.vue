@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 import StarfieldBackground from './components/StarfieldBackground.vue';
 
 export default {
@@ -60,6 +60,20 @@ export default {
     const closeMobileMenu = () => {
       isMobileMenuOpen.value = false;
     };
+
+    // 新增：监听窗口大小变化，桌面端自动关闭移动端菜单
+    onMounted(() => {
+      const handleResize = () => {
+        if (window.innerWidth >= 768) {
+          isMobileMenuOpen.value = false;
+        }
+      };
+      window.addEventListener('resize', handleResize);
+      handleResize(); // 初始化时也执行一次
+      onBeforeUnmount(() => {
+        window.removeEventListener('resize', handleResize);
+      });
+    });
 
     return {
       isMobileMenuOpen,
