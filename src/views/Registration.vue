@@ -129,7 +129,7 @@ export default {
       }
 
       // 验证手机号
-      if (!this.form.phone || !/^\d+$/.test(this.form.phone) || this.form.phone.length !== 11) {
+      if (!this.form.phone || !/^[1](([3][0-9])|([4][0,1,4-9])|([5][0-3,5-9])|([6][2,5,6,7])|([7][0-8])|([8][0-9])|([9][0-3,5-9]))[0-9]{8}$/.test(this.form.phone) || this.form.phone.length !== 11) {
         alert('请输入正确的手机号码（必须为数字）');
         return false;
       }
@@ -203,7 +203,7 @@ export default {
       }
 
       try {
-       
+
         const formData = {
           name: this.form.name.trim(),
           uid: parseInt(this.form.uid, 10),
@@ -239,7 +239,7 @@ export default {
         };
       } catch (error) {
           console.error('表单提交失败: ', error);
-        
+
         // 处理特定的错误响应
         if (error.response) {
           switch (error.response.status) {
@@ -250,7 +250,7 @@ export default {
               alert('请先获取验证码');
               break;
             case 409:
-              alert('已报名，请前往查询');
+              alert('你的信息似乎与某些人的雷同，或许是重复报名了');
               break;
             case 410:
               alert('验证码已过期，请重新获取');
