@@ -142,7 +142,7 @@ export default {
       }
 
       // 验证意向部门
-      if (this.form.department === '') {
+      if (this.form.department === '' || this.form.department < 0 || this.form.department > 5) {
         alert('请选择意向部门');
         return false;
       }
