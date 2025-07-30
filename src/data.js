@@ -8,9 +8,10 @@ export const departmentsData = [
 ];
 
 export const promotionalImages = [
-  '/images/promotionalImages/宣传1.jpg',
-  '/images/promotionalImages/宣传2.webp',
-  '/images/promotionalImages/宣传3.jpg'
+  '/images/promotionalImages/1.jpeg',
+  '/images/promotionalImages/2.jpeg',
+  '/images/promotionalImages/3.png',
+    '/images/promotionalImages/4.png'
 ]
 
 export const projectsData = {
