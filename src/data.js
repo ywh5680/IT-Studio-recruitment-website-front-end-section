@@ -8,14 +8,16 @@ export const departmentsData = [
 ];
 
 export const promotionalImages = [
-  '/images/promotionalImages/宣传1.jpg',
-  '/images/promotionalImages/宣传2.webp',
-  '/images/promotionalImages/宣传3.jpg'
+  '/images/promotionalImages/宣传1.png',
+  '/images/promotionalImages/宣传2.png',
+  '/images/promotionalImages/宣传3.jpeg',
+  '/images/promotionalImages/宣传4.jpeg',
+  '/images/promotionalImages/宣传5.png',
 ]
 
 export const projectsData = {
   '2024': [
-    { name: '爱特博客网站', description: '', image: '/images/Projects/2024爱特博客网.png' },
+    { name: '爱特官方网站', description: '', image: '/images/Projects/2024爱特博客网.png' },
     { name: '风速温度数据预测展示网站', description: '', image: '/images/Projects/2024风速温度数据预测展示网站.png' },
   ],
   '2023': [

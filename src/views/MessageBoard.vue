@@ -3,7 +3,7 @@
     <StarfieldBackground :is-dark="theme.isDark" />
     <v-container class="message-board-content">
       <h3 class="text-h3 text-center font-weight-bold mb-8 text-white">留言板</h3>
-      
+
       <v-row justify="center">
         <v-col cols="12" md="8">
           <!-- 留言列表 -->
@@ -13,10 +13,10 @@
             </div>
             <template v-else-if="comments.length > 0">
               <CommentItem
-                v-for="comment in comments"
-                :key="comment.id"
-                :comment="comment"
-                @reply="setReply"
+                  v-for="comment in comments"
+                  :key="comment.id"
+                  :comment="comment"
+                  @reply="setReply"
               />
             </template>
             <v-card v-else class="no-comments-card" flat>
@@ -30,10 +30,10 @@
           <!-- 分页控件 -->
           <div class="text-center mb-6" v-if="comments.length > 0">
             <v-pagination
-              v-model="currentPage"
-              :length="totalPages"
-              @update:modelValue="handlePageChange"
-              rounded
+                v-model="currentPage"
+                :length="totalPages"
+                @update:modelValue="handlePageChange"
+                rounded
             ></v-pagination>
           </div>
 
@@ -58,33 +58,35 @@
                     <v-btn size="x-small" icon="mdi-close" variant="text" @click="cancelReply"></v-btn>
                   </div>
                 </v-alert>
-                
+
                 <v-textarea
-                  v-model="newComment.content"
-                  label="说点什么吧..."
-                  variant="outlined"
-                  rows="4"
-                  counter
-                  maxlength="500"
-                  class="mb-3"
-                  autofocus
+                    v-model="newComment.content"
+                    label="说点什么吧..."
+                    variant="outlined"
+                    rows="4"
+                    counter
+                    maxlength="500"
+                    class="mb-3"
+                    autofocus
                 ></v-textarea>
                 <v-row>
                   <v-col cols="12" sm="6">
                     <v-text-field
-                      v-model="newComment.email"
-                      label="邮箱"
-                      variant="outlined"
-                      prepend-inner-icon="mdi-email"
+                        v-model="newComment.email"
+                        label="邮箱"
+                        variant="outlined"
+                        prepend-inner-icon="mdi-email"
+                        :error-messages="emailErrors"
+                        @blur="validateEmail"
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6">
                     <v-text-field
-                      v-model="newComment.qq"
-                      label="QQ (可选)"
-                      variant="outlined"
-                      type="number"
-                      prepend-inner-icon="mdi-qqchat"
+                        v-model="newComment.qq"
+                        label="QQ (可选)"
+                        variant="outlined"
+                        type="number"
+                        prepend-inner-icon="mdi-qqchat"
                     ></v-text-field>
                   </v-col>
                 </v-row>
@@ -92,14 +94,14 @@
                 <v-alert v-if="error" type="error" variant="tonal" class="mb-4" dense>
                   {{ error }}
                 </v-alert>
-                
+
                 <v-btn
-                  :disabled="isSubmitDisabled"
-                  :loading="loading"
-                  type="submit"
-                  block
-                  color="primary"
-                  size="large"
+                    :disabled="isSubmitDisabled"
+                    :loading="loading"
+                    type="submit"
+                    block
+                    color="primary"
+                    size="large"
                 >
                   发布
                 </v-btn>
@@ -141,12 +143,43 @@ const error = ref(null);
 const replyingTo = ref(null); // 只存id
 const replyingToInfo = ref(null); // 存简要信息
 
+// 邮箱校验状态
+const emailValid = ref(true);
+const emailErrors = ref([]);
+
+// RFC5322标准的简化版邮箱正则
+const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
 const formTitle = computed(() => {
   return replyingTo.value ? `回复评论 #${replyingTo.value}` : '留下你的足迹';
 });
 
+// 检查邮箱格式的合法性
+const validateEmail = () => {
+  // 邮箱不为空时才进行校验
+  if (newComment.value.email) {
+    if (emailRegex.test(newComment.value.email)) {
+      emailValid.value = true;
+      emailErrors.value = [];
+    } else {
+      emailValid.value = false;
+      emailErrors.value = ['请输入有效的邮箱地址'];
+    }
+  } else {
+    // 邮箱为空时清除错误信息
+    emailValid.value = true;
+    emailErrors.value = [];
+  }
+  return emailValid.value;
+};
+
+// 更新提交禁用状态
 const isSubmitDisabled = computed(() => {
-  return !newComment.value.content.trim() || (!newComment.value.email && !newComment.value.qq);
+  const contentEmpty = !newComment.value.content.trim();
+  const bothEmpty = !newComment.value.email && !newComment.value.qq;
+  const emailInvalid = newComment.value.email && !emailValid.value;
+
+  return contentEmpty || bothEmpty || emailInvalid;
 });
 
 const fetchComments = async (page = 1) => {
@@ -154,16 +187,16 @@ const fetchComments = async (page = 1) => {
   commentsError.value = null;
   try {
     const start = (page - 1) * pageSize.value;
-    
+
     const response = await api.get('/comment/', {
       params: {
         limit: pageSize.value,
         start: start
       }
     });
-    
+
     comments.value = response.data;
-    
+
     if (comments.value.length < pageSize.value && page === 1) {
       totalPages.value = 1;
     } else if (comments.value.length < pageSize.value) {
@@ -191,11 +224,17 @@ const handlePageChange = (page) => {
 };
 
 const handleSubmit = async () => {
+  // 先检查邮箱格式
+  if (!validateEmail()) {
+    error.value = '请修正邮箱格式后再提交';
+    return;
+  }
+
   if (isSubmitDisabled.value) return;
 
   loading.value = true;
   error.value = null;
-  
+
   try {
     const body = {
       content: newComment.value.content,
@@ -204,16 +243,16 @@ const handleSubmit = async () => {
     if (newComment.value.qq) body.qq = newComment.value.qq;
     if (replyingTo.value) body.parent = replyingTo.value;
 
-    
+
     await api.post('/comment/', body);
-    
+
     // 成功后清空表单
     newComment.value = { content: '', email: '', qq: '' };
-    
+
     // 完全刷新评论列表以获取最新的完整嵌套结构
     currentPage.value = 1; // 回到第一页
     await fetchComments(1); // 刷新评论列表
-    
+
     // 重置回复状态
     replyingTo.value = null;
     replyingToInfo.value = null;
@@ -248,11 +287,14 @@ onMounted(() => {
 <style scoped>
 .message-board-container {
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 .message-board-content {
   padding: 120px 20px 80px;
   position: relative;
   z-index: 1;
+  flex: 1;
 }
 
 .message-list {
@@ -312,21 +354,5 @@ onMounted(() => {
   font-style: italic;
   opacity: 0.8;
   margin-top: 4px;
-}
-
-.message-board-container {
-  min-height: 100vh;
-  /* --- 新增的 Flexbox 布局 --- */
-  display: flex;
-  flex-direction: column;
-}
-
-.message-board-content {
-  padding: 120px 20px 80px;
-  position: relative;
-  z-index: 1;
-  /* --- 新增的 flex: 1 --- */
-  /* 让内容区域自动伸展，将页脚推到底部 */
-  flex: 1;
 }
 </style>
