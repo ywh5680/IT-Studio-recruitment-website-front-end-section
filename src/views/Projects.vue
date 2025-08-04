@@ -369,6 +369,7 @@ export default {
 
 .projects:hover .project-image {
   transform: scale(1.05);
+  opacity: 0.2;
   transition: all 0.5s cubic-bezier(0.25, 0.45, 0.45, 0.95);
 }
 
@@ -413,8 +414,8 @@ export default {
 
 .close-btn {
   position: absolute;
-  top: 15px;
-  right: 15px;
+  top: 10px;
+  right: 10px;
   background: transparent;
   border: none;
   color: #a78bfa;
@@ -458,6 +459,7 @@ export default {
 }
 
 .modal-text {
+  margin-right: 10px;
   flex: 1;
   color: #e5e7eb;
   max-width: 100%; /* 防止溢出 */
