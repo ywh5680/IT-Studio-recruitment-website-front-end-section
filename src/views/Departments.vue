@@ -5,6 +5,11 @@
       <header class="departments-header">
         <h1 class="title">部门介绍</h1>
         <p class="subtitle">我们拥有多元化的技术部门，共同探索和创造前沿科技</p>
+        
+      <div class="tips">
+        <p class="instructions">点击卡片查看详细介绍<br>
+          左右滑动查看其他部门</p>
+        </div>
       </header>
 
       <main class="carousel-main">
@@ -40,11 +45,6 @@
         </div>
 
       </main>
-
-      <footer class="departments-footer">
-        <p class="instructions">点击卡片查看详细介绍<br>
-          左右滑动查看其他部门</p>
-      </footer>
     </div>
     <WebsiteFooter></WebsiteFooter>
   </div>
@@ -238,7 +238,7 @@ export default {
 .departments-header {
   text-align: center;
   padding-top: 100px;
-  padding-bottom: 40px;
+  margin-bottom: -40px;
   position: relative;
   z-index: 10;
 }
@@ -448,8 +448,7 @@ export default {
 }
 
 
-/* Footer */
-.departments-footer {
+.tips {
   text-align: center;
   padding: 20px;
   position: relative;
@@ -481,7 +480,7 @@ export default {
   .departments-header {
   text-align: center;
   padding-top: 30px;
-  padding-bottom: 20px;
+  padding-bottom: -20px;
   position: relative;
   z-index: 10;
   }

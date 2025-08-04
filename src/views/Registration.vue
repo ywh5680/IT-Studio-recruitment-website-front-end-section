@@ -203,7 +203,7 @@ export default {
       }
 
       try {
-
+       
         const formData = {
           name: this.form.name.trim(),
           uid: parseInt(this.form.uid, 10),
@@ -239,7 +239,7 @@ export default {
         };
       } catch (error) {
           console.error('表单提交失败: ', error);
-
+        
         // 处理特定的错误响应
         if (error.response) {
           switch (error.response.status) {
@@ -407,8 +407,7 @@ export default {
 
 /* 验证码输入框和按钮的容器 */
 .verification-code-group {
-  display: flex;
-  gap: 10px;
+  position: relative;
   align-items: center;
 }
 
@@ -437,10 +436,20 @@ export default {
 }
 
 .getCode {
+  width: 30%;
+  position: absolute;
+  right: 0px;
+  height: 100%;
+  border-radius:0 50px 50px 0;
   flex-shrink: 0; /* 防止按钮被压缩 */
   white-space: nowrap; /* 防止文字换行 */
   font-size: 1rem;
+  text-align: center;
   padding: 0.8rem 1.5rem; /* 调整内边距以适应手机端 */
+}
+
+.getCode:disabled {
+  cursor: not-allowed;
 }
 
 /* 手机端适配 */
@@ -455,10 +464,13 @@ export default {
   }
   
   .getCode {
-    width: 100%;
-    padding: 1rem 1.5rem;
+    width: 40%;
+    position: absolute;
+    right: 0px;
+    height: 100%;
+    padding: 0.8rem 1.2rem;
     font-size: 1rem;
-    border-radius: 50px;
+    border-radius:0 50px 50px 0;
   }
   
   /* 确保按钮在手机端有足够的点击区域 */
@@ -474,7 +486,8 @@ export default {
   }
   
   .getCode {
-    padding: 1.2rem 1.5rem;
+    width: 40%;
+    padding: 0.7rem 0.9rem;
     font-size: 0.9rem;
   }
 }
