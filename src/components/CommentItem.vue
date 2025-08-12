@@ -1,11 +1,23 @@
 <template>
-  <div class="comment-wrapper">
-    <div class="message-item" :class="{'deep-reply': isDeep}">
+  <div class="comment-wrapper" :id="`c-${comment.id}`">
+    <div class="message-item">
       <div class="message-header">
         <span class="comment-id">#{{ comment.id }}</span>
-        <span v-if="comment.parent" class="reply-to">回复 #{{ comment.parent }}</span>
+        <button
+          v-if="comment.orid"
+          class="reply-to as-link"
+          type="button"
+          @click="emitJumpTo(comment.orid)"
+        >
+          回复 #{{ comment.orid }}
+        </button>
       </div>
-      <p class="message-content">{{ comment.content }}</p>
+      <p ref="contentRef" class="message-content" :class="{ clamped: isClamped && !expanded }">{{ comment.content }}</p>
+      <div class="toggle-row" v-if="isClamped">
+        <v-btn size="x-small" variant="text" color="primary" @click="expanded = !expanded">
+          {{ expanded ? '收起' : '展开' }}
+        </v-btn>
+      </div>
       <div class="message-meta">
         <span class="author">- {{ getAuthorName(comment) }}</span>
         <span class="timestamp">{{ formatDateTime(comment.datetime) }}</span>
@@ -14,29 +26,6 @@
           回复
         </v-btn>
       </div>
-    </div>
-
-    <!-- 展开/收起回复按钮 -->
-    <div v-if="showLoadRepliesBtn" class="children-count">
-      <v-btn size="small" variant="text" color="primary" :loading="loadingChildren" @click="loadChildren">
-        展开{{ childrenCount }}条回复
-      </v-btn>
-    </div>
-    <div v-if="showCollapseBtn" class="children-count">
-      <v-btn size="small" variant="text" color="primary" @click="collapseChildren">
-        收起回复
-      </v-btn>
-    </div>
-
-    <div v-if="childrenVisible && childrenComments.length > 0" class="replies-list">
-      <CommentItem
-        v-for="child in childrenComments"
-        :key="child.id"
-        :comment="child"
-        :depth="depth + 1"
-        class="reply-item"
-        @reply="$emit('reply', $event)"
-      />
     </div>
   </div>
 </template>
@@ -49,66 +38,46 @@ export default {
 </script>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
-import api from '@/services/api';
+import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue';
 
 const props = defineProps({
   comment: {
     type: Object,
     required: true
-  },
-  depth: {
-    type: Number,
-    default: 0
   }
 });
 
-const emit = defineEmits(['reply']);
+const emit = defineEmits(['reply', 'jump-to']);
 
-const isDeep = computed(() => props.depth > 2);
+// 折叠逻辑：基于实际渲染行数检测
+const expanded = ref(false);
+const contentRef = ref(null);
+const isClamped = ref(false);
 
-// 懒加载子评论相关
-const childrenIds = computed(() => Array.isArray(props.comment.children) ? props.comment.children : []);
-const childrenComments = ref([]); // 真正用于递归渲染的对象数组
-const childrenLoaded = ref(false);
-const loadingChildren = ref(false);
-const childrenVisible = ref(false); // 控制显示/收起
-const childrenCount = computed(() => childrenIds.value.length);
-
-const hasReplies = computed(() => childrenIds.value.length > 0);
-const showLoadRepliesBtn = computed(() => hasReplies.value && !childrenVisible.value);
-const showCollapseBtn = computed(() => hasReplies.value && childrenVisible.value);
-
-// 懒加载递归获取子评论对象
-const loadChildren = async () => {
-  if (childrenLoaded.value || loadingChildren.value) {
-    childrenVisible.value = true;
+const computeLineClamp = () => {
+  const el = contentRef.value;
+  if (!el) {
+    isClamped.value = false;
     return;
   }
-  loadingChildren.value = true;
-  try {
-    // 获取所有直接子评论对象
-    const res = await api.get(`/comment/${props.comment.id}/`);
-    const comments = res.data;
-    // 对每个子评论递归加载其 childrenComments
-    for (const comment of comments) {
-      if (Array.isArray(comment.children) && comment.children.length > 0) {
-        comment.childrenComments = [];
-      }
-    }
-    childrenComments.value = comments;
-    childrenLoaded.value = true;
-    childrenVisible.value = true;
-  } catch (e) {
-    alert('加载子评论失败');
-  } finally {
-    loadingChildren.value = false;
-  }
+  const style = window.getComputedStyle(el);
+  const lineHeight = parseFloat(style.lineHeight);
+  const maxLines = 6;
+  const maxHeight = lineHeight * maxLines;
+  isClamped.value = el.scrollHeight - 1 > maxHeight;
 };
 
-const collapseChildren = () => {
-  childrenVisible.value = false;
-};
+const onResize = () => computeLineClamp();
+
+onMounted(async () => {
+  await nextTick();
+  computeLineClamp();
+  window.addEventListener('resize', onResize);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', onResize);
+});
 
 const handleReplyClick = () => {
   emit('reply', {
@@ -116,6 +85,11 @@ const handleReplyClick = () => {
     content: props.comment.content,
     author: getAuthorName(props.comment)
   });
+};
+
+const emitJumpTo = (id) => {
+  if (!id) return;
+  emit('jump-to', id);
 };
 
 const getAuthorName = (comment) => {
@@ -145,14 +119,6 @@ const formatDateTime = (datetime) => {
   }
 };
 
-onMounted(() => {
-  // 如果父组件传递了 childrenComments（如顶层），直接用
-  if (Array.isArray(props.comment.childrenComments) && props.comment.childrenComments.length > 0) {
-    childrenComments.value = props.comment.childrenComments;
-    childrenLoaded.value = true;
-    childrenVisible.value = true;
-  }
-});
 </script>
 
 <style scoped>
@@ -166,10 +132,6 @@ onMounted(() => {
   border: 1px solid rgba(255, 255, 255, 0.2);
   transition: all 0.3s ease;
 }
-.message-item.deep-reply {
-  background: rgba(var(--v-theme-primary), 0.08);
-  border-color: rgba(var(--v-theme-primary), 0.2);
-}
 .message-header {
   display: flex;
   justify-content: space-between;
@@ -180,10 +142,8 @@ onMounted(() => {
   color: rgba(255, 255, 255, 0.7);
   font-weight: 600;
 }
-.reply-to {
-  color: rgba(var(--v-theme-primary), 0.8);
-  font-style: italic;
-}
+.reply-to { color: rgba(var(--v-theme-primary), 0.8); font-style: italic; }
+.reply-to.as-link { cursor: pointer; text-decoration: underline; }
 .message-content {
   font-size: 1.1rem;
   line-height: 1.6;
@@ -191,6 +151,17 @@ onMounted(() => {
   margin-bottom: 12px;
   white-space: pre-wrap;
   word-break: break-word;
+}
+.message-content.clamped {
+  display: -webkit-box;
+  line-clamp: 6;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.toggle-row {
+  margin-top: -6px;
+  margin-bottom: 6px;
 }
 .message-meta {
   display: flex;
@@ -204,18 +175,5 @@ onMounted(() => {
   font-weight: 600;
   color: #9cd9f9;
 }
-.replies-list {
-  margin-top: 8px;
-  margin-left: 20px;
-  padding-left: 20px;
-  border-left: 2px solid rgba(255, 255, 255, 0.15);
-}
-.reply-item:last-child .comment-wrapper {
-  margin-bottom: 0;
-}
-.children-count {
-  margin: 8px 0 0 20px;
-  font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.6);
-}
+/* 移除缩进与子评论区块，全部平级展示 */
 </style> 

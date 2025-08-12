@@ -17,6 +17,7 @@
                   :key="comment.id"
                   :comment="comment"
                   @reply="setReply"
+                  @jump-to="jumpToComment"
               />
             </template>
             <v-card v-else class="no-comments-card" flat>
@@ -27,15 +28,8 @@
             </v-card>
           </div>
 
-          <!-- 分页控件 -->
-          <div class="text-center mb-6" v-if="comments.length > 0">
-            <v-pagination
-                v-model="currentPage"
-                :length="totalPages"
-                @update:modelValue="handlePageChange"
-                rounded
-            ></v-pagination>
-          </div>
+          <!-- 无限滚动哨兵 -->
+          <div ref="sentinel" class="infinite-sentinel" v-if="comments.length > 0 && hasMore"></div>
 
           <!-- 留言表单 -->
           <v-card class="message-form-card" elevation="12">
@@ -91,20 +85,20 @@
                   </v-col>
                 </v-row>
 
-                <v-alert v-if="error" type="error" variant="tonal" class="mb-4" dense>
+                 <v-alert v-if="error" type="error" variant="tonal" class="mb-4" dense>
                   {{ error }}
                 </v-alert>
 
-                <v-btn
+                 <v-btn
                     :disabled="isSubmitDisabled"
                     :loading="loading"
                     type="submit"
                     block
                     color="primary"
                     size="large"
-                >
-                  发布
-                </v-btn>
+                 >
+                   发布
+                 </v-btn>
               </v-form>
             </v-card-text>
           </v-card>
@@ -116,7 +110,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import api from '@/services/api';
 import StarfieldBackground from '@/components/StarfieldBackground.vue';
 import CommentItem from '@/components/CommentItem.vue';
@@ -127,10 +121,12 @@ const comments = ref([]);
 const commentsLoading = ref(true);
 const commentsError = ref(null);
 
-// 分页参数
-const pageSize = ref(20);
-const currentPage = ref(1);
-const totalPages = ref(1);
+// 无限滚动参数
+const currentPage = ref(1); // 从1开始
+const hasMore = ref(true);
+const loadingMore = ref(false);
+const sentinel = ref(null);
+let io = null;
 
 const newComment = ref({
   content: '',
@@ -182,45 +178,47 @@ const isSubmitDisabled = computed(() => {
   return contentEmpty || bothEmpty || emailInvalid;
 });
 
-const fetchComments = async (page = 1) => {
-  commentsLoading.value = true;
-  commentsError.value = null;
+const loadComments = async (page = 1) => {
+  if (loadingMore.value) return;
+  loadingMore.value = true;
+  if (page === 1) {
+    commentsLoading.value = true;
+    commentsError.value = null;
+  }
   try {
-    const start = (page - 1) * pageSize.value;
-
-    const response = await api.get('/comment/', {
-      params: {
-        limit: pageSize.value,
-        start: start
-      }
-    });
-
-    comments.value = response.data;
-
-    if (comments.value.length < pageSize.value && page === 1) {
-      totalPages.value = 1;
-    } else if (comments.value.length < pageSize.value) {
-      totalPages.value = page;
+    const response = await api.get(`/comment/${page}/`);
+    const list = Array.isArray(response.data) ? response.data : [];
+    if (page === 1) {
+      comments.value = list;
     } else {
-      // 这里可能需要根据API的实际情况调整
-      totalPages.value = Math.max(page, totalPages.value + 1);
+      comments.value = comments.value.concat(list);
     }
 
-    // 提交评论后，确保重新获取最新的评论列表
-    if (page === 1 && replyingTo.value !== null) {
-      replyingTo.value = null;
-      replyingToInfo.value = null;
+    // 判断是否还有更多（接口固定每页10条）
+    if (list.length < 10) {
+      hasMore.value = false;
+    } else {
+      currentPage.value = page + 1;
     }
   } catch (e) {
     console.error('获取评论失败:', e);
     commentsError.value = e.response?.data?.message || '无法加载评论，请稍后刷新重试';
+    hasMore.value = false;
   } finally {
     commentsLoading.value = false;
+    loadingMore.value = false;
   }
 };
 
-const handlePageChange = (page) => {
-  fetchComments(page);
+const setupInfiniteScroll = () => {
+  if (!sentinel.value) return;
+  io = new IntersectionObserver((entries) => {
+    const entry = entries[0];
+    if (entry.isIntersecting && hasMore.value && !loadingMore.value) {
+      loadComments(currentPage.value);
+    }
+  }, { root: null, rootMargin: '0px', threshold: 0.1 });
+  io.observe(sentinel.value);
 };
 
 const handleSubmit = async () => {
@@ -241,7 +239,7 @@ const handleSubmit = async () => {
     };
     if (newComment.value.email) body.email = newComment.value.email;
     if (newComment.value.qq) body.qq = newComment.value.qq;
-    if (replyingTo.value) body.parent = replyingTo.value;
+    if (replyingTo.value) body.orid = replyingTo.value;
 
 
     await api.post('/comment/', body);
@@ -249,9 +247,11 @@ const handleSubmit = async () => {
     // 成功后清空表单
     newComment.value = { content: '', email: '', qq: '' };
 
-    // 完全刷新评论列表以获取最新的完整嵌套结构
-    currentPage.value = 1; // 回到第一页
-    await fetchComments(1); // 刷新评论列表
+    // 重新加载第一页，回到顶部
+    comments.value = [];
+    currentPage.value = 1;
+    hasMore.value = true;
+    await loadComments(1);
 
     // 重置回复状态
     replyingTo.value = null;
@@ -280,8 +280,28 @@ const cancelReply = () => {
 };
 
 onMounted(() => {
-  fetchComments(1);
+  loadComments(1);
+  setupInfiniteScroll();
 });
+
+onBeforeUnmount(() => {
+  if (io && sentinel.value) io.unobserve(sentinel.value);
+  if (io) io.disconnect();
+});
+
+// 处理从子项发起的跳转父评论请求
+const findCommentEl = (id) => document.getElementById(`c-${id}`);
+
+const jumpToComment = (targetId) => {
+  if (!targetId) return;
+  const el = findCommentEl(targetId);
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  } else {
+    // 父评论只可能在子评论之前；如果没找到，通常意味着已被删除或尚未渲染（极少数情况）
+    console.warn('未找到父评论，请上滑查看更早的评论或父评论已被删除');
+  }
+};
 </script>
 
 <style scoped>
@@ -354,5 +374,9 @@ onMounted(() => {
   font-style: italic;
   opacity: 0.8;
   margin-top: 4px;
+}
+
+.infinite-sentinel {
+  height: 1px;
 }
 </style>
