@@ -111,7 +111,7 @@
 
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
-import api from '@/services/api';
+import commentService from '@/services/commentService';
 import StarfieldBackground from '@/components/StarfieldBackground.vue';
 import CommentItem from '@/components/CommentItem.vue';
 import { theme } from '@/theme.js';
@@ -127,6 +127,8 @@ const hasMore = ref(true);
 const loadingMore = ref(false);
 const sentinel = ref(null);
 let io = null;
+const hasScrolledToBottomOnce = ref(false);
+let scrollHandler = null;
 
 const newComment = ref({
   content: '',
@@ -186,8 +188,7 @@ const loadComments = async (page = 1) => {
     commentsError.value = null;
   }
   try {
-    const response = await api.get(`/comment/${page}/`);
-    const list = Array.isArray(response.data) ? response.data : [];
+    const list = await commentService.getCommentsPage(page);
     if (page === 1) {
       comments.value = list;
     } else {
@@ -214,7 +215,11 @@ const setupInfiniteScroll = () => {
   if (!sentinel.value) return;
   io = new IntersectionObserver((entries) => {
     const entry = entries[0];
+    // 仅当用户在第一页发生过一次滚动后，才允许加载第二页
     if (entry.isIntersecting && hasMore.value && !loadingMore.value) {
+      // 第一页：要求用户先触底，或内容高度不足（无需触底也允许加载，避免短内容卡住）
+      const contentTooShort = document.documentElement.scrollHeight <= window.innerHeight + 20;
+      if (currentPage.value === 1 && !hasScrolledToBottomOnce.value && !contentTooShort) return;
       loadComments(currentPage.value);
     }
   }, { root: null, rootMargin: '0px', threshold: 0.1 });
@@ -242,7 +247,7 @@ const handleSubmit = async () => {
     if (replyingTo.value) body.orid = replyingTo.value;
 
 
-    await api.post('/comment/', body);
+    await commentService.postComment(body);
 
     // 成功后清空表单
     newComment.value = { content: '', email: '', qq: '' };
@@ -282,11 +287,32 @@ const cancelReply = () => {
 onMounted(() => {
   loadComments(1);
   setupInfiniteScroll();
+  // 仅当用户在第一页真正“翻到底部”后，才允许加载第二页
+  scrollHandler = () => {
+    const bottomReached = (window.innerHeight + window.scrollY) >= (document.documentElement.scrollHeight - 2);
+    if (bottomReached) {
+      hasScrolledToBottomOnce.value = true;
+      if (scrollHandler) {
+        window.removeEventListener('scroll', scrollHandler);
+        scrollHandler = null;
+      }
+      // 到达底部后，如果还有更多且未在加载，立即加载下一页（避免等待哨兵再次触发）
+      if (hasMore.value && !loadingMore.value) {
+        loadComments(currentPage.value);
+      }
+    }
+  };
+  window.addEventListener('scroll', scrollHandler, { passive: true });
 });
 
 onBeforeUnmount(() => {
   if (io && sentinel.value) io.unobserve(sentinel.value);
   if (io) io.disconnect();
+  // 清理滚动监听（若仍存在）
+  if (scrollHandler) {
+    window.removeEventListener('scroll', scrollHandler);
+    scrollHandler = null;
+  }
 });
 
 // 处理从子项发起的跳转父评论请求

@@ -4,12 +4,12 @@
       <div class="message-header">
         <span class="comment-id">#{{ comment.id }}</span>
         <button
-          v-if="comment.orid"
+          v-if="comment.orid || comment.parent"
           class="reply-to as-link"
           type="button"
-          @click="emitJumpTo(comment.orid)"
+          @click="emitJumpTo(comment.orid || comment.parent)"
         >
-          回复 #{{ comment.orid }}
+          回复 #{{ comment.orid || comment.parent }}
         </button>
       </div>
       <p ref="contentRef" class="message-content" :class="{ clamped: isClamped && !expanded }">{{ comment.content }}</p>
