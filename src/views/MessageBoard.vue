@@ -7,7 +7,34 @@
       <v-row justify="center">
         <v-col cols="12" md="8">
           <!-- 留言列表 -->
-          <div class="message-list mb-10">
+          <div class="message-list mb-10" ref="messageList">
+            <!-- 搜索状态反馈 -->
+            <div v-if="searchStatus" class="search-feedback">
+              <v-alert
+                :type="getAlertType(searchStatus)"
+                variant="tonal"
+                border="start"
+                class="mb-4"
+                dismissible
+              >
+                <template v-if="searchStatus === 'searching'">
+                  <v-progress-circular indeterminate size="24" class="mr-2"></v-progress-circular>
+                  正在查找被回复的评论...
+                </template>
+                <template v-else-if="searchStatus === 'found'">
+                  <v-icon icon="mdi-check-circle" class="mr-2"></v-icon>
+                  已找到被回复的评论
+                </template>
+                <template v-else-if="searchStatus === 'not-found'">
+                  <v-icon icon="mdi-alert-circle" class="mr-2"></v-icon>
+                  未能找到该评论，可能已被删除
+                </template>
+                <template v-else-if="searchStatus === 'error'">
+                  <v-icon icon="mdi-alert-octagon" class="mr-2"></v-icon>
+                  搜索过程中出错，请重试
+                </template>
+              </v-alert>
+            </div>
             <div v-if="commentsLoading" class="text-center">
               <v-progress-circular indeterminate color="primary"></v-progress-circular>
             </div>
@@ -26,10 +53,10 @@
                 <span v-else>还没有人留言，快来抢占第一个沙发吧！</span>
               </v-card-text>
             </v-card>
-          </div>
 
-          <!-- 无限滚动哨兵 -->
-          <div ref="sentinel" class="infinite-sentinel" v-if="comments.length > 0 && hasMore"></div>
+            <!-- 无限滚动哨兵 -->
+            <div ref="sentinel" class="infinite-sentinel" v-if="hasMore"></div>
+          </div>
 
           <!-- 留言表单 -->
           <v-card class="message-form-card" elevation="12">
@@ -122,13 +149,12 @@ const commentsLoading = ref(true);
 const commentsError = ref(null);
 
 // 无限滚动参数
-const currentPage = ref(1); // 从1开始
+const start = ref(0)
+const limit = 10
 const hasMore = ref(true);
 const loadingMore = ref(false);
 const sentinel = ref(null);
 let io = null;
-const hasScrolledToBottomOnce = ref(false);
-let scrollHandler = null;
 
 const newComment = ref({
   content: '',
@@ -180,27 +206,32 @@ const isSubmitDisabled = computed(() => {
   return contentEmpty || bothEmpty || emailInvalid;
 });
 
-const loadComments = async (page = 1) => {
-  if (loadingMore.value) return;
+const loadComments = async () => {
+  if (loadingMore.value && !searchingParentId.value) return;
   loadingMore.value = true;
-  if (page === 1) {
+
+  if (start.value === 0) {
     commentsLoading.value = true;
     commentsError.value = null;
   }
   try {
-    const list = await commentService.getCommentsPage(page);
-    if (page === 1) {
-      comments.value = list;
-    } else {
-      comments.value = comments.value.concat(list);
+  const { comments: newComments, hasMore: serverHasMore } = await commentService.getComments(start.value, limit);
+    console.log('获取到数据:', {
+      newComments: newComments.map(c => c.id),
+      serverHasMore,
+      currentStart: start.value
+    });
+
+    if (io && sentinel.value) {
+      io.unobserve(sentinel.value);
+      io.observe(sentinel.value);
     }
 
-    // 判断是否还有更多（接口固定每页10条）
-    if (list.length < 10) {
-      hasMore.value = false;
-    } else {
-      currentPage.value = page + 1;
-    }
+    // 更新数据
+    comments.value = [...comments.value, ...newComments];
+    start.value += newComments.length; 
+    hasMore.value = serverHasMore;
+
   } catch (e) {
     console.error('获取评论失败:', e);
     commentsError.value = e.response?.data?.message || '无法加载评论，请稍后刷新重试';
@@ -211,18 +242,17 @@ const loadComments = async (page = 1) => {
   }
 };
 
+const messageList = ref(null);
+
 const setupInfiniteScroll = () => {
-  if (!sentinel.value) return;
+  if (!sentinel.value || !messageList.value ) return;
   io = new IntersectionObserver((entries) => {
     const entry = entries[0];
     // 仅当用户在第一页发生过一次滚动后，才允许加载第二页
-    if (entry.isIntersecting && hasMore.value && !loadingMore.value) {
-      // 第一页：要求用户先触底，或内容高度不足（无需触底也允许加载，避免短内容卡住）
-      const contentTooShort = document.documentElement.scrollHeight <= window.innerHeight + 20;
-      if (currentPage.value === 1 && !hasScrolledToBottomOnce.value && !contentTooShort) return;
-      loadComments(currentPage.value);
+    if (entry.isIntersecting && hasMore.value && !loadingMore.value ) {
+      loadComments();
     }
-  }, { root: null, rootMargin: '0px', threshold: 0.1 });
+  }, {root:messageList.value, rootMargin: '100px', threshold: 0.2 });
   io.observe(sentinel.value);
 };
 
@@ -254,9 +284,9 @@ const handleSubmit = async () => {
 
     // 重新加载第一页，回到顶部
     comments.value = [];
-    currentPage.value = 1;
+    start.value = 0;
     hasMore.value = true;
-    await loadComments(1);
+    await loadComments();
 
     // 重置回复状态
     replyingTo.value = null;
@@ -285,47 +315,101 @@ const cancelReply = () => {
 };
 
 onMounted(() => {
-  loadComments(1);
+  loadComments();
   setupInfiniteScroll();
-  // 仅当用户在第一页真正“翻到底部”后，才允许加载第二页
-  scrollHandler = () => {
-    const bottomReached = (window.innerHeight + window.scrollY) >= (document.documentElement.scrollHeight - 2);
-    if (bottomReached) {
-      hasScrolledToBottomOnce.value = true;
-      if (scrollHandler) {
-        window.removeEventListener('scroll', scrollHandler);
-        scrollHandler = null;
-      }
-      // 到达底部后，如果还有更多且未在加载，立即加载下一页（避免等待哨兵再次触发）
-      if (hasMore.value && !loadingMore.value) {
-        loadComments(currentPage.value);
-      }
-    }
-  };
-  window.addEventListener('scroll', scrollHandler, { passive: true });
 });
 
 onBeforeUnmount(() => {
   if (io && sentinel.value) io.unobserve(sentinel.value);
   if (io) io.disconnect();
-  // 清理滚动监听（若仍存在）
-  if (scrollHandler) {
-    window.removeEventListener('scroll', scrollHandler);
-    scrollHandler = null;
-  }
 });
 
 // 处理从子项发起的跳转父评论请求
 const findCommentEl = (id) => document.getElementById(`c-${id}`);
 
+const searchingParentId = ref(null);
+const searchTimeout = ref(null);
+const maxSearchAttempts = 5; // 最多尝试加载5次
+let currentAttempts = 0;
+const searchStatus = ref(''); // 'searching', 'found', 'not-found', 'error'
+
 const jumpToComment = (targetId) => {
   if (!targetId) return;
+  searchStatus.value = 'searching';
+
+  // 先尝试直接查找
   const el = findCommentEl(targetId);
   if (el) {
+    searchStatus.value = 'found';
     el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  } else {
-    // 父评论只可能在子评论之前；如果没找到，通常意味着已被删除或尚未渲染（极少数情况）
-    console.warn('未找到父评论，请上滑查看更早的评论或父评论已被删除');
+    return;
+  }
+
+  // 如果没找到，开始自动加载更多
+  searchingParentId.value = targetId;
+  currentAttempts = 0;
+
+  // 清除之前的超时
+  if (searchTimeout.value) {
+    clearTimeout(searchTimeout.value);
+  }
+  
+  // 设置超时
+  searchTimeout.value = setTimeout(() => {
+    searchStatus.value = 'error';
+    searchingParentId.value = null;
+    error.value = '未能找到该评论，可能已被删除或无法加载';
+  }, 10000); // 10秒超时
+  
+  (async () => {
+    await searchParentComment();
+  })();
+};
+
+const searchParentComment = async () => {
+  if (!hasMore.value || currentAttempts >= maxSearchAttempts) {
+    searchStatus.value = 'not-found';
+    searchingParentId.value = null;
+    if (searchTimeout.value) clearTimeout(searchTimeout.value);
+    error.value = '未能找到该评论，可能已被删除或无法加载';
+    return;
+  }
+  
+  currentAttempts++;
+  await loadComments();
+  
+  // 检查是否已加载
+  const targetExists = comments.value.some(c => c.id === searchingParentId.value);
+  if (targetExists) {
+    const targetId = searchingParentId.value; // 保存当前搜索的ID
+    searchStatus.value = 'found';
+    searchingParentId.value = null;
+    if (searchTimeout.value) clearTimeout(searchTimeout.value);
+      // 自动隐藏成功提示
+    setTimeout(() => {
+      searchStatus.value = '';
+    }, 2000);
+
+    setTimeout(() => {
+      const el = findCommentEl(targetId); // 使用保存的ID
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 300);
+    return;
+  }
+  
+  // 继续搜索
+  if (searchingParentId.value) {
+    setTimeout(() => searchParentComment(), 0);
+  }
+};
+
+const getAlertType = (status) => {
+  switch(status) {
+    case 'searching': return 'info';
+    case 'found': return 'success';
+    case 'not-found': return 'warning';
+    case 'error': return 'error';
+    default: return 'info';
   }
 };
 </script>
@@ -344,9 +428,21 @@ const jumpToComment = (targetId) => {
 }
 
 .message-list {
+  max-height: 60vh; 
+  overflow-y: auto; 
   display: flex;
   flex-direction: column;
   gap: 20px;
+  padding-right: 8px; 
+}
+
+/* 滚动条 */
+.message-list::-webkit-scrollbar {
+  width: 6px;
+}
+.message-list::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
 }
 
 .message-item {
@@ -404,5 +500,23 @@ const jumpToComment = (targetId) => {
 
 .infinite-sentinel {
   height: 1px;
+  width: 1px;
+  pointer-events: none;
+  visibility: hidden
+}
+
+.search-feedback {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.search-feedback .v-alert {
+  backdrop-filter: blur(5px);
+  border-radius: 8px;
+}
+
+.search-feedback .v-icon {
+  vertical-align: middle;
 }
 </style>
