@@ -89,18 +89,27 @@ const handleReplyClick = () => {
 
 const emitJumpTo = (id) => {
   if (!id) return;
-  emit('jump-to', id);
+  // 添加平滑滚动效果
+  const targetEl = document.getElementById(`c-${id}`);
+  if (targetEl) {
+    targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    // 添加高亮效果
+    targetEl.classList.add('highlight');
+    setTimeout(() => targetEl.classList.remove('highlight'), 2000);
+  } else {
+    emit('jump-to', id); // 让父组件处理未找到的情况
+  }
 };
 
 const getAuthorName = (comment) => {
-  if (!comment) return '未知用户';
-  if (comment.qq) {
-    return `QQ: ${comment.qq}`;
-  } else if (comment.email) {
-    return `邮箱: ${comment.email}`;
-  } else {
-    return '匿名用户';
+  if (!comment) return '匿名用户';
+  // 隐私保护，只显示QQ后4位和邮箱前缀
+  if (comment.qq) return `QQ用户 ${comment.qq.slice(-4)}`;
+  if (comment.email) {
+    const [name] = comment.email.split('@');
+    return name.length > 8 ? `${name.slice(0, 8)}...` : name;
   }
+  return '匿名用户';
 };
 
 const formatDateTime = (datetime) => {
@@ -174,6 +183,15 @@ const formatDateTime = (datetime) => {
 .message-meta .author {
   font-weight: 600;
   color: #9cd9f9;
+}
+
+/* 跳转评论时高亮显示 */
+.comment-wrapper.highlight {
+  animation: highlight-fade 2s ease;
+}
+@keyframes highlight-fade {
+  0% { background: rgba(var(--v-theme-primary), 0.3); }
+  100% { background: transparent; }
 }
 /* 移除缩进与子评论区块，全部平级展示 */
 </style> 
