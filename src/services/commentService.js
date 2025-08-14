@@ -1,4 +1,4 @@
-import axios from 'axios';
+import api from './api';
 
 export default {
     /**
@@ -9,12 +9,12 @@ export default {
      */
     async getComments(start = 0, limit = 10) {
         try {
-            const response = await axios.get('/api/comment/', {
+            const response = await api.get('/comment/', {
                 params: { start, limit }
             });
             return {
-                comments: response.data.comments || [],
-                hasMore: response.data.hasMore ?? (response.data.comments?.length >= limit)
+                comments: response.data || [],
+                hasMore: response.data?.length >= limit
             };
         } catch (error) {
             console.error('获取评论失败：', error);
@@ -33,7 +33,7 @@ export default {
      */
     async postComment(comment) {
         try {
-            const response = await axios.post('/api/comment/', comment);
+            const response = await api.post('/comment/', comment);
             return response.data;
         } catch (error) {
             console.error('提交评论失败：', error);
