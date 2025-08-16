@@ -149,7 +149,7 @@ const commentsLoading = ref(true);
 const commentsError = ref(null);
 
 // 无限滚动参数
-const start = ref(0)
+const currentPage = ref(1)
 const limit = 10
 const hasMore = ref(true);
 const loadingMore = ref(false);
@@ -210,16 +210,16 @@ const loadComments = async () => {
   if (loadingMore.value && !searchingParentId.value) return;
   loadingMore.value = true;
 
-  if (start.value === 0) {
+  if (currentPage.value === 1) {
     commentsLoading.value = true;
     commentsError.value = null;
   }
   try {
-  const { comments: newComments, hasMore: serverHasMore } = await commentService.getComments(start.value, limit);
+  const { comments: newComments, hasMore: serverHasMore } = await commentService.getComments(currentPage.value, limit);
     console.log('获取到数据:', {
       newComments: newComments.map(c => c.id),
       serverHasMore,
-      currentStart: start.value
+      currentPage: currentPage.value
     });
 
     if (io && sentinel.value) {
@@ -229,7 +229,7 @@ const loadComments = async () => {
 
     // 更新数据
     comments.value = [...comments.value, ...newComments];
-    start.value += newComments.length; 
+    currentPage.value += 1; 
     hasMore.value = serverHasMore;
 
   } catch (e) {
@@ -284,7 +284,7 @@ const handleSubmit = async () => {
 
     // 重新加载第一页，回到顶部
     comments.value = [];
-    start.value = 0;
+    currentPage.value = 1;
     hasMore.value = true;
     await loadComments();
 

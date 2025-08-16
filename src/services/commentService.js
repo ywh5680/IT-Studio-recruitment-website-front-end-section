@@ -3,18 +3,18 @@ import api from './api';
 export default {
     /**
      * 获取评论列表
-     * @param {number} start - 起始评论索引
+     * @param {number} page - 页码（从1开始）
      * @param {number} limit - 每页显示的评论数量
      * @returns {Promise<{comments: Array, hasMore: boolean}>}
      */
-    async getComments(start = 0, limit = 10) {
+    async getComments(page = 1, limit = 10) {
         try {
             const response = await api.get('/comment/', {
-                params: { start, limit }
+                params: { page, limit }
             });
             return {
-                comments: response.data || [],
-                hasMore: response.data?.length >= limit
+                comments: response.data.results || [],
+                hasMore: !!response.data.next
             };
         } catch (error) {
             console.error('获取评论失败：', error);
