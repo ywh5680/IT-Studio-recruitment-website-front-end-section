@@ -194,7 +194,32 @@ export default {
         this.startCodeCountdown();
       } catch (error) {
         console.error('验证码发送失败', error);
-          alert('发送失败，请检查网络后重试！');
+        
+        // 直接处理后端返回的错误内容
+        if (error.response && error.response.data) {
+          const data = error.response.data;
+          
+          // 如果后端返回的是对象，处理字段级错误
+          if (typeof data === 'object') {
+            const errorMessages = [];
+            Object.keys(data).forEach(field => {
+              if (Array.isArray(data[field]) && data[field].length > 0) {
+                errorMessages.push(data[field][0]);
+              }
+            });
+            if (errorMessages.length > 0) {
+              alert(errorMessages.join('\n'));
+              return;
+            }
+          } else if (typeof data === 'string') {
+            // 如果后端返回的是字符串，直接显示
+            alert(data);
+            return;
+          }
+        }
+        
+        // 如果没有具体的错误信息，显示通用错误
+        alert('发送失败，请检查网络后重试！');
       }
     },
     async submitForm() {
@@ -240,30 +265,31 @@ export default {
       } catch (error) {
           console.error('表单提交失败: ', error);
         
-        // 处理特定的错误响应
-        if (error.response) {
-          switch (error.response.status) {
-            case 400:
-              alert('验证码错误，请重新输入');
-              break;
-            case 404:
-              alert('请先获取验证码');
-              break;
-            case 409:
-              alert('你的信息似乎与某些人的雷同，或许是重复报名了');
-              break;
-            case 410:
-              alert('验证码已过期，请重新获取');
-              break;
-            case 422:
-              alert('请检查填写的信息是否正确');
-              break;
-            default:
-              alert('提交失败，请稍后重试');
+        // 直接处理后端返回的错误内容
+        if (error.response && error.response.data) {
+          const data = error.response.data;
+          
+          // 如果后端返回的是对象，处理字段级错误
+          if (typeof data === 'object') {
+            const errorMessages = [];
+            Object.keys(data).forEach(field => {
+              if (Array.isArray(data[field]) && data[field].length > 0) {
+                errorMessages.push(data[field][0]);
+              }
+            });
+            if (errorMessages.length > 0) {
+              alert(errorMessages.join('\n'));
+              return;
+            }
+          } else if (typeof data === 'string') {
+            // 如果后端返回的是字符串，直接显示
+            alert(data);
+            return;
           }
-        } else {
-          alert('网络错误，请检查网络连接');
         }
+        
+        // 如果没有具体的错误信息，显示通用错误
+        alert('提交失败，请稍后重试');
       }
     }
   }
