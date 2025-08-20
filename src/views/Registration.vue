@@ -39,7 +39,7 @@
           </button>
         </div>
         <div class="form-group">
-          <input type="text" id="content" v-model="form.content" placeholder="加入理由(选填)" maxlength="200">
+          <input type="text" id="content" v-model="form.content" placeholder="加入理由(必填)：" maxlength="200" required>
         </div>
         <div class="form-group">
           <input type="text" id="qq" v-model="form.qq" placeholder="QQ号(选填)：" pattern="[0-9]*" title="请输入正确的QQ号">
@@ -76,7 +76,7 @@ export default {
         { label: '游戏开发', value: 2 },
         { label: 'APP开发', value: 3 },
         { label: 'UI设计', value: 4 },
-        { label: 'ios', value: 5 }
+        { label: 'IOS', value: 5 }
       ],
       form: {
         name: '',
@@ -153,8 +153,12 @@ export default {
         return false;
       }
 
-      // 验证加入理由（选填）
-      if (this.form.content && this.form.content.length > 200) {
+      // 验证加入理由（必填）
+      if (!this.form.content || this.form.content.trim().length === 0) {
+        alert('请填写加入理由');
+        return false;
+      }
+      if (this.form.content.length > 200) {
         alert('加入理由不能超过200个字符');
         return false;
       }
