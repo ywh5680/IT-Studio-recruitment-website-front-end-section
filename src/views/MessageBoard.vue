@@ -116,7 +116,7 @@
                   {{ error }}
                 </v-alert>
 
-                 <v-btn
+                <v-btn
                     :disabled="isSubmitDisabled"
                     :loading="loading"
                     type="submit"
@@ -278,6 +278,9 @@ const handleSubmit = async () => {
 
 
     await commentService.postComment(body);
+
+    // 显示成功提示
+    alert('留言发布成功！');
 
     // 成功后清空表单
     newComment.value = { content: '', email: '', qq: '' };
