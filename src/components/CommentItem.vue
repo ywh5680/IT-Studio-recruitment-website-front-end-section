@@ -1,15 +1,15 @@
 <template>
-  <div class="comment-wrapper" :id="`c-${comment.id}`">
+  <div class="comment-wrapper" :id="`c-${comment.displayId}`">
     <div class="message-item">
       <div class="message-header">
-        <span class="comment-id">#{{ comment.id }}</span>
+        <span class="comment-id">#{{ comment.displayId }}</span>
         <button
-          v-if="comment.orid || comment.parent"
+          v-if="comment.displayParentId"
           class="reply-to as-link"
           type="button"
-          @click="emitJumpTo(comment.orid || comment.parent)"
+          @click="emitJumpTo(comment.displayParentId)"
         >
-          回复 #{{ comment.orid || comment.parent }}
+          回复 #{{ comment.displayParentId }}
         </button>
       </div>
       <p ref="contentRef" class="message-content" :class="{ clamped: isClamped && !expanded }">{{ comment.content }}</p>
@@ -89,7 +89,7 @@ const handleReplyClick = () => {
 
 const emitJumpTo = (id) => {
   if (!id) return;
-  // 添加平滑滚动效果
+  // 直接使用displayId进行跳转
   const targetEl = document.getElementById(`c-${id}`);
   if (targetEl) {
     targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });

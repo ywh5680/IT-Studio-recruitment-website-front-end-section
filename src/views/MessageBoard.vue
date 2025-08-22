@@ -148,6 +148,30 @@ const comments = ref([]);
 const commentsLoading = ref(true);
 const commentsError = ref(null);
 
+// 添加一个映射表来存储原始ID和新编号的对应关系
+const idMapping = ref(new Map());
+
+// 重新编号评论的函数
+const renumberComments = (commentsList) => {
+  // 清空之前的映射
+  idMapping.value.clear();
+  
+  // 按ID降序排序，这样最新的评论（ID最大）会得到最小的编号
+  const sortedComments = [...commentsList].sort((a, b) => b.id - a.id);
+  
+  // 创建新的编号映射
+  sortedComments.forEach((comment, index) => {
+    idMapping.value.set(comment.id, index + 1);
+  });
+  
+  // 更新评论对象，添加显示用的编号
+  return sortedComments.map(comment => ({
+    ...comment,
+    displayId: idMapping.value.get(comment.id),
+    displayParentId: comment.orid ? idMapping.value.get(comment.orid) : (comment.parent ? idMapping.value.get(comment.parent) : null)
+  }));
+};
+
 // 无限滚动参数
 const currentPage = ref(1)
 const limit = 10
@@ -215,21 +239,13 @@ const loadComments = async () => {
     commentsError.value = null;
   }
   try {
-  const { comments: newComments, hasMore: serverHasMore } = await commentService.getComments(currentPage.value, limit);
-    console.log('获取到数据:', {
-      newComments: newComments.map(c => c.id),
-      serverHasMore,
-      currentPage: currentPage.value
-    });
-
-    if (io && sentinel.value) {
-      io.unobserve(sentinel.value);
-      io.observe(sentinel.value);
-    }
-
-    // 更新数据
-    comments.value = [...comments.value, ...newComments];
-    currentPage.value += 1; 
+    const { comments: newComments, hasMore: serverHasMore } = await commentService.getComments(currentPage.value, limit);
+    
+    // 合并新旧评论并重新编号
+    const allComments = [...comments.value, ...newComments];
+    comments.value = renumberComments(allComments);
+    
+    currentPage.value += 1;
     hasMore.value = serverHasMore;
 
   } catch (e) {
@@ -249,10 +265,10 @@ const setupInfiniteScroll = () => {
   io = new IntersectionObserver((entries) => {
     const entry = entries[0];
     // 仅当用户在第一页发生过一次滚动后，才允许加载第二页
-    if (entry.isIntersecting && hasMore.value && !loadingMore.value ) {
+    if (entry.isIntersecting && hasMore.value && !loadingMore.value && currentPage.value > 1) {
       loadComments();
     }
-  }, {root:messageList.value, rootMargin: '100px', threshold: 0.2 });
+  }, {root:messageList.value, rootMargin: '0px', threshold: 0.1 });
   io.observe(sentinel.value);
 };
 
@@ -328,7 +344,10 @@ onBeforeUnmount(() => {
 });
 
 // 处理从子项发起的跳转父评论请求
-const findCommentEl = (id) => document.getElementById(`c-${id}`);
+const findCommentEl = (id) => {
+  // 直接使用displayId查找元素
+  return document.getElementById(`c-${id}`);
+};
 
 const searchingParentId = ref(null);
 const searchTimeout = ref(null);
@@ -382,19 +401,19 @@ const searchParentComment = async () => {
   await loadComments();
   
   // 检查是否已加载
-  const targetExists = comments.value.some(c => c.id === searchingParentId.value);
+  const targetExists = comments.value.some(c => c.displayId === searchingParentId.value);
   if (targetExists) {
     const targetId = searchingParentId.value; // 保存当前搜索的ID
     searchStatus.value = 'found';
     searchingParentId.value = null;
     if (searchTimeout.value) clearTimeout(searchTimeout.value);
-      // 自动隐藏成功提示
+    // 自动隐藏成功提示
     setTimeout(() => {
       searchStatus.value = '';
     }, 2000);
 
     setTimeout(() => {
-      const el = findCommentEl(targetId); // 使用保存的ID
+      const el = findCommentEl(targetId);
       if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, 300);
     return;
