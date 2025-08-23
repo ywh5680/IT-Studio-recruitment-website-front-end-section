@@ -17,7 +17,7 @@
               <v-form @submit.prevent="handleQuery">
                 <v-text-field
                   v-model="queryInput"
-                  label="输入姓名/邮箱/QQ/学号/手机号查询"
+                  label="QQ/学号/手机号查询"
                   prepend-inner-icon="mdi-magnify"
                   variant="outlined"
                   class="mb-3"
@@ -164,28 +164,12 @@ export default {
       error.value = null;
       result.value = null;
 
-              try {
-          const input = queryInput.value.trim();
-          let body = {};
-
-          if (input.includes('@')) {
-            // 邮箱
-            body = {"email": input};
-          } else if (/^\d+$/.test(input)) {
-            if (input.length === 11 && input.startsWith('1')) {
-              body = {"phone": parseInt(input)};
-            } else if(input.length === 11) {
-              body = {"uid": parseInt(input)};
-            }
-            else {
-            body = {"qq":parseInt(input)};
-            }
-          } else {
-            body = {"name":input};
-          }
-          
-          const response = await api.post('/get_status/', body);
-          result.value = response.data;
+      try {
+        const input = queryInput.value.trim();
+        const body = { keyword: String(input) };
+        
+        const response = await api.post('/get_status/', body);
+        result.value = response.data;
         
       } catch (e) {
         const status = e.response?.status;
